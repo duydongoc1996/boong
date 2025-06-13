@@ -13,9 +13,9 @@ Boong is an enterprise-grade framework designed to streamline application develo
 ### Core Features
 
 - [x] Query Parser
-- [x] Query Relation
-- [x] Result / Error Handling
-- [x] Application/problem+json Support
+- [ ] Query Relation
+- [ ] Result / Error Handling
+- [ ] Application/problem+json Support
 - [ ] Decorators (module, controller, route, validation)
 - [ ] API Documentation / Swagger Integration
 - [ ] JSON Rule Engine for Logic Validation
