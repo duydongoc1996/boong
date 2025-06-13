@@ -1,0 +1,19 @@
+{
+	"name": "@boong/db",
+	"module": "index.ts",
+	"main": "src/index.ts",
+	"type": "module",
+	"devDependencies": {
+		"@types/bun": "latest",
+		"@types/pg": "^8.15.4",
+		"drizzle-kit": "^0.31.1"
+	},
+	"peerDependencies": {
+		"typescript": "^5"
+	},
+	"dependencies": {
+		"dotenv": "^16.5.0",
+		"drizzle-orm": "^0.44.2",
+		"pg": "^8.16.0"
+	}
+}
