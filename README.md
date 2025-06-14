@@ -12,37 +12,37 @@ Boong is an enterprise-grade framework designed to streamline application develo
 
 ### Core Features
 
-- [x] Query Parser
-- [ ] Query Relation
-- [ ] Result / Error Handling
-- [ ] Application/problem+json Support
-- [ ] Decorators (module, controller, route, validation)
-- [ ] API Documentation / Swagger Integration
-- [ ] JSON Rule Engine for Logic Validation
-- [ ] Logging System
-- [ ] Distributed Tracing
-- [ ] Transaction Context
-- [ ] Health Check Endpoints
-- [ ] Authentication & User Module
-- [ ] Authorization (RBAC + Tenant Support)
-- [ ] Event System / Message Broker
-- [ ] Client SDK
-- [ ] UI Component Library
-- [ ] Admin Dashboard
-- [ ] CSV Export Functionality
-- [ ] File Upload / Storage System
-- [ ] Schema Definition Tools
-- [ ] Plugin Module System
-- [ ] Development Dashboard (Grafana)
-- [ ] MCP Dev Agent
-- [ ] Unit Testing Framework
-- [ ] Integration Testing Framework
+- Query Parser
+- Query Relation
+- Result / Error Handling
+- Application/problem+json Support
+- Decorators (module, controller, route, validation)
+- API Documentation / Swagger Integration
+- JSON Rule Engine for Logic Validation
+- Logging System
+- Distributed Tracing
+- Transaction Context
+- Health Check Endpoints
+- Authentication & User Module
+- Authorization (RBAC + Tenant Support)
+- Event System / Message Broker
+- Client SDK
+- UI Component Library
+- Admin Dashboard
+- CSV Export Functionality
+- File Upload / Storage System
+- Schema Definition Tools
+- Plugin Module System
+- Development Dashboard (Grafana)
+- MCP Dev Agent
+- Unit Testing Framework
+- Integration Testing Framework
 
 ## Status Legend
 
-- [x] Completed
-- [ ] In Progress
-- [ ] Planned
+- [ ] Completed
+- [x] In Progress
+- [x] Planned
 
 ## Getting Started
 

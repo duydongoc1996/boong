@@ -22,7 +22,7 @@ import {
 } from 'drizzle-orm';
 import { AnyPgColumn, AnyPgTable } from 'drizzle-orm/pg-core';
 import { t, type Static } from 'elysia';
-import qs from 'qs';
+import { IValidateOptions } from './type';
 
 // Query parameter types based on Strapi's filtering system
 export const FilterOperatorSchema = t.Object({
@@ -62,11 +62,11 @@ export const PaginationSchema = t.Object({
 });
 
 export const QueryParamsSchema = t.Object({
-	filters: t.Optional(t.Any()),
-	sort: t.Optional(t.Union([t.Array(SortSchema), t.String(), t.Array(t.String())])),
-	pagination: t.Optional(PaginationSchema),
-	populate: t.Optional(t.Union([t.String(), t.Array(t.String())])),
+	filters: t.Optional(t.Object({})),
 	fields: t.Optional(t.Union([t.String(), t.Array(t.String())])),
+	populate: t.Optional(t.Union([t.String(), t.Array(t.String())])),
+	pagination: t.Optional(PaginationSchema),
+	sort: t.Optional(t.Union([t.Array(SortSchema), t.String(), t.Array(t.String())])),
 });
 
 export type TFilterOperator = Static<typeof FilterOperatorSchema>;
@@ -251,60 +251,42 @@ export class QueryParser<TTable extends AnyPgTable> {
 	}
 
 	// Parse query parameters to Drizzle SQL
-	parseQuery(params: TQueryParams | string | Record<string, any>): {
+	parseQuery(params: TQueryParams | Record<string, any>): {
 		where?: SQL<unknown>;
 		orderBy?: SQL<unknown>[];
+		page?: number;
 		limit?: number;
-		offset?: number;
 	} {
 		// Handle different input types
-		let parsedParams: TQueryParams;
-
-		if (typeof params === 'string') {
-			// Parse raw query string using qs
-			parsedParams = qs.parse(params, {
-				allowDots: true,
-				arrayLimit: 100,
-				parseArrays: true,
-				allowPrototypes: false,
-				plainObjects: true,
-			}) as TQueryParams;
-		} else if (params && typeof params === 'object') {
-			// If it's already an object, use as-is but ensure it's properly structured
-			parsedParams = params as TQueryParams;
-		} else {
-			parsedParams = {};
-		}
+		let parsedParams: TQueryParams = params as TQueryParams;
 
 		const result: {
 			where?: SQL<unknown>;
 			orderBy?: SQL<unknown>[];
 			limit?: number;
-			offset?: number;
+			page?: number;
 		} = {};
 
 		// Parse filters
-		if (parsedParams.filters) {
+		if (parsedParams.filters && Object.keys(parsedParams.filters).length > 0) {
 			result.where = this.parseFilters(parsedParams.filters);
 		}
 
 		// Parse sorting
-		if (parsedParams.sort) {
+		if (parsedParams.sort && Object.keys(parsedParams.sort).length > 0) {
 			result.orderBy = this.parseSort(parsedParams.sort);
 		}
 
 		// Parse pagination
-		if (parsedParams.pagination) {
+		if (parsedParams.pagination && Object.keys(parsedParams.pagination).length > 0) {
 			const { page, limit, offset } = parsedParams.pagination;
+
+			if (page) {
+				result.page = page;
+			}
 
 			if (limit) {
 				result.limit = limit;
-			}
-
-			if (offset !== undefined) {
-				result.offset = offset;
-			} else if (page && limit) {
-				result.offset = (page - 1) * limit;
 			}
 		}
 
@@ -312,6 +294,8 @@ export class QueryParser<TTable extends AnyPgTable> {
 	}
 
 	private parseFilters(filters: any): SQL<unknown> {
+		console.log('filters', typeof filters);
+
 		if (!filters || typeof filters !== 'object') {
 			throw new Error('Invalid filters format');
 		}
@@ -427,7 +411,7 @@ export class QueryParser<TTable extends AnyPgTable> {
 	}
 
 	private createSortCondition(field: string, order: 'asc' | 'desc'): SQL<unknown>[] {
-		const column = this.table._.columns[field] as AnyPgColumn;
+		const column = getTableColumns(this.table)[field] as AnyPgColumn;
 
 		if (!column) {
 			throw new Error(`Field ${field} not found in table`);
@@ -442,11 +426,8 @@ export function createQueryParser<T extends AnyPgTable>(table: T): QueryParser<T
 	return new QueryParser(table);
 }
 
-// Export validation schemas for use in Elysia routes
-export const QueryValidationSchemas = {
-	FilterOperator: FilterOperatorSchema,
-	LogicalOperator: LogicalOperatorSchema,
-	Sort: SortSchema,
-	Pagination: PaginationSchema,
-	QueryParams: QueryParamsSchema,
+export const DEFAULT_VALIDATION_OPTIONS: IValidateOptions = {
+	params: t.Optional(t.Any()),
+	body: t.Optional(t.Any()),
+	query: t.Optional(t.Any()),
 };

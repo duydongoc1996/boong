@@ -15,6 +15,13 @@
       "when": 1749635321626,
       "tag": "0001_absurd_forge",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1749878525698,
+      "tag": "0002_ambiguous_sentinels",
+      "breakpoints": true
     }
   ]
 }

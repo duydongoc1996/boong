@@ -1,13 +1,12 @@
 import { asc, eq, InferSelectModel } from 'drizzle-orm';
 import Elysia from 'elysia';
-import { createQueryParser, QueryParser, QueryValidationSchemas } from './query-parser';
 import {
-	DEFAULT_VALIDATION,
-	IBaseEntity,
-	ICrudRepository,
-	IRouteOptions,
-	type TTableWithID,
-} from './type';
+	createQueryParser,
+	DEFAULT_VALIDATION_OPTIONS,
+	QueryParamsSchema,
+	QueryParser,
+} from './query-parser';
+import { IBaseEntity, ICrudRepository, IRouteOptions, type TTableWithID } from './type';
 
 export abstract class CrudController<
 	ID extends number | string,
@@ -53,21 +52,20 @@ export abstract class CrudController<
 		);
 	}
 
-	paginate(options: IRouteOptions = { validation: DEFAULT_VALIDATION }) {
+	public paginate(
+		options: IRouteOptions = {
+			validation: { ...DEFAULT_VALIDATION_OPTIONS, query: QueryParamsSchema },
+		},
+	) {
 		return new Elysia().get(
 			'/',
 			({ query, request }) => {
-				const url = new URL(request.url);
-				const queryString = url.search.substring(1);
-				const parsedQuery = this.queryParser.parseQuery(queryString);
+				const parsedQuery = this.queryParser.parseQuery(query);
 
 				return this.repository.paginate({
 					query: parsedQuery.where,
 					pagination: {
-						page:
-							parsedQuery.offset && parsedQuery.limit
-								? Math.floor(parsedQuery.offset / parsedQuery.limit) + 1
-								: 1,
+						page: parsedQuery.page || 1,
 						limit: parsedQuery.limit || 10,
 						order: parsedQuery.orderBy || [asc(this.tTable.id)],
 					},
@@ -75,12 +73,11 @@ export abstract class CrudController<
 			},
 			{
 				...options.validation,
-				query: options.validation.query || QueryValidationSchemas.QueryParams,
 			},
 		);
 	}
 
-	findOne(options: IRouteOptions = { validation: DEFAULT_VALIDATION }) {
+	public findOne(options: IRouteOptions = { validation: DEFAULT_VALIDATION_OPTIONS }) {
 		return new Elysia().get(
 			'/:id',
 			({ params }) => {
@@ -94,7 +91,7 @@ export abstract class CrudController<
 		);
 	}
 
-	createOne(options: IRouteOptions = { validation: DEFAULT_VALIDATION }) {
+	public createOne(options: IRouteOptions = { validation: DEFAULT_VALIDATION_OPTIONS }) {
 		return new Elysia().post(
 			'/',
 			({ body }) => {
@@ -108,7 +105,7 @@ export abstract class CrudController<
 		);
 	}
 
-	createMany(options: IRouteOptions = { validation: DEFAULT_VALIDATION }) {
+	public createMany(options: IRouteOptions = { validation: DEFAULT_VALIDATION_OPTIONS }) {
 		return new Elysia().post(
 			'/bulk',
 			({ body }) => {
@@ -122,7 +119,7 @@ export abstract class CrudController<
 		);
 	}
 
-	updateOne(options: IRouteOptions = { validation: DEFAULT_VALIDATION }) {
+	public updateOne(options: IRouteOptions = { validation: DEFAULT_VALIDATION_OPTIONS }) {
 		return new Elysia().patch(
 			'/:id',
 			({ params, body }) => {
@@ -137,13 +134,15 @@ export abstract class CrudController<
 		);
 	}
 
-	updateMany(options: IRouteOptions = { validation: DEFAULT_VALIDATION }) {
+	public updateMany(
+		options: IRouteOptions = {
+			validation: { ...DEFAULT_VALIDATION_OPTIONS, query: QueryParamsSchema },
+		},
+	) {
 		return new Elysia().patch(
 			'/bulk',
 			({ query, body, request }) => {
-				const url = new URL(request.url);
-				const queryString = url.search.substring(1);
-				const parsedQuery = this.queryParser.parseQuery(queryString);
+				const parsedQuery = this.queryParser.parseQuery(query);
 
 				return this.repository.updateMany({
 					query: parsedQuery.where,
@@ -152,12 +151,11 @@ export abstract class CrudController<
 			},
 			{
 				...options.validation,
-				query: options.validation.query || QueryValidationSchemas.QueryParams,
 			},
 		);
 	}
 
-	deleteOne(options: IRouteOptions = { validation: DEFAULT_VALIDATION }) {
+	public deleteOne(options: IRouteOptions = { validation: DEFAULT_VALIDATION_OPTIONS }) {
 		return new Elysia().delete(
 			'/:id',
 			({ params }) => {
@@ -171,13 +169,15 @@ export abstract class CrudController<
 		);
 	}
 
-	deleteMany(options: IRouteOptions = { validation: DEFAULT_VALIDATION }) {
+	public deleteMany(
+		options: IRouteOptions = {
+			validation: { ...DEFAULT_VALIDATION_OPTIONS, query: QueryParamsSchema },
+		},
+	) {
 		return new Elysia().delete(
 			'/bulk',
 			({ query, request }) => {
-				const url = new URL(request.url);
-				const queryString = url.search.substring(1);
-				const parsedQuery = this.queryParser.parseQuery(queryString);
+				const parsedQuery = this.queryParser.parseQuery(query);
 
 				return this.repository.deleteMany({
 					query: parsedQuery.where || eq(this.tTable.id, (query as any).id),
@@ -185,7 +185,6 @@ export abstract class CrudController<
 			},
 			{
 				...options.validation,
-				query: options.validation.query || QueryValidationSchemas.QueryParams,
 			},
 		);
 	}

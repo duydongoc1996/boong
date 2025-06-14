@@ -1,6 +1,6 @@
 import { SQL } from 'drizzle-orm';
 import { AnyPgColumn, AnyPgTable } from 'drizzle-orm/pg-core';
-import { t, type TSchema } from 'elysia';
+import { type TSchema } from 'elysia';
 
 interface IQuery<T> extends SQL<unknown> {}
 
@@ -103,14 +103,7 @@ interface IRouteOptions {
 	validation: IValidateOptions;
 }
 
-const DEFAULT_VALIDATION: IValidateOptions = {
-	params: t.Any(),
-	body: t.Any(),
-	query: t.Any(),
-};
-
 export {
-	DEFAULT_VALIDATION,
 	ICreateManyOptions,
 	ICreateOneOptions,
 	IDeleteManyOptions,

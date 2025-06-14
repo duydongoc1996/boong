@@ -5,7 +5,7 @@
 | Status | Task                                                  |
 | ------ | ----------------------------------------------------- |
 | [x]    | 🔍 Query Parser                                       |
-| [ ]    | 🔗 Query Relation                                     |
+| [x]    | 🔗 Query Relation                                     |
 | [ ]    | ✅ Result / Error Handling                            |
 | [ ]    | 🔧 Application/problem+json Support                   |
 | [ ]    | ✨ Decorators (module, controller, route, validation) |
@@ -30,3 +30,4 @@
 | [ ]    | 🤖 MCP Dev Agent                                      |
 | [ ]    | Unit Testing Framework                                |
 | [ ]    | Integration Testing Framework                         |
+| [ ]    | Full text search                                      |

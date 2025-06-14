@@ -1,6 +1,5 @@
 import { InferSelectModel } from 'drizzle-orm';
 import { AnyPgTable, PgSelect, PgTable } from 'drizzle-orm/pg-core';
-import { inject } from 'tsyringe';
 import { type DB } from './drizzle';
 import {
 	IBaseEntity,
@@ -25,8 +24,8 @@ export abstract class Repository<
 > implements ICrudRepository<T>
 {
 	constructor(
-		private tTable: TTable,
-		@inject('db') private readonly db: DB,
+		private readonly tTable: TTable,
+		private readonly db: DB,
 	) {}
 
 	async paginateByPage<Q extends PgSelect>(qb: Q, page: number = 1, limit: number = 10) {

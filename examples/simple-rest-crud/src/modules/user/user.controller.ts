@@ -1,19 +1,19 @@
 import { CrudController, ICrudRepository } from '@boong/core';
 import Elysia, { t } from 'elysia';
 import { inject, injectable, singleton } from 'tsyringe';
-import { tPost, type TPost } from '../../common/db/schema';
-import { PostRepository } from './post.repository';
-import { PostService } from './post.service';
+import { tUser, type TUser } from '../../common/db/schema';
+import { UserRepository } from './user.repository';
+import { UserService } from './user.service';
 
 @injectable()
 @singleton()
-export class PostController extends CrudController<number> {
+export class UserController extends CrudController<number> {
 	constructor(
-		@inject(PostRepository) repository: PostRepository,
-		@inject(PostService) private readonly service: PostService,
+		@inject(UserRepository) repository: UserRepository,
+		@inject(UserService) private readonly service: UserService,
 	) {
 		// Extend base controller
-		super('posts', tPost, repository as ICrudRepository<TPost>);
+		super('users', tUser, repository as ICrudRepository<TUser>);
 
 		// Register custom routes
 		this.registerRoute(() => this.test());
@@ -33,10 +33,7 @@ export class PostController extends CrudController<number> {
 		return super.createOne({
 			validation: {
 				body: t.Object({
-					title: t.String(),
-					content: t.String(),
-					published: t.Boolean(),
-					authorId: t.Number(),
+					email: t.String({ format: 'email' }),
 				}),
 			},
 		});
@@ -47,10 +44,7 @@ export class PostController extends CrudController<number> {
 			validation: {
 				body: t.Array(
 					t.Object({
-						title: t.String(),
-						content: t.String(),
-						published: t.Boolean(),
-						authorId: t.Number(),
+						email: t.String({ format: 'email' }),
 					}),
 				),
 			},
@@ -64,10 +58,7 @@ export class PostController extends CrudController<number> {
 					id: t.Number(),
 				}),
 				body: t.Object({
-					title: t.Optional(t.String()),
-					content: t.Optional(t.String()),
-					published: t.Optional(t.Boolean()),
-					authorId: t.Optional(t.Number()),
+					email: t.String({ format: 'email' }),
 				}),
 			},
 		});
