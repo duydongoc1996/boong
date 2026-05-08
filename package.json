@@ -1,0 +1,22 @@
+{
+  "name": "@bunti",
+  "description": "A Bun Multi Tenant Application",
+  "private": true,
+  "packageManager": "bun@1.3.13",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "typecheck": "turbo run typecheck",
+    "lint": "turbo run lint"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.4.14",
+    "@types/bun": "latest",
+    "turbo": "latest",
+    "typescript": "latest"
+  }
+}

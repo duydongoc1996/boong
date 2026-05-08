@@ -1,0 +1,30 @@
+# This is a docker compose file for running the project locally
+services:
+  postgres:
+    image: postgres:17.5
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: local-db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - local-network
+
+  redis:
+    image: redis:7.4.1
+    ports:
+      - "6379:6379"
+    networks:
+      - local-network
+
+volumes:
+  postgres_data:
+    driver: local
+  
+networks:
+  local-network:
+    driver: bridge
+    
