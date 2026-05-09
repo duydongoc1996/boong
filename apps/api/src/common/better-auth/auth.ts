@@ -1,21 +1,21 @@
-import { betterAuth } from 'better-auth';
-import { drizzleAdapter } from 'better-auth/adapters/drizzle';
-import { Elysia } from 'elysia';
-import type { OpenAPIV3 } from 'openapi-types';
-import { db } from '@/database/db';
-import { BETTER_AUTH_CONFIG } from './config';
+import { betterAuth } from "better-auth";
+import { drizzleAdapter } from "better-auth/adapters/drizzle";
+import { Elysia } from "elysia";
+import type { OpenAPIV3 } from "openapi-types";
+import { db } from "@/database/db";
+import { BETTER_AUTH_CONFIG } from "./config";
 
 export const auth = betterAuth({
 	database: drizzleAdapter(db, {
-		provider: 'pg',
+		provider: "pg",
 	}),
 
 	...BETTER_AUTH_CONFIG,
 });
 
 export const pluginAuth = () => {
-	return new Elysia({ name: 'plugin-auth' })
-		.decorate('auth', auth)
+	return new Elysia({ name: "plugin-auth" })
+		.decorate("auth", auth)
 		.mount(auth.handler);
 };
 

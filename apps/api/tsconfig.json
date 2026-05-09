@@ -1,5 +1,5 @@
 {
-	"extends": "../../tsconfig.base.json",
+	"extends": "@bunti/tsconfig/bun-app.json",
 	"compilerOptions": {
 		"paths": {
 			"@/*": ["./src/*"]

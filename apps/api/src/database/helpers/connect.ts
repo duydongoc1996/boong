@@ -1,7 +1,7 @@
-import type { DrizzleConfig } from 'drizzle-orm';
-import { drizzle, type PostgresJsDatabase } from 'drizzle-orm/postgres-js';
-import postgres from 'postgres';
-import { v7 as uuidv7 } from 'uuid';
+import type { DrizzleConfig } from "drizzle-orm";
+import { drizzle, type PostgresJsDatabase } from "drizzle-orm/postgres-js";
+import postgres from "postgres";
+import { v7 as uuidv7 } from "uuid";
 
 // Define a type for the arguments to keep the function signature clean
 export interface ConnectDatabaseOptions<
@@ -14,7 +14,7 @@ export interface ConnectDatabaseOptions<
 	/** Optional configurations specific to postgres.js (e.g., max connections) */
 	postgres?: postgres.Options<Record<string, postgres.PostgresType>>;
 	/** Optional configurations specific to Drizzle ORM (e.g., logger) */
-	drizzle?: Omit<DrizzleConfig<TSchema>, 'schema'>;
+	drizzle?: Omit<DrizzleConfig<TSchema>, "schema">;
 }
 
 /**

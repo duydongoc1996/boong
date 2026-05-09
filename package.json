@@ -11,10 +11,12 @@
     "build": "turbo run build",
     "dev": "turbo run dev",
     "typecheck": "turbo run typecheck",
-    "lint": "turbo run lint"
+    "lint": "turbo run lint",
+    "format": "turbo run format"
   },
   "devDependencies": {
     "@biomejs/biome": "2.4.14",
+    "@bunti/biome": "workspace:*",
     "@types/bun": "latest",
     "turbo": "latest",
     "typescript": "latest"

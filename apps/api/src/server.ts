@@ -1,9 +1,9 @@
-import { Elysia } from 'elysia';
-import { pluginAuth } from './common/better-auth/auth';
-import { pluginConfig } from './common/plugins/config';
-import { pluginCors } from './common/plugins/cors';
-import { pluginOpenAPI } from './common/plugins/openapi';
-import { pluginDB } from './database/db';
+import { Elysia } from "elysia";
+import { pluginAuth } from "./common/better-auth/auth";
+import { pluginConfig } from "./common/plugins/config";
+import { pluginCors } from "./common/plugins/cors";
+import { pluginOpenAPI } from "./common/plugins/openapi";
+import { pluginDB } from "./database/db";
 
 const port = Number(process.env.PORT ?? 4000);
 
