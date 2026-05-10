@@ -1,10 +1,10 @@
 {
-	"extends": "@bunti/tsconfig/bun-app.json",
-	"compilerOptions": {
-		"paths": {
-			"@/*": ["./src/*"]
-		}
-	},
-	"include": ["src", "lib", "drizzle.config.ts"],
-	"exclude": ["node_modules", "dist"]
+    "extends": "@bunti/tsconfig/bun-app.json",
+    "compilerOptions": {
+        "paths": {
+            "@/*": ["./src/*"]
+        }
+    },
+    "include": ["src", "lib", "drizzle.config.ts"],
+    "exclude": ["node_modules", "dist"]
 }

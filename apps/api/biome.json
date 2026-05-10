@@ -1,7 +1,19 @@
 {
-	"$schema": "https://biomejs.dev/schemas/2.4.14/schema.json",
-	"extends": ["@bunti/biome/elysia"],
-	"files": {
-		"includes": ["src/**/*", "lib/**/*", "drizzle.config.ts"]
-	}
+    "$schema": "https://biomejs.dev/schemas/2.4.14/schema.json",
+    "root": false,
+    "extends": "//",
+    "files": {
+        "includes": ["src/**/*", "lib/**/*", "drizzle.config.ts"]
+    },
+    "javascript": {
+        "globals": ["Bun"]
+    },
+    "linter": {
+        "rules": {
+            "correctness": {
+                "useExhaustiveDependencies": "off",
+                "useHookAtTopLevel": "off"
+            }
+        }
+    }
 }

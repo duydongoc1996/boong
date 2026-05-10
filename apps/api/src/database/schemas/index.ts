@@ -7,9 +7,9 @@
 /**
  * Core schema for the auth system
  */
-export * from "./core.js";
+export * from "./core.js"
 
 /**
  * Extended schemas
  */
-export * from "./example.js";
+export * from "./example.js"

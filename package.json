@@ -16,7 +16,6 @@
   },
   "devDependencies": {
     "@biomejs/biome": "2.4.14",
-    "@bunti/biome": "workspace:*",
     "@types/bun": "latest",
     "turbo": "latest",
     "typescript": "latest"
