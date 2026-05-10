@@ -1,3 +1,4 @@
+import { relations } from "drizzle-orm"
 import { pgSchema, text, timestamp } from "drizzle-orm/pg-core"
 import { organization } from "./core.js"
 
@@ -33,3 +34,11 @@ export const postCategory = pgTable("post_category", {
         onDelete: "cascade",
     }),
 })
+
+export const postRelations = relations(post, ({ many }) => ({
+    categories: many(postCategory),
+}))
+
+export const categoryRelations = relations(category, ({ many }) => ({
+    posts: many(postCategory),
+}))

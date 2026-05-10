@@ -7,7 +7,9 @@ const connection = connectDatabase({
     url: config.DATABASE_URL,
     schema,
     postgres: {},
-    drizzle: {},
+    drizzle: {
+        logger: true,
+    },
 })
 
 export const db = connection.db

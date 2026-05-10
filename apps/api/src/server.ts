@@ -4,6 +4,7 @@ import { pluginConfig } from "./common/plugins/config"
 import { pluginCors } from "./common/plugins/cors"
 import { pluginOpenAPI } from "./common/plugins/openapi"
 import { pluginDB } from "./database/db"
+import { postRoutes } from "./modules/post/routes"
 
 const port = Number(process.env.PORT ?? 4000)
 
@@ -13,11 +14,12 @@ const server = new Elysia({
         reusePort: false,
     },
 })
-    .use(pluginCors())
     .use(pluginConfig())
+    .use(pluginCors())
     .use(pluginDB())
     .use(pluginAuth())
     .use(pluginOpenAPI())
+    .use(postRoutes)
     .listen(port)
 
 console.log(`API listening on http://localhost:${port}`)
