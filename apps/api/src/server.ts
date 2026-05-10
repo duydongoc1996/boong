@@ -10,9 +10,10 @@ const port = Number(process.env.PORT ?? 4000)
 const server = new Elysia({
     serve: {
         maxRequestBodySize: 1024 * 1024 * 5, // 5MB
+        reusePort: false,
     },
 })
-    .use(pluginCors)
+    .use(pluginCors())
     .use(pluginConfig())
     .use(pluginDB())
     .use(pluginAuth())

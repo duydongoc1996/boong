@@ -22,8 +22,8 @@
         "auth:generate": "bunx auth@latest generate --config ./lib/auth.ts --output ./src/database/schemas/auth.ts"
     },
     "dependencies": {
+        "@elysia/cors": "^1.4.2",
         "@elysia/openapi": "^1.4.15",
-        "@elysiajs/cors": "^1.4.2",
         "better-auth": "^1.6.9",
         "drizzle-orm": "^0.45.2",
         "elysia": "^1.4.28",

@@ -1,7 +1,7 @@
-import { cors } from "@elysiajs/cors"
+import cors from "@elysia/cors"
+import { config } from "./config"
 
-export const pluginCors = cors({
-    origin: "*",
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-})
+export const pluginCors = () =>
+    cors({
+        origin: config.ALLOWED_ORIGINS,
+    })

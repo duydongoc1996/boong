@@ -1,5 +1,6 @@
 import { betterAuth } from "better-auth"
 import { drizzleAdapter } from "better-auth/adapters/drizzle"
+import type { Context } from "elysia"
 import { Elysia } from "elysia"
 import type { OpenAPIV3 } from "openapi-types"
 import { db } from "@/database/db"
@@ -13,10 +14,22 @@ export const auth = betterAuth({
     ...BETTER_AUTH_CONFIG,
 })
 
+const betterAuthView = (context: Context & { request: Request }) => {
+    const BETTER_AUTH_ACCEPT_METHODS = ["POST", "GET"]
+    // validate request method
+    if (BETTER_AUTH_ACCEPT_METHODS.includes(context.request.method)) {
+        return auth.handler(context.request)
+    } else {
+        return context.status(405, {
+            message: "Method not allowed",
+        })
+    }
+}
+
 export const pluginAuth = () => {
     return new Elysia({ name: "plugin-auth" })
         .decorate("auth", auth)
-        .mount(auth.handler)
+        .all("/api/auth/*", betterAuthView)
 }
 
 export async function getOpenApiSchema(prefix: string) {

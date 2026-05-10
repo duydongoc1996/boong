@@ -1,5 +1,5 @@
-import { ForgotPasswordForm } from "@/components/refine-ui/form/forgot-password-form"
+import { ForgotPassword } from "@/components/auth/forgot-password"
 
-export const ForgotPassword = () => {
-    return <ForgotPasswordForm />
+export const ForgotPasswordPage = () => {
+    return <ForgotPassword />
 }
