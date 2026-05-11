@@ -1,9 +1,8 @@
-import { useOne, useShow } from "@refinedev/core"
+import { useShow } from "@refinedev/core"
 import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
 
 import { ShowView } from "@/components/refine-ui/views/show-view"
-import { Badge } from "@/components/ui/badge"
 import {
     Card,
     CardContent,
@@ -12,20 +11,10 @@ import {
     CardTitle,
 } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
+import type { Post } from "./types"
 
-export const BlogPostShow = () => {
-    const { result: record } = useShow({})
-
-    const {
-        result: category,
-        query: { isLoading: categoryIsLoading },
-    } = useOne({
-        resource: "categories",
-        id: record?.category?.id || "",
-        queryOptions: {
-            enabled: !!record,
-        },
-    })
+export const PostShow = () => {
+    const { result: record } = useShow<Post>({})
 
     return (
         <ShowView>
@@ -35,15 +24,6 @@ export const BlogPostShow = () => {
                         <CardTitle>{record?.title}</CardTitle>
                         <CardDescription>
                             <div className="flex items-center gap-4">
-                                <Badge
-                                    variant={
-                                        record?.status === "published"
-                                            ? "default"
-                                            : "secondary"
-                                    }
-                                >
-                                    {record?.status}
-                                </Badge>
                                 <span className="text-sm text-muted-foreground">
                                     ID: {record?.id}
                                 </span>
@@ -51,19 +31,6 @@ export const BlogPostShow = () => {
                         </CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-4">
-                        <div>
-                            <h4 className="text-sm font-medium mb-2">
-                                Category
-                            </h4>
-                            <p className="text-sm text-muted-foreground">
-                                {categoryIsLoading
-                                    ? "Loading..."
-                                    : category?.title || "-"}
-                            </p>
-                        </div>
-
-                        <Separator />
-
                         <div>
                             <h4 className="text-sm font-medium mb-2">
                                 Created At
@@ -83,7 +50,7 @@ export const BlogPostShow = () => {
                             <h4 className="text-sm font-medium mb-4">
                                 Content
                             </h4>
-                            <div className="prose prose-sm max-w-none">
+                            <div className="prose prose-sm prose-neutral max-w-none dark:prose-invert">
                                 {record?.content ? (
                                     <ReactMarkdown remarkPlugins={[remarkGfm]}>
                                         {record.content}

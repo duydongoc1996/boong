@@ -25,6 +25,7 @@ type ListHeaderProps = PropsWithChildren<{
     canCreate?: boolean
     headerClassName?: string
     wrapperClassName?: string
+    actionSlots?: React.ReactNode[]
 }>
 
 export const ListViewHeader = ({
@@ -33,6 +34,7 @@ export const ListViewHeader = ({
     title: titleFromProps,
     wrapperClassName,
     headerClassName,
+    actionSlots,
 }: ListHeaderProps) => {
     const getUserFriendlyName = useUserFriendlyName()
 

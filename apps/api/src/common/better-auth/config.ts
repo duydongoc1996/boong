@@ -8,4 +8,9 @@ export const BETTER_AUTH_CONFIG = {
     },
     trustedOrigins: config.ALLOWED_ORIGINS,
     plugins: [organization(), openAPI()],
+    advanced: {
+        database: {
+            generateId: false,
+        },
+    },
 } satisfies BetterAuthOptions

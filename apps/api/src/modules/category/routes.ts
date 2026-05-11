@@ -7,13 +7,13 @@ import { findMany, getLimitOffset } from "@/common/crud/find-many"
 import { findOne } from "@/common/crud/find-one"
 import { updateMany } from "@/common/crud/update-many"
 import { db } from "@/database/db"
-import { post } from "@/database/schemas"
+import { category } from "@/database/schemas"
 
-export const postRoutes = new Elysia({ prefix: "/posts" })
+export const categoryRoutes = new Elysia({ prefix: "/categories" })
     .get("/", async () => {
         const { limit, offset } = getLimitOffset(1, 10)
 
-        const posts = await findMany(db, post, {
+        const categories = await findMany(db, category, {
             limit,
             offset,
             orderBy: [
@@ -25,13 +25,13 @@ export const postRoutes = new Elysia({ prefix: "/posts" })
         })
 
         return {
-            data: posts.rows,
-            total: posts.total,
+            data: categories.rows,
+            total: categories.total,
         }
     })
     .get("/:id", async ({ params }) => {
-        const { row } = await findOne(db, post, {
-            where: eq(post.id, params.id),
+        const { row } = await findOne(db, category, {
+            where: eq(category.id, params.id),
         })
         return {
             data: row,
@@ -39,12 +39,9 @@ export const postRoutes = new Elysia({ prefix: "/posts" })
     })
     .post(
         "/",
-        async ({ body, headers }) => {
-            const { row } = await createOne(db, post, {
-                value: {
-                    ...body,
-                    orgId: headers["x-org-id"],
-                },
+        async ({ body }) => {
+            const { row } = await createOne(db, category, {
+                value: body,
             })
             return {
                 data: row,
@@ -52,19 +49,16 @@ export const postRoutes = new Elysia({ prefix: "/posts" })
         },
         {
             body: z.object({
-                title: z.string(),
-                content: z.string(),
-            }),
-            headers: z.object({
-                "x-org-id": z.string(),
+                name: z.string(),
+                orgId: z.string(),
             }),
         }
     )
     .patch(
         "/:id",
         async ({ params, body }) => {
-            const { rows } = await updateMany(db, post, {
-                where: eq(post.id, params.id),
+            const { rows } = await updateMany(db, category, {
+                where: eq(category.id, params.id),
                 value: body,
             })
             return {
@@ -73,15 +67,14 @@ export const postRoutes = new Elysia({ prefix: "/posts" })
         },
         {
             body: z.object({
-                title: z.string(),
-                content: z.string(),
+                name: z.string(),
                 orgId: z.string(),
             }),
         }
     )
     .delete("/:id", async ({ params }) => {
-        const { rows } = await deleteMany(db, post, {
-            where: eq(post.id, params.id),
+        const { rows } = await deleteMany(db, category, {
+            where: eq(category.id, params.id),
         })
         console.debug(
             "Deleted rows:",

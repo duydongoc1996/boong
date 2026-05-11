@@ -29,7 +29,7 @@ const betterAuthView = (context: Context & { request: Request }) => {
 export const pluginAuth = () => {
     return new Elysia({ name: "plugin-auth" })
         .decorate("auth", auth)
-        .all("/api/auth/*", betterAuthView)
+        .all("/auth/*", betterAuthView)
 }
 
 export async function getOpenApiSchema(prefix: string) {

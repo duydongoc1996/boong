@@ -1,7 +1,7 @@
 import { useSelect } from "@refinedev/core"
 import { useForm } from "@refinedev/react-hook-form"
 import { useNavigate } from "react-router"
-import { CreateView } from "@/components/refine-ui/views/create-view"
+import { EditView } from "@/components/refine-ui/views/edit-view"
 import { Button } from "@/components/ui/button"
 import {
     Form,
@@ -21,18 +21,24 @@ import {
 } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
 
-export const BlogPostCreate = () => {
+export const PostEdit = () => {
     const navigate = useNavigate()
 
     const {
-        refineCore: { onFinish },
+        refineCore: { onFinish, query },
         ...form
     } = useForm({
         refineCoreProps: {},
     })
 
+    const blogPostsData = query?.data?.data
+
     const { options: categoryOptions } = useSelect({
         resource: "categories",
+        defaultValue: blogPostsData?.category,
+        queryOptions: {
+            enabled: !!blogPostsData?.category,
+        },
     })
 
     function onSubmit(values: Record<string, string>) {
@@ -40,7 +46,7 @@ export const BlogPostCreate = () => {
     }
 
     return (
-        <CreateView>
+        <EditView>
             <Form {...form}>
                 <form
                     onSubmit={form.handleSubmit(onSubmit)}
@@ -126,7 +132,7 @@ export const BlogPostCreate = () => {
                                 <FormLabel>Status</FormLabel>
                                 <Select
                                     onValueChange={field.onChange}
-                                    defaultValue={"draft"}
+                                    value={field.value || ""}
                                 >
                                     <FormControl>
                                         <SelectTrigger>
@@ -157,8 +163,8 @@ export const BlogPostCreate = () => {
                             disabled={form.formState.isSubmitting}
                         >
                             {form.formState.isSubmitting
-                                ? "Creating..."
-                                : "Create"}
+                                ? "Updating..."
+                                : "Update"}
                         </Button>
                         <Button
                             type="button"
@@ -170,6 +176,6 @@ export const BlogPostCreate = () => {
                     </div>
                 </form>
             </Form>
-        </CreateView>
+        </EditView>
     )
 }

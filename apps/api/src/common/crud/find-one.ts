@@ -1,15 +1,15 @@
 import type { InferSelectModel } from "drizzle-orm"
 import type { PgTable } from "drizzle-orm/pg-core"
-import type { DbExecutor, ReadTableOptions, ReadTableResult } from "./types"
+import type { DbExecutor, FindOneOptions, FindOneResult } from "./types"
 
-export async function read<
+export async function findOne<
     TSchema extends Record<string, unknown>,
     TTable extends PgTable,
 >(
     db: DbExecutor<TSchema>,
     table: TTable,
-    options: ReadTableOptions<TTable>
-): Promise<ReadTableResult<TTable>> {
+    options: FindOneOptions<TTable>
+): Promise<FindOneResult<TTable>> {
     const { where } = options
 
     const rows = (await db

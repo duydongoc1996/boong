@@ -8,7 +8,7 @@ const connection = connectDatabase({
     schema,
     postgres: {},
     drizzle: {
-        logger: true,
+        // logger: true,
     },
 })
 

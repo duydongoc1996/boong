@@ -42,8 +42,7 @@
         "@refinedev/react-hook-form": "^5.0.4",
         "@refinedev/react-router": "^2.0.4",
         "@refinedev/react-table": "^6.0.1",
-        "@refinedev/rest": "^2.1.1",
-        "@refinedev/simple-rest": "^6.0.1",
+        "@bunti/rest-adapter": "workspace:*",
         "@tailwindcss/vite": "^4.3.0",
         "@tanstack/react-pacer": "^0.22.0",
         "@tanstack/react-query": "^5.100.9",
@@ -79,17 +78,18 @@
         "zod": "^4.4.3"
     },
     "devDependencies": {
+        "@biomejs/biome": "2.4.14",
+        "@bunti/tsconfig": "workspace:*",
+        "@tailwindcss/postcss": "^4.3.0",
+        "@tailwindcss/typography": "^0.5.19",
         "@types/node": "^25.6.2",
         "@types/react": "^19.2.14",
         "@types/react-dom": "^19.2.3",
         "@vitejs/plugin-react": "^6.0.1",
         "globals": "^17.6.0",
-        "vite": "^8.0.11",
-        "typescript": "^6.0.3",
-        "@tailwindcss/postcss": "^4.3.0",
         "tailwindcss": "^4.3.0",
-        "@biomejs/biome": "2.4.14",
-        "@bunti/tsconfig": "workspace:*"
+        "typescript": "^6.0.3",
+        "vite": "^8.0.11"
     },
     "scripts": {
         "dev": "refine dev",

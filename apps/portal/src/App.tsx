@@ -16,18 +16,13 @@ import { Toaster } from "./components/refine-ui/notification/toaster"
 import { useNotificationProvider } from "./components/refine-ui/notification/use-notification-provider"
 import { ThemeProvider } from "./components/refine-ui/theme/theme-provider"
 import {
-    BlogPostCreate,
-    BlogPostEdit,
-    BlogPostList,
-    BlogPostShow,
-} from "./pages/blog-posts"
-import {
     CategoryCreate,
     CategoryEdit,
     CategoryList,
     CategoryShow,
 } from "./pages/categories"
 import { ForgotPasswordPage } from "./pages/forgot-password"
+import { PostCreate, PostEdit, PostList, PostShow } from "./pages/posts"
 import { ResetPasswordPage } from "./pages/reset-password"
 import { SettingsAccount } from "./pages/settings/account"
 import { SettingsIndex } from "./pages/settings/index"
@@ -37,7 +32,7 @@ import { SignOutPage } from "./pages/sign-out"
 import { SignUpPage } from "./pages/sign-up"
 import { authProvider } from "./providers/auth"
 import { BetterAuthUIProvider } from "./providers/better-auth-ui-provider"
-import { dataProvider } from "./providers/data"
+import { restProvider } from "./providers/data"
 
 function App() {
     return (
@@ -47,17 +42,17 @@ function App() {
                     <BetterAuthUIProvider>
                         <DevtoolsProvider>
                             <Refine
-                                dataProvider={dataProvider}
+                                dataProvider={restProvider}
                                 notificationProvider={useNotificationProvider()}
                                 routerProvider={routerProvider}
                                 authProvider={authProvider}
                                 resources={[
                                     {
-                                        name: "blog_posts",
-                                        list: "/blog-posts",
-                                        create: "/blog-posts/create",
-                                        edit: "/blog-posts/edit/:id",
-                                        show: "/blog-posts/show/:id",
+                                        name: "posts",
+                                        list: "/posts",
+                                        create: "/posts/create",
+                                        edit: "/posts/edit/:id",
+                                        show: "/posts/show/:id",
                                         meta: {
                                             canDelete: true,
                                         },
@@ -97,25 +92,25 @@ function App() {
                                         <Route
                                             index
                                             element={
-                                                <NavigateToResource resource="blog_posts" />
+                                                <NavigateToResource resource="posts" />
                                             }
                                         />
-                                        <Route path="/blog-posts">
+                                        <Route path="/posts">
                                             <Route
                                                 index
-                                                element={<BlogPostList />}
+                                                element={<PostList />}
                                             />
                                             <Route
                                                 path="create"
-                                                element={<BlogPostCreate />}
+                                                element={<PostCreate />}
                                             />
                                             <Route
                                                 path="edit/:id"
-                                                element={<BlogPostEdit />}
+                                                element={<PostEdit />}
                                             />
                                             <Route
                                                 path="show/:id"
-                                                element={<BlogPostShow />}
+                                                element={<PostShow />}
                                             />
                                         </Route>
                                         <Route path="/categories">

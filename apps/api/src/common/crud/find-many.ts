@@ -6,11 +6,11 @@ import {
     type SQL,
 } from "drizzle-orm"
 import type { PgTable } from "drizzle-orm/pg-core"
-import type { BrowseTableOptions, BrowseTableResult, DbExecutor } from "./types"
+import type { DbExecutor, FindManyOptions, FindManyResult } from "./types"
 
 function buildWhere<TTable extends PgTable>(
     table: TTable,
-    where: BrowseTableOptions<TTable>["where"]
+    where: FindManyOptions<TTable>["where"]
 ): SQL | undefined {
     if (where === undefined) {
         return undefined
@@ -23,7 +23,7 @@ function buildWhere<TTable extends PgTable>(
 
 function buildOrderBy<TTable extends PgTable>(
     table: TTable,
-    orderBy: BrowseTableOptions<TTable>["orderBy"]
+    orderBy: FindManyOptions<TTable>["orderBy"]
 ): SQL[] | undefined {
     if (orderBy === undefined || orderBy.length === 0) {
         return undefined
@@ -41,14 +41,14 @@ function buildOrderBy<TTable extends PgTable>(
 /**
  * Typed `select` + pagination: dynamic `where`, `orderBy`, `limit`/`offset`, and optional total count via `$count`.
  */
-export async function paginate<
+export async function findMany<
     TSchema extends Record<string, unknown>,
     TTable extends PgTable,
 >(
     db: DbExecutor<TSchema>,
     table: TTable,
-    options: BrowseTableOptions<TTable>
-): Promise<BrowseTableResult<TTable>> {
+    options: FindManyOptions<TTable>
+): Promise<FindManyResult<TTable>> {
     const { limit, offset = 0, orderBy, where, withTotal = true } = options
 
     const whereClause = buildWhere(table, where)

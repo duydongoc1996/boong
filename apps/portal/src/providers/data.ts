@@ -1,5 +1,6 @@
-import { createSimpleRestDataProvider } from "@refinedev/rest/simple-rest"
+import dataProvider from "@bunti/rest-adapter"
 import { API_URL } from "./constants"
-export const { dataProvider, kyInstance } = createSimpleRestDataProvider({
-    apiURL: API_URL,
-})
+
+// const fake = "https://api.fake-rest.refine.dev";
+
+export const restProvider = dataProvider(API_URL)

@@ -1,49 +1,52 @@
-import { useList } from "@refinedev/core"
 import { useTable } from "@refinedev/react-table"
 import { createColumnHelper } from "@tanstack/react-table"
 import React from "react"
-
 import { DeleteButton } from "@/components/refine-ui/buttons/delete"
 import { EditButton } from "@/components/refine-ui/buttons/edit"
+import { RefreshButton } from "@/components/refine-ui/buttons/refresh"
 import { ShowButton } from "@/components/refine-ui/buttons/show"
 import { DataTable } from "@/components/refine-ui/data-table/data-table"
-import { ListView } from "@/components/refine-ui/views/list-view"
-import { Badge } from "@/components/ui/badge"
+import {
+    DataTableFilterDropdownDateRangePicker,
+    DataTableFilterDropdownText,
+} from "@/components/refine-ui/data-table/data-table-filter"
+import { DataTableSorter } from "@/components/refine-ui/data-table/data-table-sorter"
+import {
+    ListView,
+    ListViewHeader,
+} from "@/components/refine-ui/views/list-view"
+import type { Post } from "./types"
 
-type BlogPost = {
-    id: string
-    title: string
-    content: string
-    status: string
-    createdAt: string
-    category: { id: string; title: string }
-}
-
-export const BlogPostList = () => {
-    // fetch all categories to use in the combobox filter
-    const {
-        result: { data: categories },
-        query: { isLoading: categoryIsLoading },
-    } = useList({
-        resource: "categories",
-        pagination: {
-            currentPage: 1,
-            pageSize: 999,
-        },
-    })
-
+export const PostList = () => {
     const columns = React.useMemo(() => {
-        const columnHelper = createColumnHelper<BlogPost>()
+        const columnHelper = createColumnHelper<Post>()
 
         return [
             columnHelper.accessor("id", {
                 id: "id",
-                header: "ID",
-                enableSorting: false,
+                enableSorting: true,
+                header: ({ column }) => (
+                    <div className="flex items-center gap-1">
+                        <span>ID</span>
+                        <DataTableSorter column={column} />
+                    </div>
+                ),
             }),
             columnHelper.accessor("title", {
                 id: "title",
-                header: "Title",
+                header: ({ column, table }) => (
+                    <div className="flex items-center gap-1">
+                        <span>Title</span>
+                        <div>
+                            <DataTableFilterDropdownText
+                                defaultOperator="contains"
+                                column={column}
+                                table={table}
+                                placeholder="Filter by title"
+                            />
+                        </div>
+                    </div>
+                ),
                 enableSorting: true,
             }),
             columnHelper.accessor("content", {
@@ -60,41 +63,25 @@ export const BlogPostList = () => {
                     )
                 },
             }),
-            columnHelper.accessor("category.title", {
-                id: "category",
-                header: "Category",
-                enableSorting: false,
-                cell: ({ row }) => {
-                    const categoryId = row.original.category?.id
-                    const category = categories?.find(
-                        (item) => item.id === categoryId
-                    )
-                    return categoryIsLoading
-                        ? "Loading..."
-                        : category?.title || "-"
-                },
-            }),
-            columnHelper.accessor("status", {
-                id: "status",
-                header: "Status",
-                enableSorting: true,
-                cell: ({ getValue }) => {
-                    const status = getValue()
-                    return (
-                        <Badge
-                            variant={
-                                status === "published" ? "default" : "secondary"
-                            }
-                        >
-                            {status}
-                        </Badge>
-                    )
-                },
-            }),
             columnHelper.accessor("createdAt", {
                 id: "createdAt",
-                header: "Created At",
-                enableSorting: true,
+                header: ({ column }) => (
+                    <div className="flex items-center gap-1">
+                        <span>Created At</span>
+                        <DataTableSorter column={column} />
+                        <DataTableFilterDropdownDateRangePicker
+                            column={column}
+                            formatDateRange={(dateRange) => {
+                                if (!dateRange?.from || !dateRange?.to)
+                                    return undefined
+                                return [
+                                    dateRange.from.toISOString(),
+                                    dateRange.to.toISOString(),
+                                ]
+                            }}
+                        />
+                    </div>
+                ),
                 cell: ({ getValue }) => {
                     const date = getValue()
                     return date ? new Date(date).toLocaleDateString() : "-"
@@ -117,7 +104,7 @@ export const BlogPostList = () => {
                 size: 290,
             }),
         ]
-    }, [categories, categoryIsLoading])
+    }, [])
 
     const table = useTable({
         columns,
@@ -128,6 +115,7 @@ export const BlogPostList = () => {
 
     return (
         <ListView>
+            <ListViewHeader canCreate={true} />
             <DataTable table={table} />
         </ListView>
     )
