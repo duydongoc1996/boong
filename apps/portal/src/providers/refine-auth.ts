@@ -1,5 +1,4 @@
 import type { AuthProvider } from "@refinedev/core"
-
 import { authClient } from "@/lib/auth/auth-client"
 
 const notViaRefine = {

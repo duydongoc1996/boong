@@ -8,7 +8,7 @@ import {
 } from "@refinedev/core"
 import { ChevronRight, ListIcon } from "lucide-react"
 import type React from "react"
-import { OrgSwitcher } from "@/components/bunti/org-switcher"
+import { OrgSwitcher } from "@/components/boong/org-switcher"
 import { Button } from "@/components/ui/button"
 import {
     Collapsible,

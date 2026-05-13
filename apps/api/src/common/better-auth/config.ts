@@ -1,7 +1,14 @@
 import { i18n } from "@better-auth/i18n"
 import type { BetterAuthOptions } from "better-auth"
-import { multiSession, openAPI, organization } from "better-auth/plugins"
+import {
+    admin,
+    multiSession,
+    openAPI,
+    organization,
+    type UserWithRole,
+} from "better-auth/plugins"
 import { config } from "../plugins/config"
+import { UserRole } from "./enum"
 
 export const BETTER_AUTH_CONFIG = {
     emailAndPassword: {
@@ -9,7 +16,12 @@ export const BETTER_AUTH_CONFIG = {
     },
     trustedOrigins: config.ALLOWED_ORIGINS,
     plugins: [
-        organization(),
+        admin(),
+        organization({
+            allowUserToCreateOrganization: async (user) => {
+                return (user as UserWithRole).role === UserRole.ADMIN
+            },
+        }),
         openAPI(),
         multiSession(),
         i18n({

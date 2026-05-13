@@ -3,9 +3,7 @@ import type { ComponentType, PropsWithChildren } from "react"
 import { forwardRef } from "react"
 import { Link as RouterLink, useNavigate } from "react-router"
 import { AuthProvider } from "@/components/auth/auth-provider"
-import { useTheme } from "@/components/refine-ui/theme/theme-provider"
 import { authClient } from "@/lib/auth/auth-client"
-import { themePlugin } from "@/lib/auth/theme-plugin"
 
 /**
  * Better Auth UI passes `href`; React Router's `Link` navigates from `to` and overwrites
@@ -43,7 +41,7 @@ export function BetterAuthUIProvider({ children }: PropsWithChildren) {
             basePaths={{
                 auth: "",
                 settings: "/settings",
-                organization: "/organization",
+                organization: "/organizations",
             }}
             viewPaths={{
                 auth: {

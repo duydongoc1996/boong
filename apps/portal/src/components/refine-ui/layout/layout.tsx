@@ -1,7 +1,7 @@
 "use client"
 
 import type { PropsWithChildren } from "react"
-import { AppSidebar } from "@/components/bunti/app-sidebar"
+import { AppSidebar } from "@/components/boong/app-sidebar"
 import { Header } from "@/components/refine-ui/layout/header"
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
 import { cn } from "@/lib/utils"

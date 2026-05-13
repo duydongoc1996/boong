@@ -1,6 +1,6 @@
 {
     "name": "i18n",
-    "description": "Internationalization package for Bunti",
+    "description": "Internationalization package for Boong",
     "private": true,
     "version": "0.0.1",
     "packageManager": "bun@1.3.13",

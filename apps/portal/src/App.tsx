@@ -10,29 +10,42 @@ import routerProvider, {
 } from "@refinedev/react-router"
 import { BrowserRouter, Outlet, Route, Routes } from "react-router"
 import "./App.css"
-import { ErrorComponent } from "./components/refine-ui/layout/error-component"
-import { Layout } from "./components/refine-ui/layout/layout"
-import { Toaster } from "./components/refine-ui/notification/toaster"
-import { useNotificationProvider } from "./components/refine-ui/notification/use-notification-provider"
-import { ThemeProvider } from "./components/refine-ui/theme/theme-provider"
+import { BetterAuthUIProvider } from "@/components/auth/better-auth-ui-provider"
+import { ErrorComponent } from "@/components/refine-ui/layout/error-component"
+import { Layout } from "@/components/refine-ui/layout/layout"
+import { Toaster } from "@/components/refine-ui/notification/toaster"
+import { useNotificationProvider } from "@/components/refine-ui/notification/use-notification-provider"
+import { ThemeProvider } from "@/components/refine-ui/theme/theme-provider"
 import {
     CategoryCreate,
     CategoryEdit,
     CategoryList,
     CategoryShow,
-} from "./pages/categories"
-import { ForgotPasswordPage } from "./pages/forgot-password"
+} from "@/pages/categories"
+import { ForgotPasswordPage } from "@/pages/forgot-password"
+import {
+    OrganizationCreate,
+    OrganizationEdit,
+    OrganizationList,
+    OrganizationShow,
+} from "@/pages/organizations"
+import { ResetPasswordPage } from "@/pages/reset-password"
+import { SettingsAccount } from "@/pages/settings/account"
+import { SettingsIndex } from "@/pages/settings/index"
+import { SettingsSecurity } from "@/pages/settings/security"
+import { SignInPage } from "@/pages/sign-in"
+import { SignOutPage } from "@/pages/sign-out"
+import { SignUpPage } from "@/pages/sign-up"
+import { authProvider } from "@/providers/refine-auth"
+import { restProvider } from "@/providers/rest"
+import { InvitationCreate, InvitationList } from "./pages/invitations"
+import { MemberEdit, MemberList } from "./pages/members"
 import { PostCreate, PostEdit, PostList, PostShow } from "./pages/posts"
-import { ResetPasswordPage } from "./pages/reset-password"
-import { SettingsAccount } from "./pages/settings/account"
-import { SettingsIndex } from "./pages/settings/index"
-import { SettingsSecurity } from "./pages/settings/security"
-import { SignInPage } from "./pages/sign-in"
-import { SignOutPage } from "./pages/sign-out"
-import { SignUpPage } from "./pages/sign-up"
-import { authProvider } from "./providers/auth"
-import { BetterAuthUIProvider } from "./providers/better-auth-ui-provider"
-import { restProvider } from "./providers/data"
+import {
+    invitationProvider,
+    memberProvider,
+    orgProvider,
+} from "./providers/better-auth"
 
 function App() {
     return (
@@ -42,7 +55,12 @@ function App() {
                     <BetterAuthUIProvider>
                         <DevtoolsProvider>
                             <Refine
-                                dataProvider={restProvider}
+                                dataProvider={{
+                                    default: restProvider,
+                                    org: orgProvider,
+                                    member: memberProvider,
+                                    invitation: invitationProvider,
+                                }}
                                 notificationProvider={useNotificationProvider()}
                                 routerProvider={routerProvider}
                                 authProvider={authProvider}
@@ -63,6 +81,34 @@ function App() {
                                         create: "/categories/create",
                                         edit: "/categories/edit/:id",
                                         show: "/categories/show/:id",
+                                        meta: {
+                                            canDelete: true,
+                                        },
+                                    },
+                                    {
+                                        name: "organizations",
+                                        list: "/admin/organizations",
+                                        create: "/admin/organizations/create",
+                                        edit: "/admin/organizations/edit/:id",
+                                        show: "/admin/organizations/show/:id",
+                                        meta: {
+                                            canDelete: true,
+                                        },
+                                    },
+                                    {
+                                        name: "invitations",
+                                        list: "/team/invitations",
+                                        create: "/team/invitations/create",
+                                        show: "/team/invitations/show/:id",
+                                        meta: {
+                                            canDelete: true,
+                                        },
+                                    },
+                                    {
+                                        name: "members",
+                                        list: "/team/members",
+                                        create: "/team/invitations/create",
+                                        edit: "/team/members/edit/:id",
                                         meta: {
                                             canDelete: true,
                                         },
@@ -129,6 +175,44 @@ function App() {
                                             <Route
                                                 path="show/:id"
                                                 element={<CategoryShow />}
+                                            />
+                                        </Route>
+                                        <Route path="/admin/organizations">
+                                            <Route
+                                                index
+                                                element={<OrganizationList />}
+                                            />
+                                            <Route
+                                                path="create"
+                                                element={<OrganizationCreate />}
+                                            />
+                                            <Route
+                                                path="edit/:id"
+                                                element={<OrganizationEdit />}
+                                            />
+                                            <Route
+                                                path="show/:id"
+                                                element={<OrganizationShow />}
+                                            />
+                                        </Route>
+                                        <Route path="/team/members">
+                                            <Route
+                                                index
+                                                element={<MemberList />}
+                                            />
+                                            <Route
+                                                path="edit/:id"
+                                                element={<MemberEdit />}
+                                            />
+                                        </Route>
+                                        <Route path="/team/invitations">
+                                            <Route
+                                                index
+                                                element={<InvitationList />}
+                                            />
+                                            <Route
+                                                path="create"
+                                                element={<InvitationCreate />}
                                             />
                                         </Route>
                                         <Route

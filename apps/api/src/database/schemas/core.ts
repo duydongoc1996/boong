@@ -25,6 +25,10 @@ export const user = core.table("user", {
         .defaultNow()
         .$onUpdate(() => /* @__PURE__ */ new Date())
         .notNull(),
+    role: text("role"),
+    banned: boolean("banned").default(false),
+    banReason: text("ban_reason"),
+    banExpires: timestamp("ban_expires"),
 })
 
 export const session = core.table(
@@ -42,6 +46,7 @@ export const session = core.table(
         userId: text("user_id")
             .notNull()
             .references(() => user.id, { onDelete: "cascade" }),
+        impersonatedBy: text("impersonated_by"),
         activeOrganizationId: text("active_organization_id"),
     },
     (table) => [index("session_userId_idx").on(table.userId)]

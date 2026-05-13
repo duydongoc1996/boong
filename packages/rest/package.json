@@ -1,10 +1,10 @@
 {
-    "name": "@boong/rest-adapter",
+    "name": "@boong/rest",
     "version": "0.0.1",
     "private": true,
-    "description": "REST Adapter for Bunti, enabling seamless REST API interactions.",
+    "description": "REST Adapter for Boong, enabling seamless REST API interactions.",
     "license": "MIT",
-    "author": "Bunti",
+    "author": "Boong",
     "type": "module",
     "packageManager": "bun@1.3.13",
     "exports": {

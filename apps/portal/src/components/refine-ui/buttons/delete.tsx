@@ -12,6 +12,11 @@ import {
 
 type DeleteButtonProps = {
     /**
+     * Target data provider name for API call to be made
+     * @default `"default"`
+     */
+    dataProviderName?: string
+    /**
      * Resource name for API data interactions. `identifier` of the resource can be used instead of the `name` of the resource.
      * @default Inferred resource name from the route
      */
@@ -38,84 +43,99 @@ type DeleteButtonProps = {
 export const DeleteButton = React.forwardRef<
     React.ComponentRef<typeof Button>,
     DeleteButtonProps
->(({ resource, recordItemId, accessControl, meta, children, ...rest }, ref) => {
-    const {
-        hidden,
-        disabled,
-        loading,
-        onConfirm,
-        label,
-        confirmTitle: defaultConfirmTitle,
-        confirmOkLabel: defaultConfirmOkLabel,
-        cancelLabel: defaultCancelLabel,
-    } = useDeleteButton({
-        resource,
-        id: recordItemId,
-        accessControl,
-        meta,
-    })
-    const [open, setOpen] = React.useState(false)
+>(
+    (
+        {
+            dataProviderName,
+            resource,
+            recordItemId,
+            accessControl,
+            meta,
+            children,
 
-    const isDisabled = disabled || rest.disabled || loading
-    const isHidden = hidden || rest.hidden
+            ...rest
+        },
+        ref
+    ) => {
+        const {
+            hidden,
+            disabled,
+            loading,
+            onConfirm,
+            label,
+            confirmTitle: defaultConfirmTitle,
+            confirmOkLabel: defaultConfirmOkLabel,
+            cancelLabel: defaultCancelLabel,
+        } = useDeleteButton({
+            dataProviderName,
+            resource,
+            id: recordItemId,
+            accessControl,
+            meta,
+        })
+        const [open, setOpen] = React.useState(false)
 
-    if (isHidden) return null
+        const isDisabled = disabled || rest.disabled || loading
+        const isHidden = hidden || rest.hidden
 
-    const confirmCancelText = defaultCancelLabel
-    const confirmOkText = defaultConfirmOkLabel
-    const confirmTitle = defaultConfirmTitle
+        if (isHidden) return null
 
-    return (
-        <Popover open={open} onOpenChange={setOpen}>
-            <PopoverTrigger asChild>
-                <span>
-                    <Button
-                        variant="destructive"
-                        {...rest}
-                        ref={ref}
-                        disabled={isDisabled}
-                    >
-                        {loading && (
-                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        )}
-                        {children ?? (
-                            <div className="flex items-center gap-2 font-semibold">
-                                <Trash className="h-4 w-4" />
-                                <span>{label}</span>
-                            </div>
-                        )}
-                    </Button>
-                </span>
-            </PopoverTrigger>
-            <PopoverContent className="w-auto" align="start">
-                <div className="flex flex-col gap-2">
-                    <p className="text-sm">{confirmTitle}</p>
-                    <div className="flex justify-end gap-2">
-                        <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => setOpen(false)}
-                        >
-                            {confirmCancelText}
-                        </Button>
+        const confirmCancelText = defaultCancelLabel
+        const confirmOkText = defaultConfirmOkLabel
+        const confirmTitle = defaultConfirmTitle
+
+        return (
+            <Popover open={open} onOpenChange={setOpen}>
+                <PopoverTrigger asChild>
+                    <span>
                         <Button
                             variant="destructive"
-                            size="sm"
-                            disabled={loading}
-                            onClick={() => {
-                                if (typeof onConfirm === "function") {
-                                    onConfirm()
-                                }
-                                setOpen(false)
-                            }}
+                            {...rest}
+                            ref={ref}
+                            disabled={isDisabled}
                         >
-                            {confirmOkText}
+                            {loading && (
+                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                            )}
+                            {children ?? (
+                                <div className="flex items-center gap-2 font-semibold">
+                                    <Trash className="h-4 w-4" />
+                                    <span>{label}</span>
+                                </div>
+                            )}
                         </Button>
+                    </span>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto" align="start">
+                    <div className="flex flex-col gap-2">
+                        <p className="text-sm">{confirmTitle}</p>
+                        <div className="flex justify-end gap-2">
+                            <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => setOpen(false)}
+                            >
+                                {confirmCancelText}
+                            </Button>
+                            <Button
+                                variant="destructive"
+                                size="sm"
+                                disabled={loading}
+                                onClick={() => {
+                                    if (typeof onConfirm === "function") {
+                                        onConfirm()
+                                    }
+                                    setOpen(false)
+                                }}
+                            >
+                                {confirmOkText}
+                            </Button>
+                        </div>
                     </div>
-                </div>
-            </PopoverContent>
-        </Popover>
-    )
-})
+                </PopoverContent>
+            </Popover>
+        )
+    }
+)
 
 DeleteButton.displayName = "DeleteButton"

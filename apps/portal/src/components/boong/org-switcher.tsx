@@ -95,7 +95,7 @@ export function OrgSwitcher() {
                         <DropdownMenuSeparator />
                         <DropdownMenuItem asChild>
                             <Link
-                                to="/organization"
+                                to="/organizations"
                                 className="flex w-full cursor-pointer items-center gap-2 p-2"
                             >
                                 <div className="flex size-6 items-center justify-center rounded-md border bg-transparent">
