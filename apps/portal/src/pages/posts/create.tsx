@@ -12,20 +12,18 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
+import { useOrg } from "@/hooks/use-org"
 
 export const PostCreate = () => {
     const navigate = useNavigate()
+    const { metaHeaders } = useOrg()
 
     const {
         refineCore: { onFinish },
         ...form
     } = useForm({
         refineCoreProps: {
-            meta: {
-                headers: {
-                    "x-org-id": "1",
-                },
-            },
+            meta: metaHeaders ? { headers: metaHeaders } : undefined,
         },
     })
 

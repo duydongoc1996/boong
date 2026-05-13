@@ -1,5 +1,5 @@
 {
-    "name": "@bunti/rest-adapter",
+    "name": "@boong/rest-adapter",
     "version": "0.0.1",
     "private": true,
     "description": "REST Adapter for Bunti, enabling seamless REST API interactions.",
@@ -33,7 +33,7 @@
         "@refinedev/cli": "^2.16.50",
         "@refinedev/core": "^5.0.5",
         "@biomejs/biome": "2.4.14",
-        "@bunti/tsconfig": "workspace:*",
+        "@boong/tsconfig": "workspace:*",
         "typescript": "^6.0.3"
     },
     "peerDependencies": {

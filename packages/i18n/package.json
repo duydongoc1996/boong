@@ -1,0 +1,18 @@
+{
+    "name": "i18n",
+    "description": "Internationalization package for Bunti",
+    "private": true,
+    "version": "0.0.1",
+    "packageManager": "bun@1.3.13",
+    "module": "index.ts",
+    "type": "module",
+    "devDependencies": {
+        "@types/bun": "latest",
+        "typescript": "^6.0.3",
+        "@boong/tsconfig": "workspace:*",
+        "@biomejs/biome": "2.4.14"
+    },
+    "dependencies": {
+        "typesafe-i18n": "^5.27.1"
+    }
+}

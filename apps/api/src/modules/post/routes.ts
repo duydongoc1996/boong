@@ -6,44 +6,58 @@ import { deleteMany } from "@/common/crud/delete-many"
 import { findMany, getLimitOffset } from "@/common/crud/find-many"
 import { findOne } from "@/common/crud/find-one"
 import { updateMany } from "@/common/crud/update-many"
+import { macroOrg } from "@/common/plugins/org"
 import { db } from "@/database/db"
 import { post } from "@/database/schemas"
 
 export const postRoutes = new Elysia({ prefix: "/posts" })
-    .get("/", async () => {
-        const { limit, offset } = getLimitOffset(1, 10)
+    .use(macroOrg)
+    .get(
+        "/",
+        async () => {
+            const { limit, offset } = getLimitOffset(1, 10)
 
-        const posts = await findMany(db, post, {
-            limit,
-            offset,
-            orderBy: [
-                {
-                    column: "createdAt",
-                    direction: "asc",
-                },
-            ],
-        })
+            const posts = await findMany(db, post, {
+                limit,
+                offset,
+                orderBy: [
+                    {
+                        column: "createdAt",
+                        direction: "asc",
+                    },
+                ],
+            })
 
-        return {
-            data: posts.rows,
-            total: posts.total,
+            return {
+                data: posts.rows,
+                total: posts.total,
+            }
+        },
+        {
+            withOrg: true,
         }
-    })
-    .get("/:id", async ({ params }) => {
-        const { row } = await findOne(db, post, {
-            where: eq(post.id, params.id),
-        })
-        return {
-            data: row,
+    )
+    .get(
+        "/:id",
+        async ({ params }) => {
+            const { row } = await findOne(db, post, {
+                where: eq(post.id, params.id),
+            })
+            return {
+                data: row,
+            }
+        },
+        {
+            withOrg: true,
         }
-    })
+    )
     .post(
         "/",
-        async ({ body, headers }) => {
+        async ({ body, orgId, headers }) => {
             const { row } = await createOne(db, post, {
                 value: {
                     ...body,
-                    orgId: headers["x-org-id"],
+                    orgId,
                 },
             })
             return {
@@ -55,9 +69,10 @@ export const postRoutes = new Elysia({ prefix: "/posts" })
                 title: z.string(),
                 content: z.string(),
             }),
-            headers: z.object({
-                "x-org-id": z.string(),
-            }),
+            // headers: z.object({
+            //     "x-org-id": z.string(),
+            // }),
+            withOrg: true,
         }
     )
     .patch(

@@ -1,5 +1,5 @@
 {
-    "name": "@bunti/api",
+    "name": "@boong/api",
     "private": true,
     "type": "module",
     "packageManager": "bun@1.3.13",
@@ -22,6 +22,7 @@
         "auth:generate": "bunx auth@latest generate --config ./lib/auth.ts --output ./src/database/schemas/auth.ts"
     },
     "dependencies": {
+        "@better-auth/i18n": "^1.6.10",
         "@elysia/cors": "^1.4.2",
         "@elysia/openapi": "^1.4.15",
         "@refinedev/simple-rest": "^6.0.1",
@@ -38,7 +39,7 @@
     },
     "devDependencies": {
         "@biomejs/biome": "2.4.14",
-        "@bunti/tsconfig": "workspace:*",
+        "@boong/tsconfig": "workspace:*",
         "drizzle-kit": "^0.31.10",
         "typescript": "^6.0.3"
     }

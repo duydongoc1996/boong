@@ -1,4 +1,4 @@
-# @bunti-tenant
+# @boong-tenant
 
 A multi tenant application codebase with:
 

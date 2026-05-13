@@ -8,6 +8,7 @@ import {
 } from "@refinedev/core"
 import { ChevronRight, ListIcon } from "lucide-react"
 import type React from "react"
+import { OrgSwitcher } from "@/components/bunti/org-switcher"
 import { Button } from "@/components/ui/button"
 import {
     Collapsible,
@@ -37,7 +38,7 @@ export function Sidebar() {
     return (
         <ShadcnSidebar collapsible="icon" className={cn("border-none")}>
             <ShadcnSidebarRail />
-            <SidebarHeader />
+            {/* <SidebarHeader /> */}
             <ShadcnSidebarContent
                 className={cn(
                     "transition-discrete",
@@ -55,6 +56,7 @@ export function Sidebar() {
                     }
                 )}
             >
+                <OrgSwitcher />
                 {menuItems.map((item: TreeMenuItem) => (
                     <SidebarItem
                         key={item.key || item.name}

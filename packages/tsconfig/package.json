@@ -1,14 +1,14 @@
 {
-  "name": "@bunti/tsconfig",
-  "version": "0.0.0",
-  "private": true,
-  "description": "Shared TypeScript bases for the Bunti monorepo",
-  "exports": {
-    "./base.json": "./base.json",
-    "./bun-app.json": "./bun-app.json",
-    "./vite-app.json": "./vite-app.json",
-    "./vite-node.json": "./vite-node.json",
-    "./react-library.json": "./react-library.json"
-  },
-  "files": ["*.json"]
+    "name": "@boong/tsconfig",
+    "version": "0.0.0",
+    "private": true,
+    "description": "Shared TypeScript bases for the Bunti monorepo",
+    "exports": {
+        "./base.json": "./base.json",
+        "./bun-app.json": "./bun-app.json",
+        "./vite-app.json": "./vite-app.json",
+        "./vite-node.json": "./vite-node.json",
+        "./react-library.json": "./react-library.json"
+    },
+    "files": ["*.json"]
 }

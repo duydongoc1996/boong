@@ -1,5 +1,5 @@
 {
-    "extends": "@bunti/tsconfig/vite-node.json",
+    "extends": "@boong/tsconfig/vite-node.json",
     "compilerOptions": {},
     "include": ["vite.config.ts"]
 }

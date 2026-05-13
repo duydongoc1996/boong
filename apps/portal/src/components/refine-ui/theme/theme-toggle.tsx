@@ -38,8 +38,8 @@ export function ThemeToggle({ className }: ThemeToggleProps) {
                 "border-sidebar-border",
                 "bg-transparent",
                 className,
-                "h-10",
-                "w-10"
+                "h-8",
+                "w-8"
             )}
         >
             <Sun

@@ -1,5 +1,5 @@
 {
-    "extends": "@bunti/tsconfig/base.json",
+    "extends": "@boong/tsconfig/base.json",
     "compilerOptions": {
         "noEmit": true,
         "rootDir": "src"

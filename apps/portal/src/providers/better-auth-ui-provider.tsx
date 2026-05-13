@@ -1,7 +1,7 @@
+import { organizationClient } from "better-auth/client/plugins"
 import type { ComponentType, PropsWithChildren } from "react"
 import { forwardRef } from "react"
 import { Link as RouterLink, useNavigate } from "react-router"
-
 import { AuthProvider } from "@/components/auth/auth-provider"
 import { useTheme } from "@/components/refine-ui/theme/theme-provider"
 import { authClient } from "@/lib/auth/auth-client"
@@ -24,7 +24,6 @@ const AuthLink = forwardRef<
  */
 export function BetterAuthUIProvider({ children }: PropsWithChildren) {
     const navigate = useNavigate()
-    const themeApi = useTheme()
 
     return (
         <AuthProvider
@@ -58,15 +57,7 @@ export function BetterAuthUIProvider({ children }: PropsWithChildren) {
             baseURL={
                 typeof window !== "undefined" ? window.location.origin : ""
             }
-            plugins={[
-                themePlugin({
-                    useTheme: () => ({
-                        theme: themeApi.theme,
-                        setTheme: (value: string) =>
-                            themeApi.setTheme(value as typeof themeApi.theme),
-                    }),
-                }),
-            ]}
+            plugins={[organizationClient()]}
             emailAndPassword={{
                 name: false,
             }}

@@ -6,11 +6,14 @@ import { DeleteButton } from "@/components/refine-ui/buttons/delete"
 import { EditButton } from "@/components/refine-ui/buttons/edit"
 import { ShowButton } from "@/components/refine-ui/buttons/show"
 import { DataTable } from "@/components/refine-ui/data-table/data-table"
-import { ListView } from "@/components/refine-ui/views/list-view"
+import {
+    ListView,
+    ListViewHeader,
+} from "@/components/refine-ui/views/list-view"
 
 type Category = {
     id: string
-    title: string
+    name: string
 }
 
 export const CategoryList = () => {
@@ -23,9 +26,9 @@ export const CategoryList = () => {
                 header: "ID",
                 enableSorting: false,
             }),
-            columnHelper.accessor("title", {
-                id: "title",
-                header: "Title",
+            columnHelper.accessor("name", {
+                id: "name",
+                header: "Name",
                 enableSorting: true,
             }),
             columnHelper.display({
@@ -56,6 +59,7 @@ export const CategoryList = () => {
 
     return (
         <ListView>
+            <ListViewHeader canCreate={true} />
             <DataTable table={table} />
         </ListView>
     )

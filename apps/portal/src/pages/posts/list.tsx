@@ -3,7 +3,6 @@ import { createColumnHelper } from "@tanstack/react-table"
 import React from "react"
 import { DeleteButton } from "@/components/refine-ui/buttons/delete"
 import { EditButton } from "@/components/refine-ui/buttons/edit"
-import { RefreshButton } from "@/components/refine-ui/buttons/refresh"
 import { ShowButton } from "@/components/refine-ui/buttons/show"
 import { DataTable } from "@/components/refine-ui/data-table/data-table"
 import {
@@ -15,9 +14,11 @@ import {
     ListView,
     ListViewHeader,
 } from "@/components/refine-ui/views/list-view"
+import { useOrg } from "@/hooks/use-org"
 import type { Post } from "./types"
 
 export const PostList = () => {
+    const { metaHeaders } = useOrg()
     const columns = React.useMemo(() => {
         const columnHelper = createColumnHelper<Post>()
 
@@ -110,6 +111,7 @@ export const PostList = () => {
         columns,
         refineCoreProps: {
             syncWithLocation: true,
+            meta: metaHeaders ? { headers: metaHeaders } : undefined,
         },
     })
 

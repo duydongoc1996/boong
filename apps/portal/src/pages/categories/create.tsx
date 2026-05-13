@@ -36,16 +36,16 @@ export const CategoryCreate = () => {
                 >
                     <FormField
                         control={form.control}
-                        name="title"
-                        rules={{ required: "Title is required" }}
+                        name="name"
+                        rules={{ required: "Name is required" }}
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Title</FormLabel>
+                                <FormLabel>Name</FormLabel>
                                 <FormControl>
                                     <Input
                                         {...field}
                                         value={field.value || ""}
-                                        placeholder="Enter category title"
+                                        placeholder="Enter category name"
                                     />
                                 </FormControl>
                                 <FormMessage />

@@ -1,5 +1,5 @@
 {
-    "name": "portal",
+    "name": "@boong/portal",
     "version": "0.1.0",
     "private": true,
     "type": "module",
@@ -8,6 +8,7 @@
         "@base-ui/react": "^1.4.1",
         "@better-auth-ui/core": "^1.6.8",
         "@better-auth-ui/react": "^1.6.8",
+        "@boong/rest-adapter": "workspace:*",
         "@hookform/resolvers": "^5.2.2",
         "@radix-ui/react-accordion": "^1.2.12",
         "@radix-ui/react-alert-dialog": "^1.1.15",
@@ -42,7 +43,6 @@
         "@refinedev/react-hook-form": "^5.0.4",
         "@refinedev/react-router": "^2.0.4",
         "@refinedev/react-table": "^6.0.1",
-        "@bunti/rest-adapter": "workspace:*",
         "@tailwindcss/vite": "^4.3.0",
         "@tanstack/react-pacer": "^0.22.0",
         "@tanstack/react-query": "^5.100.9",
@@ -79,7 +79,7 @@
     },
     "devDependencies": {
         "@biomejs/biome": "2.4.14",
-        "@bunti/tsconfig": "workspace:*",
+        "@boong/tsconfig": "workspace:*",
         "@tailwindcss/postcss": "^4.3.0",
         "@tailwindcss/typography": "^0.5.19",
         "@types/node": "^25.6.2",

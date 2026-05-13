@@ -3,6 +3,7 @@ import { UserButton } from "@/components/auth/user/user-button"
 import { ThemeToggle } from "@/components/refine-ui/theme/theme-toggle"
 import { SidebarTrigger, useSidebar } from "@/components/ui/sidebar"
 import { cn } from "@/lib/utils"
+import { Breadcrumb } from "./breadcrumb"
 
 export const Header = () => {
     const { isMobile } = useSidebar()
@@ -24,13 +25,13 @@ function DesktopHeader() {
                 "border-b",
                 "border-border",
                 "bg-sidebar",
-                "pr-3",
-                "justify-end",
+                "px-4",
+                "justify-between",
                 "z-40"
             )}
         >
+            <Breadcrumb />
             <ThemeToggle />
-            <UserButton align="end" size="icon" variant="ghost" />
         </header>
     )
 }
@@ -103,7 +104,6 @@ function MobileHeader() {
 
             <div className={cn("flex", "items-center", "gap-2")}>
                 <ThemeToggle className={cn("h-8", "w-8")} />
-                <UserButton align="end" size="icon" variant="ghost" />
             </div>
         </header>
     )
