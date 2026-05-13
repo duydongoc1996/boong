@@ -3,12 +3,13 @@ import { createColumnHelper } from "@tanstack/react-table"
 import type { Invitation } from "better-auth/client"
 import React from "react"
 import { DeleteButton } from "@/components/refine-ui/buttons/delete"
-import { ShowButton } from "@/components/refine-ui/buttons/show"
 import { DataTable } from "@/components/refine-ui/data-table/data-table"
 import {
     ListView,
     ListViewHeader,
 } from "@/components/refine-ui/views/list-view"
+import { Badge } from "@/components/ui/badge"
+import { BlueBadge, GreenBadge, RedBadge } from "@/components/ui/color-badge"
 
 export const InvitationList = () => {
     const columns = React.useMemo(() => {
@@ -34,6 +35,20 @@ export const InvitationList = () => {
                 id: "status",
                 header: "Status",
                 enableSorting: true,
+                cell: ({ getValue }) => {
+                    const status = getValue()
+                    switch (status) {
+                        case "accepted":
+                            return <GreenBadge>{status}</GreenBadge>
+                        case "pending":
+                            return <BlueBadge>{status}</BlueBadge>
+                        case "rejected":
+                        case "canceled":
+                            return <RedBadge>{status}</RedBadge>
+                        default:
+                            return <Badge>{status}</Badge>
+                    }
+                },
             }),
 
             columnHelper.accessor("createdAt", {
