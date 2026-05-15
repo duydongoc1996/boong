@@ -22,6 +22,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { apiFetch } from "@/lib/api/http"
 import { breadcrumbI18n } from "@/lib/router-static-data"
+import { postsListSearchDefaults } from "@/lib/table/posts-list-search"
 
 const orgRouteApi = getRouteApi("/$orgSlug")
 
@@ -56,6 +57,7 @@ function NewPostPage() {
             await navigate({
                 to: "/$orgSlug/posts",
                 params: { orgSlug },
+                search: postsListSearchDefaults,
             })
         },
     })
@@ -126,7 +128,11 @@ function NewPostPage() {
                         {create.isPending ? "Saving…" : "Save"}
                     </Button>
                     <Button variant="outline" type="button" asChild>
-                        <Link to="/$orgSlug/posts" params={{ orgSlug }}>
+                        <Link
+                            to="/$orgSlug/posts"
+                            params={{ orgSlug }}
+                            search={postsListSearchDefaults}
+                        >
                             Cancel
                         </Link>
                     </Button>

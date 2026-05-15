@@ -1,5 +1,10 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { getRouteApi, Link, useParams } from "@tanstack/react-router"
+import {
+    getRouteApi,
+    Link,
+    useNavigate,
+    useParams,
+} from "@tanstack/react-router"
 import type { ColumnDef } from "@tanstack/react-table"
 import {
     flexRender,
@@ -39,9 +44,9 @@ import {
     type PostRow,
     postRowSchema,
 } from "@/lib/api/schemas"
-import { useListQueryState } from "@/lib/table/list-query-state"
 
 const orgRouteApi = getRouteApi("/$orgSlug")
+const postsListRouteApi = getRouteApi("/$orgSlug/posts/")
 
 const qk = {
     posts: (orgId: string) => ["posts", orgId] as const,
@@ -51,7 +56,8 @@ export function PostsListRouteView() {
     const { orgId } = orgRouteApi.useLoaderData()
     const { orgSlug } = useParams({ strict: false }) as { orgSlug: string }
     const queryClient = useQueryClient()
-    const [{ page, size }, setQs] = useListQueryState()
+    const { page, size } = postsListRouteApi.useSearch()
+    const navigate = useNavigate({ from: postsListRouteApi.id })
 
     const query = useQuery({
         queryKey: [...qk.posts(orgId), page, size],
@@ -192,8 +198,8 @@ export function PostsListRouteView() {
                         CRUD wired to{" "}
                         <Badge variant="secondary">GET/POST /api/posts</Badge>{" "}
                         with <code className="text-xs">x-org-id</code>.
-                        Pagination controls update URL state (nuqs); extend the
-                        API to honor page/size when you are ready.
+                        Pagination controls update URL state; extend the API to
+                        honor page/size when you are ready.
                     </CardDescription>
                 </div>
                 <div className="flex flex-wrap gap-2">
@@ -222,7 +228,13 @@ export function PostsListRouteView() {
                         variant="outline"
                         size="sm"
                         onClick={() =>
-                            void setQs({ page: Math.max(1, page - 1) })
+                            void navigate({
+                                search: (prev) => ({
+                                    ...prev,
+                                    page: Math.max(1, page - 1),
+                                }),
+                                replace: true,
+                            })
                         }
                     >
                         Prev page
@@ -230,7 +242,15 @@ export function PostsListRouteView() {
                     <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => void setQs({ page: page + 1 })}
+                        onClick={() =>
+                            void navigate({
+                                search: (prev) => ({
+                                    ...prev,
+                                    page: page + 1,
+                                }),
+                                replace: true,
+                            })
+                        }
                     >
                         Next page
                     </Button>

@@ -1,42 +1,23 @@
 import { useI18nContext } from "@boong/i18n"
 import { useQuery } from "@tanstack/react-query"
 import { Link, useNavigate } from "@tanstack/react-router"
-import {
-    BookOpen,
-    Building2,
-    ChevronsUpDown,
-    Home,
-    PieChart,
-    Users,
-} from "lucide-react"
+import { BookOpen, Home, PieChart, Users } from "lucide-react"
 import * as React from "react"
+import { OrgSwitcher } from "@/components/layout/dashboard/org-switcher"
 import { NavMain, type NavMainItem } from "@/components/nav-main"
 import { NavUser } from "@/components/nav-user"
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
 import {
     Sidebar,
     SidebarContent,
     SidebarFooter,
     SidebarHeader,
-    SidebarMenu,
     SidebarMenuButton,
     SidebarMenuItem,
     SidebarRail,
-    useSidebar,
 } from "@/components/ui/sidebar"
 import { authClient } from "@/lib/auth-client"
-import {
-    type ListedOrg,
-    listSessionOrganizations,
-    setActiveOrganization,
-} from "@/lib/auth-org"
+import { listSessionOrganizations, setActiveOrganization } from "@/lib/auth-org"
+import { postsListSearchDefaults } from "@/lib/table/posts-list-search"
 
 function buildNav(orgSlug: string): NavMainItem[] {
     const base = `/${orgSlug}` as const
@@ -112,6 +93,7 @@ export function OrgDashboardSidebar({ orgSlug }: { orgSlug: string }) {
                         await navigate({
                             to: "/$orgSlug/posts",
                             params: { orgSlug: org.slug },
+                            search: postsListSearchDefaults,
                         })
                     }}
                 />
@@ -130,86 +112,5 @@ export function OrgDashboardSidebar({ orgSlug }: { orgSlug: string }) {
             </SidebarFooter>
             <SidebarRail />
         </Sidebar>
-    )
-}
-
-function OrgSwitcher({
-    active,
-    orgs,
-    onSelect,
-}: {
-    active: ListedOrg | undefined
-    orgs: ListedOrg[]
-    onSelect: (org: ListedOrg) => Promise<void>
-}) {
-    const { isMobile } = useSidebar()
-
-    if (!active) {
-        return (
-            <div className="text-muted-foreground px-2 text-sm">
-                No organizations — create one from admin.
-            </div>
-        )
-    }
-
-    return (
-        <SidebarMenu>
-            <SidebarMenuItem>
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <SidebarMenuButton
-                            size="lg"
-                            className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
-                        >
-                            <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
-                                <Building2 className="size-4" />
-                            </div>
-                            <div className="grid flex-1 text-left text-sm leading-tight">
-                                <span className="truncate font-medium">
-                                    {active.name}
-                                </span>
-                                <span className="text-muted-foreground truncate text-xs">
-                                    {active.slug}
-                                </span>
-                            </div>
-                            <ChevronsUpDown className="ml-auto" />
-                        </SidebarMenuButton>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent
-                        className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg"
-                        align="start"
-                        side={isMobile ? "bottom" : "right"}
-                        sideOffset={4}
-                    >
-                        <DropdownMenuLabel className="text-muted-foreground text-xs">
-                            Organizations
-                        </DropdownMenuLabel>
-                        {orgs.map((org) => (
-                            <DropdownMenuItem
-                                key={org.id}
-                                className="gap-2 p-2"
-                                onClick={() => void onSelect(org)}
-                            >
-                                <div className="flex size-6 items-center justify-center rounded-md border">
-                                    <Building2 className="size-3.5 shrink-0" />
-                                </div>
-                                <div className="flex flex-col">
-                                    <span>{org.name}</span>
-                                    <span className="text-muted-foreground text-xs">
-                                        {org.slug}
-                                    </span>
-                                </div>
-                            </DropdownMenuItem>
-                        ))}
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem asChild>
-                            <Link to="/admin/organizations">
-                                Manage (admin)
-                            </Link>
-                        </DropdownMenuItem>
-                    </DropdownMenuContent>
-                </DropdownMenu>
-            </SidebarMenuItem>
-        </SidebarMenu>
     )
 }

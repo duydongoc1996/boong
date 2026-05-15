@@ -1,5 +1,5 @@
 import { createFileRoute, redirect } from "@tanstack/react-router"
-import { AdminShell } from "@/components/layout/admin-shell"
+import { AdminShell } from "@/components/layout/admin/admin-shell"
 import { authClient } from "@/lib/auth-client"
 import { breadcrumbI18n } from "@/lib/router-static-data"
 

@@ -3,7 +3,6 @@ import type { QueryClient } from "@tanstack/react-query"
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
 import { createRootRouteWithContext, Outlet } from "@tanstack/react-router"
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools"
-import { NuqsAdapter } from "nuqs/adapters/tanstack-router"
 import { Toaster } from "sonner"
 import { ThemeProvider } from "@/components/theme/theme-provider"
 import { TooltipProvider } from "@/components/ui/tooltip"
@@ -33,31 +32,29 @@ function NotFound() {
 
 function RootLayout() {
     return (
-        <NuqsAdapter>
-            <ThemeProvider>
-                <TooltipProvider delayDuration={200}>
-                    <Outlet />
-                    <Toaster richColors position="top-center" />
-                    {import.meta.env.DEV ? (
-                        <TanStackDevtools
-                            plugins={[
-                                {
-                                    name: "TanStack Query",
-                                    render: (
-                                        <ReactQueryDevtools buttonPosition="bottom-right" />
-                                    ),
-                                },
-                                {
-                                    name: "TanStack Router",
-                                    render: (
-                                        <TanStackRouterDevtools position="bottom-right" />
-                                    ),
-                                },
-                            ]}
-                        />
-                    ) : null}
-                </TooltipProvider>
-            </ThemeProvider>
-        </NuqsAdapter>
+        <ThemeProvider>
+            <TooltipProvider delayDuration={200}>
+                <Outlet />
+                <Toaster richColors position="top-center" />
+                {import.meta.env.DEV ? (
+                    <TanStackDevtools
+                        plugins={[
+                            {
+                                name: "TanStack Query",
+                                render: (
+                                    <ReactQueryDevtools buttonPosition="bottom-right" />
+                                ),
+                            },
+                            {
+                                name: "TanStack Router",
+                                render: (
+                                    <TanStackRouterDevtools position="bottom-right" />
+                                ),
+                            },
+                        ]}
+                    />
+                ) : null}
+            </TooltipProvider>
+        </ThemeProvider>
     )
 }

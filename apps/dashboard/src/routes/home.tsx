@@ -6,6 +6,7 @@ import { Skeleton } from "@/components/ui/skeleton"
 import { authClient } from "@/lib/auth-client"
 import { listSessionOrganizations } from "@/lib/auth-org"
 import { breadcrumbI18n } from "@/lib/router-static-data"
+import { postsListSearchDefaults } from "@/lib/table/posts-list-search"
 
 export const Route = createFileRoute("/home")({
     staticData: breadcrumbI18n("home"),
@@ -58,6 +59,7 @@ function HomePage() {
                                 <Link
                                     to="/$orgSlug/posts"
                                     params={{ orgSlug: firstOrgSlug }}
+                                    search={postsListSearchDefaults}
                                 >
                                     Open posts
                                 </Link>

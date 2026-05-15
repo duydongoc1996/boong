@@ -17,6 +17,7 @@ import {
 import { apiFetch } from "@/lib/api/http"
 import { postRowSchema } from "@/lib/api/schemas"
 import { breadcrumbI18n } from "@/lib/router-static-data"
+import { postsListSearchDefaults } from "@/lib/table/posts-list-search"
 
 const orgRouteApi = getRouteApi("/$orgSlug")
 
@@ -69,7 +70,11 @@ function ShowPostPage() {
             <CardContent className="space-y-2">
                 <p className="text-sm whitespace-pre-wrap">{q.data.content}</p>
                 <Button variant="ghost" size="sm" asChild>
-                    <Link to="/$orgSlug/posts" params={{ orgSlug }}>
+                    <Link
+                        to="/$orgSlug/posts"
+                        params={{ orgSlug }}
+                        search={postsListSearchDefaults}
+                    >
                         Back to list
                     </Link>
                 </Button>
