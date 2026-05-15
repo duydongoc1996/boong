@@ -53,7 +53,7 @@ export const postRoutes = new Elysia({ prefix: "/posts" })
     )
     .post(
         "/",
-        async ({ body, orgId, headers }) => {
+        async ({ body, orgId }) => {
             const { row } = await createOne(db, post, {
                 value: {
                     ...body,

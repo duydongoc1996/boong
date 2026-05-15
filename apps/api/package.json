@@ -38,7 +38,7 @@
         "zod": "^4.4.3"
     },
     "devDependencies": {
-        "@biomejs/biome": "2.4.14",
+        "@biomejs/biome": "2.4.15",
         "@boong/tsconfig": "workspace:*",
         "drizzle-kit": "^0.31.10",
         "typescript": "^6.0.3"

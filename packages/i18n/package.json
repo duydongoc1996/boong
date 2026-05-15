@@ -1,18 +1,39 @@
 {
-    "name": "i18n",
+    "name": "@boong/i18n",
     "description": "Internationalization package for Boong",
     "private": true,
     "version": "0.0.1",
-    "packageManager": "bun@1.3.13",
-    "module": "index.ts",
     "type": "module",
-    "devDependencies": {
-        "@types/bun": "latest",
-        "typescript": "^6.0.3",
-        "@boong/tsconfig": "workspace:*",
-        "@biomejs/biome": "2.4.14"
+    "packageManager": "bun@1.3.13",
+    "exports": {
+        ".": {
+            "types": "./src/index.ts",
+            "import": "./src/index.ts"
+        },
+        "./react": {
+            "types": "./src/i18n/i18n-react.tsx",
+            "import": "./src/i18n/i18n-react.tsx"
+        }
+    },
+    "scripts": {
+        "dev": "typesafe-i18n",
+        "generate": "typesafe-i18n",
+        "typecheck": "tsc -p tsconfig.json",
+        "lint": "biome check .",
+        "format": "biome check --write ."
     },
     "dependencies": {
         "typesafe-i18n": "^5.27.1"
+    },
+    "peerDependencies": {
+        "react": "^19.0.0"
+    },
+    "devDependencies": {
+        "@biomejs/biome": "2.4.15",
+        "@boong/tsconfig": "workspace:*",
+        "@types/bun": "latest",
+        "@types/react": "^19.2.14",
+        "react": "19.2.6",
+        "typescript": "^6.0.3"
     }
 }

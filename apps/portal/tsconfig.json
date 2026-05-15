@@ -1,9 +1,0 @@
-{
-    "extends": "@boong/tsconfig/vite-app.json",
-    "compilerOptions": {
-        "paths": {
-            "@/*": ["./src/*"]
-        }
-    },
-    "include": ["src"]
-}

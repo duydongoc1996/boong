@@ -1,6 +1,8 @@
 {
     "extends": "@boong/tsconfig/react-library.json",
     "compilerOptions": {
+        "noUnusedLocals": false,
+        "noUnusedParameters": false,
         "paths": {
             "@/*": ["./src/*"]
         }

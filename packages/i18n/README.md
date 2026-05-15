@@ -1,15 +1,19 @@
-# i18n
+# @boong/i18n
 
-To install dependencies:
+Type-safe translations via [typesafe-i18n](https://github.com/ivanhofer/typesafe-i18n).
+
+## Usage
+
+1. Edit base strings in `src/i18n/en/index.ts`
+2. Regenerate types and adapters:
 
 ```bash
-bun install
+bun run generate
 ```
 
-To run:
+3. In React apps:
 
-```bash
-bun run index.ts
+```tsx
+import { I18nProvider } from "@/components/i18n/i18n-provider"
+import { useI18nContext } from "@boong/i18n"
 ```
-
-This project was created using `bun init` in bun v1.3.13. [Bun](https://bun.com) is a fast all-in-one JavaScript runtime.
