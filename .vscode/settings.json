@@ -9,7 +9,15 @@
         "source.fixAll.biome": "explicit"
     },
 
-    // Explicitly tell VS Code to use Biome for these languages
+    "files.watcherExclude": {
+        "**/routeTree.gen.ts": true
+    },
+    "search.exclude": {
+        "**/routeTree.gen.ts": true
+    },
+    "files.readonlyInclude": {
+        "**/routeTree.gen.ts": true
+    },
     "[javascript]": {
         "editor.defaultFormatter": "biomejs.biome"
     },

@@ -94,19 +94,14 @@ type UpdateMemberArgs = Parameters<
 export const memberProvider: DataProvider = {
     getApiUrl: () => "/api/auth/organization",
     getList: async <TData extends BaseRecord = BaseRecord>(
-        params: GetListParams
+        _params: GetListParams
     ) => {
-        // Better Auth uses the active org by default,
-        // but we allow override via meta.organizationId
-        const { data, error } = await authClient.organization.listMembers({
-            query: params.meta?.organizationId
-                ? { organizationId: String(params.meta.organizationId) }
-                : undefined,
-        })
+        const { data: membersData, error } =
+            await authClient.organization.listMembers({})
 
         if (error) throw error
-        const members = (data?.members ?? []) as unknown as TData[]
-        const total = data?.total ?? 0
+        const members = (membersData?.members ?? []) as unknown as TData[]
+        const total = membersData?.total ?? 0
 
         return {
             data: members,
@@ -149,10 +144,6 @@ export const memberProvider: DataProvider = {
     ) => {
         const { error } = await authClient.organization.removeMember({
             memberIdOrEmail: String(params.id),
-            // Optional: allow passing orgId in delete as well
-            organizationId: params.meta?.organizationId
-                ? String(params.meta.organizationId)
-                : undefined,
         })
         if (error) throw error
         return { data: {} as unknown as TData }
@@ -162,14 +153,11 @@ export const memberProvider: DataProvider = {
 type InviteArgs = Parameters<typeof authClient.organization.inviteMember>[0]
 
 export const invitationProvider: DataProvider = {
+    getApiUrl: () => "/api/auth/organization/invitation",
     getList: async <TData extends BaseRecord = BaseRecord>(
-        params: GetListParams
+        _params: GetListParams
     ) => {
-        const { data, error } = await authClient.organization.listInvitations({
-            query: params.meta?.organizationId
-                ? { organizationId: String(params.meta.organizationId) }
-                : undefined,
-        })
+        const { data, error } = await authClient.organization.listInvitations()
 
         if (error) throw error
         const invites = data ?? []
@@ -225,6 +213,4 @@ export const invitationProvider: DataProvider = {
         if (error) throw error
         return { data: {} as unknown as TData }
     },
-
-    getApiUrl: () => "/api/auth/organization/invitation",
 }
