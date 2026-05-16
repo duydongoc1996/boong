@@ -104,7 +104,7 @@ export function OrgDashboardSidebar({ orgSlug }: { orgSlug: string }) {
             <SidebarFooter>
                 <NavUser
                     user={{
-                        name: user?.name ?? "Account",
+                        name: user?.name ?? LL.navUser.fallbackName(),
                         email: user?.email ?? "",
                         avatar: user?.image ?? "",
                     }}

@@ -1,3 +1,4 @@
+import { useI18nContext } from "@boong/i18n"
 import { useQuery } from "@tanstack/react-query"
 import { createFileRoute, Link, useParams } from "@tanstack/react-router"
 import { z } from "zod"
@@ -11,7 +12,7 @@ import {
 } from "@/components/ui/card"
 import { apiFetch } from "@/lib/api/http"
 import { categoryRowSchema } from "@/lib/api/schemas"
-import { breadcrumbI18n } from "@/lib/router-static-data"
+import { breadcrumbI18n } from "@/lib/breadcrumb"
 
 const envelope = z.object({ data: categoryRowSchema.nullable() })
 
@@ -21,6 +22,7 @@ export const Route = createFileRoute("/$orgSlug/categories/$categoryId/")({
 })
 
 function ShowCategoryPage() {
+    const { LL } = useI18nContext()
     const { orgSlug, categoryId } = useParams({
         strict: false,
     }) as { orgSlug: string; categoryId: string }
@@ -34,10 +36,18 @@ function ShowCategoryPage() {
     })
 
     if (q.isLoading) {
-        return <p className="text-muted-foreground text-sm">Loading…</p>
+        return (
+            <p className="text-muted-foreground text-sm">
+                {LL.common.loading()}
+            </p>
+        )
     }
     if (!q.data) {
-        return <p className="text-destructive text-sm">Not found.</p>
+        return (
+            <p className="text-destructive text-sm">
+                {LL.categories.show.notFound()}
+            </p>
+        )
     }
 
     return (
@@ -54,14 +64,14 @@ function ShowCategoryPage() {
                         to="/$orgSlug/categories/$categoryId/edit"
                         params={{ orgSlug, categoryId }}
                     >
-                        Edit
+                        {LL.common.edit()}
                     </Link>
                 </Button>
             </CardHeader>
             <CardContent>
                 <Button variant="ghost" size="sm" asChild>
                     <Link to="/$orgSlug/categories" params={{ orgSlug }}>
-                        Back to list
+                        {LL.common.backToList()}
                     </Link>
                 </Button>
             </CardContent>

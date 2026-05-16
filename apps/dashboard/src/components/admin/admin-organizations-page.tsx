@@ -1,3 +1,4 @@
+import { useI18nContext } from "@boong/i18n"
 import { useForm } from "@tanstack/react-form"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { toast } from "sonner"
@@ -23,16 +24,18 @@ import {
 } from "@/components/ui/table"
 import { authClient } from "@/lib/auth-client"
 import { listSessionOrganizations } from "@/lib/auth-org"
+import { translateError } from "@/lib/i18n-errors"
 
 const schema = z.object({
     name: z.string().min(1),
     slug: z
         .string()
         .min(2)
-        .regex(/^[a-z0-9-]+$/i, "Slug: letters, numbers, hyphen"),
+        .regex(/^[a-z0-9-]+$/i, "SLUG_INVALID"),
 })
 
 export function AdminOrganizationsPage() {
+    const { LL } = useI18nContext()
     const queryClient = useQueryClient()
     const q = useQuery({
         queryKey: ["organizations"],
@@ -46,12 +49,15 @@ export function AdminOrganizationsPage() {
                 slug: values.slug.toLowerCase(),
             })
             if (error) {
-                throw new Error(error.message ?? "Create failed")
+                throw error
             }
         },
         onSuccess: async () => {
-            toast.success("Organization created")
+            toast.success(LL.admin.organizations.create.success())
             await queryClient.invalidateQueries({ queryKey: ["organizations"] })
+        },
+        onError: (err) => {
+            toast.error(translateError(LL, err, "createOrgFailed"))
         },
     })
 
@@ -60,7 +66,12 @@ export function AdminOrganizationsPage() {
         onSubmit: async ({ value }) => {
             const parsed = schema.safeParse(value)
             if (!parsed.success) {
-                toast.error(parsed.error.issues[0]?.message ?? "Invalid")
+                const code = parsed.error.issues[0]?.message
+                const err =
+                    code === "SLUG_INVALID"
+                        ? { code: "SLUG_INVALID" }
+                        : parsed.error
+                toast.error(translateError(LL, err, "invalidInput"))
                 return
             }
             await create.mutateAsync(parsed.data)
@@ -71,14 +82,11 @@ export function AdminOrganizationsPage() {
         <div className="grid gap-4 lg:grid-cols-2">
             <Card>
                 <CardHeader>
-                    <CardTitle>Create organization</CardTitle>
+                    <CardTitle>
+                        {LL.admin.organizations.create.title()}
+                    </CardTitle>
                     <CardDescription>
-                        Uses{" "}
-                        <code className="text-xs">
-                            authClient.organization.create
-                        </code>{" "}
-                        (Better Auth organization plugin). Requires an
-                        admin-capable session.
+                        {LL.admin.organizations.create.description()}
                     </CardDescription>
                 </CardHeader>
                 <form
@@ -91,7 +99,9 @@ export function AdminOrganizationsPage() {
                         <form.Field name="name">
                             {(field) => (
                                 <div className="grid gap-2">
-                                    <Label htmlFor={field.name}>Name</Label>
+                                    <Label htmlFor={field.name}>
+                                        {LL.admin.organizations.create.fieldName()}
+                                    </Label>
                                     <Input
                                         id={field.name}
                                         value={field.state.value}
@@ -105,7 +115,9 @@ export function AdminOrganizationsPage() {
                         <form.Field name="slug">
                             {(field) => (
                                 <div className="grid gap-2">
-                                    <Label htmlFor={field.name}>Slug</Label>
+                                    <Label htmlFor={field.name}>
+                                        {LL.admin.organizations.create.fieldSlug()}
+                                    </Label>
                                     <Input
                                         id={field.name}
                                         value={field.state.value}
@@ -118,27 +130,28 @@ export function AdminOrganizationsPage() {
                         </form.Field>
                         {create.error ? (
                             <p className="text-destructive text-sm">
-                                {create.error.message}
+                                {translateError(
+                                    LL,
+                                    create.error,
+                                    "createOrgFailed"
+                                )}
                             </p>
                         ) : null}
                     </CardContent>
                     <CardFooter>
                         <Button type="submit" disabled={create.isPending}>
-                            {create.isPending ? "Creating…" : "Create"}
+                            {create.isPending
+                                ? LL.admin.organizations.create.submitting()
+                                : LL.admin.organizations.create.submit()}
                         </Button>
                     </CardFooter>
                 </form>
             </Card>
             <Card>
                 <CardHeader>
-                    <CardTitle>Organizations (session)</CardTitle>
+                    <CardTitle>{LL.admin.organizations.list.title()}</CardTitle>
                     <CardDescription>
-                        Listing memberships via{" "}
-                        <code className="text-xs">
-                            /api/auth/organization/list
-                        </code>
-                        . For a global admin directory, add a dedicated API
-                        route later.
+                        {LL.admin.organizations.list.description()}
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -146,9 +159,15 @@ export function AdminOrganizationsPage() {
                         <Table>
                             <TableHeader>
                                 <TableRow>
-                                    <TableHead>Name</TableHead>
-                                    <TableHead>Slug</TableHead>
-                                    <TableHead>Id</TableHead>
+                                    <TableHead>
+                                        {LL.admin.organizations.list.columnName()}
+                                    </TableHead>
+                                    <TableHead>
+                                        {LL.admin.organizations.list.columnSlug()}
+                                    </TableHead>
+                                    <TableHead>
+                                        {LL.admin.organizations.list.columnId()}
+                                    </TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
@@ -158,7 +177,7 @@ export function AdminOrganizationsPage() {
                                             colSpan={3}
                                             className="h-24 text-center"
                                         >
-                                            Loading…
+                                            {LL.common.loading()}
                                         </TableCell>
                                     </TableRow>
                                 ) : q.data?.length ? (
@@ -179,7 +198,7 @@ export function AdminOrganizationsPage() {
                                             colSpan={3}
                                             className="h-24 text-center"
                                         >
-                                            No organizations.
+                                            {LL.admin.organizations.list.empty()}
                                         </TableCell>
                                     </TableRow>
                                 )}

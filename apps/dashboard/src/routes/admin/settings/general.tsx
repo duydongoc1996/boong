@@ -1,3 +1,4 @@
+import { useI18nContext } from "@boong/i18n"
 import { createFileRoute } from "@tanstack/react-router"
 import {
     Card,
@@ -6,7 +7,7 @@ import {
     CardTitle,
 } from "@/components/ui/card"
 
-import { breadcrumbI18n } from "@/lib/router-static-data"
+import { breadcrumbI18n } from "@/lib/breadcrumb"
 
 export const Route = createFileRoute("/admin/settings/general")({
     staticData: breadcrumbI18n("settingsGeneral"),
@@ -14,13 +15,13 @@ export const Route = createFileRoute("/admin/settings/general")({
 })
 
 function GeneralSettingsPage() {
+    const { LL } = useI18nContext()
     return (
         <Card>
             <CardHeader>
-                <CardTitle>General</CardTitle>
+                <CardTitle>{LL.admin.settings.general.title()}</CardTitle>
                 <CardDescription>
-                    Placeholder for global admin preferences (branding, locale,
-                    etc.).
+                    {LL.admin.settings.general.description()}
                 </CardDescription>
             </CardHeader>
         </Card>

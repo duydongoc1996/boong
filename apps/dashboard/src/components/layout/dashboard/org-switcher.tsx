@@ -1,3 +1,4 @@
+import { useI18nContext } from "@boong/i18n"
 import { Building2, ChevronsUpDown } from "lucide-react"
 import {
     DropdownMenu,
@@ -24,11 +25,12 @@ export function OrgSwitcher({
     onSelect: (org: ListedOrg) => Promise<void>
 }) {
     const { isMobile } = useSidebar()
+    const { LL } = useI18nContext()
 
     if (!active) {
         return (
             <div className="text-muted-foreground px-2 text-sm">
-                No organizations — create one from admin.
+                {LL.orgSwitcher.empty()}
             </div>
         )
     }
@@ -63,7 +65,7 @@ export function OrgSwitcher({
                         sideOffset={4}
                     >
                         <DropdownMenuLabel className="text-muted-foreground text-xs">
-                            Organizations
+                            {LL.orgSwitcher.label()}
                         </DropdownMenuLabel>
                         {orgs.map((org) => (
                             <DropdownMenuItem

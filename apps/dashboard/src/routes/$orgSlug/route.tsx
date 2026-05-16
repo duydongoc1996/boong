@@ -7,7 +7,7 @@ import {
 import { DashboardShell } from "@/components/layout/dashboard/dashboard-shell"
 import { authClient } from "@/lib/auth-client"
 import { listSessionOrganizations } from "@/lib/auth-org"
-import { breadcrumbLoader } from "@/lib/router-static-data"
+import { breadcrumbLoader } from "@/lib/breadcrumb"
 
 export const Route = createFileRoute("/$orgSlug")({
     staticData: breadcrumbLoader("org"),

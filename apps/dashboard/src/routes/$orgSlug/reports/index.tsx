@@ -3,7 +3,7 @@ import { ChartAreaInteractive } from "@/components/chart/chart-1"
 import { ChartBarMultiple } from "@/components/chart/chart-2"
 import { ChartPieLabel } from "@/components/chart/chart-3"
 
-import { breadcrumbI18n } from "@/lib/router-static-data"
+import { breadcrumbI18n } from "@/lib/breadcrumb"
 
 export const Route = createFileRoute("/$orgSlug/reports/")({
     staticData: breadcrumbI18n("reports"),

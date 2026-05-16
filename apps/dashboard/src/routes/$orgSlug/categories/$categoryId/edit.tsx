@@ -1,3 +1,4 @@
+import { useI18nContext } from "@boong/i18n"
 import { useForm } from "@tanstack/react-form"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import {
@@ -22,7 +23,8 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { apiFetch } from "@/lib/api/http"
 import { categoryRowSchema } from "@/lib/api/schemas"
-import { breadcrumbI18n } from "@/lib/router-static-data"
+import { breadcrumbI18n } from "@/lib/breadcrumb"
+import { translateError } from "@/lib/i18n-errors"
 
 const orgRouteApi = getRouteApi("/$orgSlug")
 
@@ -38,6 +40,7 @@ export const Route = createFileRoute("/$orgSlug/categories/$categoryId/edit")({
 })
 
 function EditCategoryPage() {
+    const { LL } = useI18nContext()
     const { orgId } = orgRouteApi.useLoaderData()
     const { orgSlug, categoryId } = useParams({
         strict: false,
@@ -52,7 +55,11 @@ function EditCategoryPage() {
     })
 
     if (detail.isLoading || !detail.data) {
-        return <p className="text-muted-foreground text-sm">Loading…</p>
+        return (
+            <p className="text-muted-foreground text-sm">
+                {LL.common.loading()}
+            </p>
+        )
     }
 
     return (
@@ -76,6 +83,7 @@ function EditCategoryFormInner({
     categoryId: string
     initial: z.infer<typeof categoryRowSchema>
 }) {
+    const { LL } = useI18nContext()
     const navigate = useNavigate()
     const queryClient = useQueryClient()
 
@@ -88,7 +96,7 @@ function EditCategoryFormInner({
             })
         },
         onSuccess: async () => {
-            toast.success("Saved")
+            toast.success(LL.common.saved())
             await queryClient.invalidateQueries({
                 queryKey: ["category", categoryId],
             })
@@ -100,6 +108,9 @@ function EditCategoryFormInner({
                 params: { orgSlug, categoryId },
             })
         },
+        onError: (err) => {
+            toast.error(translateError(LL, err))
+        },
     })
 
     const form = useForm({
@@ -107,7 +118,7 @@ function EditCategoryFormInner({
         onSubmit: async ({ value }) => {
             const parsed = schema.safeParse(value)
             if (!parsed.success) {
-                toast.error(parsed.error.issues[0]?.message ?? "Invalid")
+                toast.error(translateError(LL, parsed.error, "invalidInput"))
                 return
             }
             await update.mutateAsync(parsed.data)
@@ -117,7 +128,7 @@ function EditCategoryFormInner({
     return (
         <Card className="max-w-md">
             <CardHeader>
-                <CardTitle>Edit category</CardTitle>
+                <CardTitle>{LL.categories.edit.title()}</CardTitle>
                 <CardDescription>{initial.id}</CardDescription>
             </CardHeader>
             <form
@@ -130,7 +141,9 @@ function EditCategoryFormInner({
                     <form.Field name="name">
                         {(field) => (
                             <div className="grid gap-2">
-                                <Label htmlFor={field.name}>Name</Label>
+                                <Label htmlFor={field.name}>
+                                    {LL.categories.edit.fieldName()}
+                                </Label>
                                 <Input
                                     id={field.name}
                                     value={field.state.value}
@@ -144,14 +157,16 @@ function EditCategoryFormInner({
                 </CardContent>
                 <CardFooter className="flex gap-2">
                     <Button type="submit" disabled={update.isPending}>
-                        {update.isPending ? "Saving…" : "Save"}
+                        {update.isPending
+                            ? LL.common.saving()
+                            : LL.common.save()}
                     </Button>
                     <Button variant="outline" type="button" asChild>
                         <Link
                             to="/$orgSlug/categories/$categoryId"
                             params={{ orgSlug, categoryId }}
                         >
-                            Cancel
+                            {LL.common.cancel()}
                         </Link>
                     </Button>
                 </CardFooter>

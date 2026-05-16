@@ -12,7 +12,8 @@
         "rules": {
             "correctness": {
                 "useExhaustiveDependencies": "off",
-                "useHookAtTopLevel": "off"
+                "useHookAtTopLevel": "off",
+                "noUnusedVariables": "warn"
             }
         }
     }

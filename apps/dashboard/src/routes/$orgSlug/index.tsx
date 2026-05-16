@@ -1,3 +1,4 @@
+import { useI18nContext } from "@boong/i18n"
 import { createFileRoute, getRouteApi } from "@tanstack/react-router"
 import {
     Card,
@@ -13,15 +14,14 @@ export const Route = createFileRoute("/$orgSlug/")({
 })
 
 function OrgHome() {
+    const { LL } = useI18nContext()
     const { org } = orgApi.useLoaderData()
     return (
         <Card>
             <CardHeader>
                 <CardTitle>{org.name}</CardTitle>
                 <CardDescription>
-                    Organization workspace for{" "}
-                    <span className="font-mono">{org.slug}</span>. Pick a
-                    section from the sidebar to manage resources.
+                    {LL.orgWorkspace.description({ slug: org.slug })}
                 </CardDescription>
             </CardHeader>
         </Card>

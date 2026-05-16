@@ -1,3 +1,4 @@
+import { useI18nContext } from "@boong/i18n"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import {
     getRouteApi,
@@ -13,7 +14,6 @@ import {
 } from "@tanstack/react-table"
 import { MoreHorizontal, RefreshCw, Trash2 } from "lucide-react"
 import { toast } from "sonner"
-import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
     Card,
@@ -44,6 +44,8 @@ import {
     type PostRow,
     postRowSchema,
 } from "@/lib/api/schemas"
+import { translateError } from "@/lib/i18n-errors"
+import { extractPlainText } from "@/lib/rich-text/sanitize"
 
 const orgRouteApi = getRouteApi("/$orgSlug")
 const postsListRouteApi = getRouteApi("/$orgSlug/posts/")
@@ -53,6 +55,7 @@ const qk = {
 }
 
 export function PostsListRouteView() {
+    const { LL } = useI18nContext()
     const { orgId } = orgRouteApi.useLoaderData()
     const { orgSlug } = useParams({ strict: false }) as { orgSlug: string }
     const queryClient = useQueryClient()
@@ -72,25 +75,28 @@ export function PostsListRouteView() {
             await apiFetch(`/posts/${id}`, { method: "DELETE", orgId })
         },
         onSuccess: async () => {
-            toast.success("Deleted")
+            toast.success(LL.common.deleted())
             await queryClient.invalidateQueries({ queryKey: qk.posts(orgId) })
+        },
+        onError: (err) => {
+            toast.error(translateError(LL, err))
         },
     })
 
     const columns: ColumnDef<PostRow>[] = [
-        { accessorKey: "title", header: "Title" },
+        { accessorKey: "title", header: LL.posts.list.columnTitle() },
         {
             accessorKey: "content",
-            header: "Content",
+            header: LL.posts.list.columnContent(),
             cell: (ctx) => (
                 <span className="line-clamp-2 max-w-md text-sm">
-                    {String(ctx.getValue())}
+                    {extractPlainText(String(ctx.getValue() ?? ""))}
                 </span>
             ),
         },
         {
             accessorKey: "createdAt",
-            header: "Created",
+            header: LL.posts.list.columnCreated(),
             cell: (ctx) => (
                 <span className="text-muted-foreground text-xs">
                     {String(ctx.getValue())}
@@ -107,7 +113,9 @@ export function PostsListRouteView() {
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                        <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                        <DropdownMenuLabel>
+                            {LL.common.actions()}
+                        </DropdownMenuLabel>
                         <DropdownMenuItem asChild>
                             <Link
                                 to="/$orgSlug/posts/$postId"
@@ -116,7 +124,7 @@ export function PostsListRouteView() {
                                     postId: row.original.id,
                                 }}
                             >
-                                Show
+                                {LL.common.show()}
                             </Link>
                         </DropdownMenuItem>
                         <DropdownMenuItem asChild>
@@ -127,7 +135,7 @@ export function PostsListRouteView() {
                                     postId: row.original.id,
                                 }}
                             >
-                                Edit
+                                {LL.common.edit()}
                             </Link>
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
@@ -138,37 +146,37 @@ export function PostsListRouteView() {
                                 })
                             }
                         >
-                            <RefreshCw className="mr-2 size-4" /> Refresh
+                            <RefreshCw className="mr-2 size-4" />{" "}
+                            {LL.common.refresh()}
                         </DropdownMenuItem>
                         <DropdownMenuItem
                             onClick={() => {
                                 void navigator.clipboard.writeText(
                                     row.original.id
                                 )
-                                toast.message("Cloned id to clipboard")
+                                toast.message(LL.common.copiedToClipboard())
                             }}
                         >
-                            Clone (id)
+                            {LL.common.copyId()}
                         </DropdownMenuItem>
                         <DropdownMenuItem
-                            onClick={() => toast.message("Custom action")}
+                            onClick={() =>
+                                toast.message(LL.common.customAction())
+                            }
                         >
-                            Custom…
+                            {LL.common.customAction()}
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem
                             className="text-destructive"
                             onClick={() => {
-                                if (
-                                    confirm(
-                                        "Delete this post? This cannot be undone."
-                                    )
-                                ) {
+                                if (confirm(LL.posts.list.deleteConfirm())) {
                                     del.mutate(row.original.id)
                                 }
                             }}
                         >
-                            <Trash2 className="mr-2 size-4" /> Delete
+                            <Trash2 className="mr-2 size-4" />{" "}
+                            {LL.common.delete()}
                         </DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
@@ -193,13 +201,9 @@ export function PostsListRouteView() {
         <Card>
             <CardHeader className="flex flex-row flex-wrap items-start justify-between gap-2">
                 <div>
-                    <CardTitle>Posts</CardTitle>
+                    <CardTitle>{LL.posts.list.title()}</CardTitle>
                     <CardDescription>
-                        CRUD wired to{" "}
-                        <Badge variant="secondary">GET/POST /api/posts</Badge>{" "}
-                        with <code className="text-xs">x-org-id</code>.
-                        Pagination controls update URL state; extend the API to
-                        honor page/size when you are ready.
+                        {LL.posts.list.description()}
                     </CardDescription>
                 </div>
                 <div className="flex flex-wrap gap-2">
@@ -213,11 +217,11 @@ export function PostsListRouteView() {
                         }
                     >
                         <RefreshCw className="mr-1 size-4" />
-                        Refresh
+                        {LL.common.refresh()}
                     </Button>
                     <Button size="sm" asChild>
                         <Link to="/$orgSlug/posts/new" params={{ orgSlug }}>
-                            Create
+                            {LL.posts.list.create()}
                         </Link>
                     </Button>
                 </div>
@@ -237,7 +241,7 @@ export function PostsListRouteView() {
                             })
                         }
                     >
-                        Prev page
+                        {LL.common.prevPage()}
                     </Button>
                     <Button
                         variant="outline"
@@ -252,10 +256,10 @@ export function PostsListRouteView() {
                             })
                         }
                     >
-                        Next page
+                        {LL.common.nextPage()}
                     </Button>
                     <span className="text-muted-foreground self-center text-sm">
-                        Page {page} · size {size}
+                        {LL.common.pageInfo({ page, size })}
                     </span>
                 </div>
                 <div className="rounded-md border">
@@ -283,7 +287,7 @@ export function PostsListRouteView() {
                                         colSpan={columns.length}
                                         className="h-24 text-center"
                                     >
-                                        Loading…
+                                        {LL.common.loading()}
                                     </TableCell>
                                 </TableRow>
                             ) : table.getRowModel().rows.length ? (
@@ -305,7 +309,7 @@ export function PostsListRouteView() {
                                         colSpan={columns.length}
                                         className="h-24 text-center"
                                     >
-                                        No posts yet.
+                                        {LL.posts.list.empty()}
                                     </TableCell>
                                 </TableRow>
                             )}

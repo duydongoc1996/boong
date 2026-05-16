@@ -1,14 +1,14 @@
 {
-  "$schema": "https://json.schemastore.org/tsconfig",
-  "extends": "./base.json",
-  "compilerOptions": {
-    "target": "ES2022",
-    "lib": ["ES2022", "DOM", "DOM.Iterable"],
-    "module": "ESNext",
-    "jsx": "react-jsx",
-    "allowImportingTsExtensions": true,
-    "noEmit": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true
-  }
+    "$schema": "https://json.schemastore.org/tsconfig",
+    "extends": "./base.json",
+    "compilerOptions": {
+        "target": "ES2022",
+        "lib": ["ES2022", "DOM", "DOM.Iterable"],
+        "module": "ESNext",
+        "jsx": "react-jsx",
+        "allowImportingTsExtensions": true,
+        "noEmit": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true
+    }
 }

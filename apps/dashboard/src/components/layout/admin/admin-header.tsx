@@ -1,3 +1,4 @@
+import { useI18nContext } from "@boong/i18n"
 import { Link } from "@tanstack/react-router"
 import { LanguageButton } from "@/components/i18n/language-btn"
 import { AppBreadcrumb } from "@/components/layout/app-breadcrumb"
@@ -7,6 +8,7 @@ import { Separator } from "@/components/ui/separator"
 import { SidebarTrigger } from "@/components/ui/sidebar"
 
 export function AdminHeader() {
+    const { LL } = useI18nContext()
     return (
         <header className="flex h-14 shrink-0 items-center gap-2 border-b px-4">
             <SidebarTrigger className="-ml-1" />
@@ -18,7 +20,7 @@ export function AdminHeader() {
                 <ThemeToggle />
                 <LanguageButton />
                 <Button variant="outline" size="sm" asChild>
-                    <Link to="/home">Exit admin</Link>
+                    <Link to="/home">{LL.adminHeader.exitAdmin()}</Link>
                 </Button>
             </div>
         </header>

@@ -1,3 +1,4 @@
+import { useI18nContext } from "@boong/i18n"
 import { createFileRoute } from "@tanstack/react-router"
 import {
     Card,
@@ -6,7 +7,7 @@ import {
     CardTitle,
 } from "@/components/ui/card"
 
-import { breadcrumbI18n } from "@/lib/router-static-data"
+import { breadcrumbI18n } from "@/lib/breadcrumb"
 
 export const Route = createFileRoute("/$orgSlug/members/")({
     staticData: breadcrumbI18n("members"),
@@ -14,14 +15,12 @@ export const Route = createFileRoute("/$orgSlug/members/")({
 })
 
 function MembersPage() {
+    const { LL } = useI18nContext()
     return (
         <Card>
             <CardHeader>
-                <CardTitle>Members</CardTitle>
-                <CardDescription>
-                    Organization membership management will connect to Better
-                    Auth organization APIs when you extend this route.
-                </CardDescription>
+                <CardTitle>{LL.members.title()}</CardTitle>
+                <CardDescription>{LL.members.description()}</CardDescription>
             </CardHeader>
         </Card>
     )

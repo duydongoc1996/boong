@@ -1,3 +1,4 @@
+import { useI18nContext } from "@boong/i18n"
 import { useForm } from "@tanstack/react-form"
 import { useMutation } from "@tanstack/react-query"
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router"
@@ -15,6 +16,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { authClient } from "@/lib/auth-client"
+import { translateError } from "@/lib/i18n-errors"
 
 const schema = z.object({
     name: z.string().min(1),
@@ -28,6 +30,7 @@ export const Route = createFileRoute("/signup")({
 
 function SignUpPage() {
     const navigate = useNavigate()
+    const { LL } = useI18nContext()
 
     const signUp = useMutation({
         mutationFn: async (values: z.infer<typeof schema>) => {
@@ -37,12 +40,15 @@ function SignUpPage() {
                 name: values.name,
             })
             if (error) {
-                throw new Error(error.message ?? "Sign up failed")
+                throw error
             }
         },
         onSuccess: () => {
-            toast.success("Account created — you can sign in.")
+            toast.success(LL.signUp.success())
             navigate({ to: "/signin" })
+        },
+        onError: (error) => {
+            toast.error(translateError(LL, error, "signUpFailed"))
         },
     })
 
@@ -51,7 +57,7 @@ function SignUpPage() {
         onSubmit: async ({ value }) => {
             const parsed = schema.safeParse(value)
             if (!parsed.success) {
-                toast.error(parsed.error.issues[0]?.message ?? "Invalid input")
+                toast.error(translateError(LL, parsed.error, "invalidInput"))
                 return
             }
             await signUp.mutateAsync(parsed.data)
@@ -62,10 +68,8 @@ function SignUpPage() {
         <div className="flex min-h-svh items-center justify-center p-6">
             <Card className="w-full max-w-md">
                 <CardHeader>
-                    <CardTitle>Sign up</CardTitle>
-                    <CardDescription>
-                        Create a Boong account with email and password.
-                    </CardDescription>
+                    <CardTitle>{LL.signUp.title()}</CardTitle>
+                    <CardDescription>{LL.signUp.description()}</CardDescription>
                 </CardHeader>
                 <form
                     onSubmit={(e) => {
@@ -77,7 +81,9 @@ function SignUpPage() {
                         <form.Field name="name">
                             {(field) => (
                                 <div className="grid gap-2">
-                                    <Label htmlFor={field.name}>Name</Label>
+                                    <Label htmlFor={field.name}>
+                                        {LL.signUp.fieldName()}
+                                    </Label>
                                     <Input
                                         id={field.name}
                                         value={field.state.value}
@@ -98,7 +104,9 @@ function SignUpPage() {
                         <form.Field name="email">
                             {(field) => (
                                 <div className="grid gap-2">
-                                    <Label htmlFor={field.name}>Email</Label>
+                                    <Label htmlFor={field.name}>
+                                        {LL.signUp.fieldEmail()}
+                                    </Label>
                                     <Input
                                         id={field.name}
                                         type="email"
@@ -120,7 +128,9 @@ function SignUpPage() {
                         <form.Field name="password">
                             {(field) => (
                                 <div className="grid gap-2">
-                                    <Label htmlFor={field.name}>Password</Label>
+                                    <Label htmlFor={field.name}>
+                                        {LL.signUp.fieldPassword()}
+                                    </Label>
                                     <Input
                                         id={field.name}
                                         type="password"
@@ -141,7 +151,11 @@ function SignUpPage() {
                         </form.Field>
                         {signUp.error ? (
                             <p className="text-destructive text-sm">
-                                {signUp.error.message}
+                                {translateError(
+                                    LL,
+                                    signUp.error,
+                                    "signUpFailed"
+                                )}
                             </p>
                         ) : null}
                     </CardContent>
@@ -151,14 +165,18 @@ function SignUpPage() {
                             disabled={signUp.isPending}
                             className="w-full sm:w-auto"
                         >
-                            {signUp.isPending ? "Creating…" : "Create account"}
+                            {signUp.isPending
+                                ? LL.signUp.submitting()
+                                : LL.signUp.submit()}
                         </Button>
                         <Button
                             variant="ghost"
                             asChild
                             className="w-full sm:w-auto"
                         >
-                            <Link to="/signin">Already have an account</Link>
+                            <Link to="/signin">
+                                {LL.signUp.haveAccountLink()}
+                            </Link>
                         </Button>
                     </CardFooter>
                 </form>

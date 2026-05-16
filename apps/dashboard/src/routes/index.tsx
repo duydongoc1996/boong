@@ -1,3 +1,4 @@
+import { useI18nContext } from "@boong/i18n"
 import { createFileRoute, Link, redirect } from "@tanstack/react-router"
 import { Button } from "@/components/ui/button"
 import {
@@ -20,22 +21,22 @@ export const Route = createFileRoute("/")({
 })
 
 function IndexPage() {
+    const { LL } = useI18nContext()
     return (
         <div className="flex min-h-svh flex-col items-center justify-center gap-6 p-6">
             <Card className="w-full max-w-md">
                 <CardHeader>
-                    <CardTitle>Boong Dashboard</CardTitle>
+                    <CardTitle>{LL.landing.title()}</CardTitle>
                     <CardDescription>
-                        Welcome. Sign in to open an organization workspace or
-                        visit the admin area.
+                        {LL.landing.description()}
                     </CardDescription>
                 </CardHeader>
                 <CardContent className="flex flex-wrap gap-2">
                     <Button asChild>
-                        <Link to="/signin">Sign in</Link>
+                        <Link to="/signin">{LL.landing.signIn()}</Link>
                     </Button>
                     <Button variant="outline" asChild>
-                        <Link to="/signup">Sign up</Link>
+                        <Link to="/signup">{LL.landing.signUp()}</Link>
                     </Button>
                 </CardContent>
             </Card>

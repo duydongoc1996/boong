@@ -1,3 +1,4 @@
+import { useI18nContext } from "@boong/i18n"
 import { createFileRoute } from "@tanstack/react-router"
 import {
     Card,
@@ -6,7 +7,7 @@ import {
     CardTitle,
 } from "@/components/ui/card"
 
-import { breadcrumbI18n } from "@/lib/router-static-data"
+import { breadcrumbI18n } from "@/lib/breadcrumb"
 
 export const Route = createFileRoute("/$orgSlug/invitations/")({
     staticData: breadcrumbI18n("invitations"),
@@ -14,13 +15,13 @@ export const Route = createFileRoute("/$orgSlug/invitations/")({
 })
 
 function InvitationsPage() {
+    const { LL } = useI18nContext()
     return (
         <Card>
             <CardHeader>
-                <CardTitle>Invitations</CardTitle>
+                <CardTitle>{LL.invitations.title()}</CardTitle>
                 <CardDescription>
-                    Invitation flows will plug into Better Auth organization
-                    invitations here.
+                    {LL.invitations.description()}
                 </CardDescription>
             </CardHeader>
         </Card>

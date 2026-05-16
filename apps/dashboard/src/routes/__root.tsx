@@ -1,3 +1,4 @@
+import { useI18nContext } from "@boong/i18n"
 import { TanStackDevtools } from "@tanstack/react-devtools"
 import type { QueryClient } from "@tanstack/react-query"
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
@@ -17,14 +18,15 @@ export const Route = createRootRouteWithContext<RouterContext>()({
 })
 
 function NotFound() {
+    const { LL } = useI18nContext()
     return (
         <div className="flex min-h-svh flex-col items-center justify-center gap-2 p-6">
-            <h1 className="text-2xl font-semibold">Page not found</h1>
+            <h1 className="text-2xl font-semibold">{LL.notFound.title()}</h1>
             <p className="text-muted-foreground text-sm">
-                Check the URL or return home.
+                {LL.notFound.description()}
             </p>
             <a className="text-primary text-sm underline" href="/">
-                Home
+                {LL.notFound.home()}
             </a>
         </div>
     )

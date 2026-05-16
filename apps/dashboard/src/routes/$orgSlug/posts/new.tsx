@@ -1,3 +1,4 @@
+import { useI18nContext } from "@boong/i18n"
 import { useForm } from "@tanstack/react-form"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import {
@@ -9,6 +10,7 @@ import {
 } from "@tanstack/react-router"
 import { toast } from "sonner"
 import { z } from "zod"
+import { RichTextEditor } from "@/components/rich-text/rich-text-editor"
 import { Button } from "@/components/ui/button"
 import {
     Card,
@@ -21,14 +23,22 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { apiFetch } from "@/lib/api/http"
-import { breadcrumbI18n } from "@/lib/router-static-data"
+import { breadcrumbI18n } from "@/lib/breadcrumb"
+import { translateError } from "@/lib/i18n-errors"
+import { extractPlainText } from "@/lib/rich-text/sanitize"
 import { postsListSearchDefaults } from "@/lib/table/posts-list-search"
 
 const orgRouteApi = getRouteApi("/$orgSlug")
 
 const schema = z.object({
-    title: z.string().min(1),
-    content: z.string().min(1),
+    title: z.string().min(1).max(200),
+    content: z
+        .string()
+        .min(1)
+        .max(100_000)
+        .refine((raw) => extractPlainText(raw).trim().length > 0, {
+            message: "Content must not be empty",
+        }),
 })
 
 export const Route = createFileRoute("/$orgSlug/posts/new")({
@@ -37,6 +47,7 @@ export const Route = createFileRoute("/$orgSlug/posts/new")({
 })
 
 function NewPostPage() {
+    const { LL } = useI18nContext()
     const { orgId } = orgRouteApi.useLoaderData()
     const { orgSlug } = useParams({ strict: false }) as { orgSlug: string }
     const navigate = useNavigate()
@@ -52,13 +63,16 @@ function NewPostPage() {
             })
         },
         onSuccess: async () => {
-            toast.success("Post created")
+            toast.success(LL.posts.new.success())
             await queryClient.invalidateQueries({ queryKey: ["posts", orgId] })
             await navigate({
                 to: "/$orgSlug/posts",
                 params: { orgSlug },
                 search: postsListSearchDefaults,
             })
+        },
+        onError: (err) => {
+            toast.error(translateError(LL, err))
         },
     })
 
@@ -67,7 +81,7 @@ function NewPostPage() {
         onSubmit: async ({ value }) => {
             const parsed = schema.safeParse(value)
             if (!parsed.success) {
-                toast.error(parsed.error.issues[0]?.message ?? "Invalid")
+                toast.error(translateError(LL, parsed.error, "invalidInput"))
                 return
             }
             await create.mutateAsync(parsed.data)
@@ -75,12 +89,10 @@ function NewPostPage() {
     })
 
     return (
-        <Card className="max-w-lg">
+        <Card className="max-w-3xl">
             <CardHeader>
-                <CardTitle>New post</CardTitle>
-                <CardDescription>
-                    Create a post in this organization.
-                </CardDescription>
+                <CardTitle>{LL.posts.new.title()}</CardTitle>
+                <CardDescription>{LL.posts.new.description()}</CardDescription>
             </CardHeader>
             <form
                 onSubmit={(e) => {
@@ -92,7 +104,9 @@ function NewPostPage() {
                     <form.Field name="title">
                         {(field) => (
                             <div className="grid gap-2">
-                                <Label htmlFor={field.name}>Title</Label>
+                                <Label htmlFor={field.name}>
+                                    {LL.posts.new.fieldTitle()}
+                                </Label>
                                 <Input
                                     id={field.name}
                                     value={field.state.value}
@@ -106,12 +120,13 @@ function NewPostPage() {
                     <form.Field name="content">
                         {(field) => (
                             <div className="grid gap-2">
-                                <Label htmlFor={field.name}>Content</Label>
-                                <Input
-                                    id={field.name}
+                                <Label htmlFor={field.name}>
+                                    {LL.posts.new.fieldContent()}
+                                </Label>
+                                <RichTextEditor
                                     value={field.state.value}
-                                    onChange={(ev) =>
-                                        field.handleChange(ev.target.value)
+                                    onChange={(next) =>
+                                        field.handleChange(next)
                                     }
                                 />
                             </div>
@@ -119,13 +134,15 @@ function NewPostPage() {
                     </form.Field>
                     {create.error ? (
                         <p className="text-destructive text-sm">
-                            {create.error.message}
+                            {translateError(LL, create.error)}
                         </p>
                     ) : null}
                 </CardContent>
                 <CardFooter className="flex gap-2">
                     <Button type="submit" disabled={create.isPending}>
-                        {create.isPending ? "Saving…" : "Save"}
+                        {create.isPending
+                            ? LL.common.saving()
+                            : LL.common.save()}
                     </Button>
                     <Button variant="outline" type="button" asChild>
                         <Link
@@ -133,7 +150,7 @@ function NewPostPage() {
                             params={{ orgSlug }}
                             search={postsListSearchDefaults}
                         >
-                            Cancel
+                            {LL.common.cancel()}
                         </Link>
                     </Button>
                 </CardFooter>

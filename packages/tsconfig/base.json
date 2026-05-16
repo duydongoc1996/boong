@@ -1,15 +1,15 @@
 {
-  "$schema": "https://json.schemastore.org/tsconfig",
-  "compilerOptions": {
-    "strict": true,
-    "strictNullChecks": true,
-    "skipLibCheck": true,
-    "verbatimModuleSyntax": true,
-    "moduleDetection": "force",
-    "moduleResolution": "bundler",
-    "noFallthroughCasesInSwitch": true,
-    "noUncheckedIndexedAccess": true,
-    "noImplicitOverride": true,
-    "noPropertyAccessFromIndexSignature": false
-  }
+    "$schema": "https://json.schemastore.org/tsconfig",
+    "compilerOptions": {
+        "strict": true,
+        "strictNullChecks": true,
+        "skipLibCheck": true,
+        "verbatimModuleSyntax": true,
+        "moduleDetection": "force",
+        "moduleResolution": "bundler",
+        "noFallthroughCasesInSwitch": true,
+        "noUncheckedIndexedAccess": true,
+        "noImplicitOverride": true,
+        "noPropertyAccessFromIndexSignature": false
+    }
 }

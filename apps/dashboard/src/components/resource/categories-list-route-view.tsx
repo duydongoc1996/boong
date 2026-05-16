@@ -1,3 +1,4 @@
+import { useI18nContext } from "@boong/i18n"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { getRouteApi, Link, useParams } from "@tanstack/react-router"
 import type { ColumnDef } from "@tanstack/react-table"
@@ -39,6 +40,7 @@ import {
     categoryRowSchema,
     listEnvelopeSchema,
 } from "@/lib/api/schemas"
+import { translateError } from "@/lib/i18n-errors"
 
 const orgRouteApi = getRouteApi("/$orgSlug")
 
@@ -47,6 +49,7 @@ const qk = {
 }
 
 export function CategoriesListRouteView() {
+    const { LL } = useI18nContext()
     const { orgId } = orgRouteApi.useLoaderData()
     const { orgSlug } = useParams({ strict: false }) as { orgSlug: string }
     const queryClient = useQueryClient()
@@ -68,18 +71,21 @@ export function CategoriesListRouteView() {
             await apiFetch(`/categories/${id}`, { method: "DELETE" })
         },
         onSuccess: async () => {
-            toast.success("Deleted")
+            toast.success(LL.common.deleted())
             await queryClient.invalidateQueries({
                 queryKey: qk.categories(orgId),
             })
         },
+        onError: (err) => {
+            toast.error(translateError(LL, err))
+        },
     })
 
     const columns: ColumnDef<CategoryRow>[] = [
-        { accessorKey: "name", header: "Name" },
+        { accessorKey: "name", header: LL.categories.list.columnName() },
         {
             accessorKey: "orgId",
-            header: "Org",
+            header: LL.categories.list.columnOrg(),
             cell: (ctx) => (
                 <Badge variant="outline" className="font-mono text-xs">
                     {String(ctx.getValue())}
@@ -96,7 +102,9 @@ export function CategoriesListRouteView() {
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                        <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                        <DropdownMenuLabel>
+                            {LL.common.actions()}
+                        </DropdownMenuLabel>
                         <DropdownMenuItem asChild>
                             <Link
                                 to="/$orgSlug/categories/$categoryId"
@@ -105,7 +113,7 @@ export function CategoriesListRouteView() {
                                     categoryId: row.original.id,
                                 }}
                             >
-                                Show
+                                {LL.common.show()}
                             </Link>
                         </DropdownMenuItem>
                         <DropdownMenuItem asChild>
@@ -116,7 +124,7 @@ export function CategoriesListRouteView() {
                                     categoryId: row.original.id,
                                 }}
                             >
-                                Edit
+                                {LL.common.edit()}
                             </Link>
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
@@ -127,17 +135,21 @@ export function CategoriesListRouteView() {
                                 })
                             }
                         >
-                            <RefreshCw className="mr-2 size-4" /> Refresh
+                            <RefreshCw className="mr-2 size-4" />{" "}
+                            {LL.common.refresh()}
                         </DropdownMenuItem>
                         <DropdownMenuItem
                             className="text-destructive"
                             onClick={() => {
-                                if (confirm("Delete this category?")) {
+                                if (
+                                    confirm(LL.categories.list.deleteConfirm())
+                                ) {
                                     del.mutate(row.original.id)
                                 }
                             }}
                         >
-                            <Trash2 className="mr-2 size-4" /> Delete
+                            <Trash2 className="mr-2 size-4" />{" "}
+                            {LL.common.delete()}
                         </DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
@@ -155,11 +167,9 @@ export function CategoriesListRouteView() {
         <Card>
             <CardHeader className="flex flex-row flex-wrap items-start justify-between gap-2">
                 <div>
-                    <CardTitle>Categories</CardTitle>
+                    <CardTitle>{LL.categories.list.title()}</CardTitle>
                     <CardDescription>
-                        Uses <code className="text-xs">/api/categories</code>.
-                        The list endpoint is not org-scoped yet; rows are
-                        filtered in the UI to the active organization.
+                        {LL.categories.list.description()}
                     </CardDescription>
                 </div>
                 <div className="flex flex-wrap gap-2">
@@ -173,14 +183,14 @@ export function CategoriesListRouteView() {
                         }
                     >
                         <RefreshCw className="mr-1 size-4" />
-                        Refresh
+                        {LL.common.refresh()}
                     </Button>
                     <Button size="sm" asChild>
                         <Link
                             to="/$orgSlug/categories/new"
                             params={{ orgSlug }}
                         >
-                            Create
+                            {LL.categories.list.create()}
                         </Link>
                     </Button>
                 </div>
@@ -211,7 +221,7 @@ export function CategoriesListRouteView() {
                                         colSpan={columns.length}
                                         className="h-24 text-center"
                                     >
-                                        Loading…
+                                        {LL.common.loading()}
                                     </TableCell>
                                 </TableRow>
                             ) : table.getRowModel().rows.length ? (
@@ -233,7 +243,7 @@ export function CategoriesListRouteView() {
                                         colSpan={columns.length}
                                         className="h-24 text-center"
                                     >
-                                        No categories for this org.
+                                        {LL.categories.list.empty()}
                                     </TableCell>
                                 </TableRow>
                             )}

@@ -2,12 +2,11 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { createRouter, RouterProvider } from "@tanstack/react-router"
 import { StrictMode } from "react"
 import { createRoot } from "react-dom/client"
-import "@/lib/router-static-data"
-import { routeTree } from "./routeTree.gen"
-import "./index.css"
 import { I18nProvider } from "@/components/i18n/i18n-provider"
 import { TooltipProvider } from "@/components/ui/tooltip"
-import type { RouteBreadcrumbConfig } from "@/lib/router-static-data"
+import type { RouteBreadcrumbConfig } from "@/lib/breadcrumb"
+import { routeTree } from "./routeTree.gen"
+import "./index.css"
 
 const queryClient = new QueryClient({
     defaultOptions: {

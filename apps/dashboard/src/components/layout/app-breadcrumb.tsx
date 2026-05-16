@@ -9,48 +9,23 @@ import {
     BreadcrumbPage,
     BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
-import type { OrgRouteLoaderData } from "@/lib/router-static-data"
-import { translateBreadcrumb } from "@/lib/router-static-data"
-
-function resolveLoaderBreadcrumb(
-    resolve: "org",
-    loaderData: unknown
-): string | undefined {
-    if (resolve !== "org") {
-        return undefined
-    }
-    const data = loaderData as OrgRouteLoaderData | undefined
-    return data?.org?.name
-}
+import { resolveBreadcrumbLabel } from "@/lib/breadcrumb"
 
 export function AppBreadcrumb() {
     const { LL } = useI18nContext()
     const matches = useMatches()
 
-    const crumbs = matches
-        .filter((match) => match.staticData?.breadcrumb)
-        .map((match) => {
-            const config = match.staticData!.breadcrumb!
-            let label: string | undefined
-
-            if (config.kind === "i18n") {
-                label = translateBreadcrumb(LL, config.key)
-            } else {
-                label = resolveLoaderBreadcrumb(
-                    config.resolve,
-                    match.loaderData
-                )
-            }
-
-            return {
-                id: match.id,
-                to: match.fullPath,
-                label,
-            }
-        })
-        .filter((crumb): crumb is typeof crumb & { label: string } =>
-            Boolean(crumb.label)
+    const crumbs = matches.flatMap((match) => {
+        const label = resolveBreadcrumbLabel(
+            match.staticData?.breadcrumb,
+            match.loaderData,
+            LL
         )
+        if (!label) {
+            return []
+        }
+        return [{ id: match.id, to: match.fullPath, label }]
+    })
 
     if (crumbs.length === 0) {
         return null

@@ -1,3 +1,4 @@
+import { useI18nContext } from "@boong/i18n"
 import { useQuery } from "@tanstack/react-query"
 import { Badge } from "@/components/ui/badge"
 import {
@@ -25,6 +26,7 @@ type Row = {
 }
 
 export function AdminUsersPage() {
+    const { LL } = useI18nContext()
     const q = useQuery({
         queryKey: ["admin", "users"],
         queryFn: async () => {
@@ -48,10 +50,9 @@ export function AdminUsersPage() {
     return (
         <Card>
             <CardHeader>
-                <CardTitle>Users</CardTitle>
+                <CardTitle>{LL.admin.users.title()}</CardTitle>
                 <CardDescription>
-                    Backed by the Better Auth admin plugin (
-                    <code className="text-xs">listUsers</code>).
+                    {LL.admin.users.description()}
                 </CardDescription>
             </CardHeader>
             <CardContent>
@@ -59,9 +60,15 @@ export function AdminUsersPage() {
                     <Table>
                         <TableHeader>
                             <TableRow>
-                                <TableHead>Email</TableHead>
-                                <TableHead>Name</TableHead>
-                                <TableHead>Role</TableHead>
+                                <TableHead>
+                                    {LL.admin.users.columnEmail()}
+                                </TableHead>
+                                <TableHead>
+                                    {LL.admin.users.columnName()}
+                                </TableHead>
+                                <TableHead>
+                                    {LL.admin.users.columnRole()}
+                                </TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
@@ -71,7 +78,7 @@ export function AdminUsersPage() {
                                         colSpan={3}
                                         className="h-24 text-center"
                                     >
-                                        Loading…
+                                        {LL.common.loading()}
                                     </TableCell>
                                 </TableRow>
                             ) : q.data?.length ? (
@@ -83,7 +90,8 @@ export function AdminUsersPage() {
                                         <TableCell>{u.name}</TableCell>
                                         <TableCell>
                                             <Badge variant="secondary">
-                                                {u.role ?? "user"}
+                                                {u.role ??
+                                                    LL.admin.users.defaultRole()}
                                             </Badge>
                                         </TableCell>
                                     </TableRow>
@@ -94,7 +102,7 @@ export function AdminUsersPage() {
                                         colSpan={3}
                                         className="h-24 text-center"
                                     >
-                                        No users returned.
+                                        {LL.admin.users.empty()}
                                     </TableCell>
                                 </TableRow>
                             )}

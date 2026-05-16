@@ -1,3 +1,4 @@
+import { useI18nContext } from "@boong/i18n"
 import { Link, useNavigate } from "@tanstack/react-router"
 import {
     BadgeCheck,
@@ -36,6 +37,7 @@ export function NavUser({
 }) {
     const { isMobile } = useSidebar()
     const navigate = useNavigate()
+    const { LL } = useI18nContext()
 
     const initials = user.name
         .split(/\s+/)
@@ -109,7 +111,7 @@ export function NavUser({
                         <DropdownMenuGroup>
                             <DropdownMenuItem>
                                 <Sparkles />
-                                Upgrade to Pro
+                                {LL.navUser.upgrade()}
                             </DropdownMenuItem>
                         </DropdownMenuGroup>
                         <DropdownMenuSeparator />
@@ -117,16 +119,16 @@ export function NavUser({
                             <DropdownMenuItem asChild>
                                 <Link to="/admin/users">
                                     <BadgeCheck />
-                                    Admin
+                                    {LL.navUser.admin()}
                                 </Link>
                             </DropdownMenuItem>
                             <DropdownMenuItem>
                                 <CreditCard />
-                                Billing
+                                {LL.navUser.billing()}
                             </DropdownMenuItem>
                             <DropdownMenuItem>
                                 <Bell />
-                                Notifications
+                                {LL.navUser.notifications()}
                             </DropdownMenuItem>
                         </DropdownMenuGroup>
                         <DropdownMenuSeparator />
@@ -136,7 +138,7 @@ export function NavUser({
                             }}
                         >
                             <LogOut />
-                            Log out
+                            {LL.navUser.logout()}
                         </DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>

@@ -1,3 +1,4 @@
+import { useI18nContext } from "@boong/i18n"
 import { createFileRoute } from "@tanstack/react-router"
 import {
     Card,
@@ -6,7 +7,7 @@ import {
     CardTitle,
 } from "@/components/ui/card"
 
-import { breadcrumbI18n } from "@/lib/router-static-data"
+import { breadcrumbI18n } from "@/lib/breadcrumb"
 
 export const Route = createFileRoute("/admin/settings/notification")({
     staticData: breadcrumbI18n("settingsNotification"),
@@ -14,12 +15,13 @@ export const Route = createFileRoute("/admin/settings/notification")({
 })
 
 function Page() {
+    const { LL } = useI18nContext()
     return (
         <Card>
             <CardHeader>
-                <CardTitle>Notification settings</CardTitle>
+                <CardTitle>{LL.admin.settings.notification.title()}</CardTitle>
                 <CardDescription>
-                    Reserved for future email and webhook settings.
+                    {LL.admin.settings.notification.description()}
                 </CardDescription>
             </CardHeader>
         </Card>

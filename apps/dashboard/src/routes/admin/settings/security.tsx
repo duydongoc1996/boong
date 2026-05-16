@@ -1,3 +1,4 @@
+import { useI18nContext } from "@boong/i18n"
 import { createFileRoute } from "@tanstack/react-router"
 import {
     Card,
@@ -6,7 +7,7 @@ import {
     CardTitle,
 } from "@/components/ui/card"
 
-import { breadcrumbI18n } from "@/lib/router-static-data"
+import { breadcrumbI18n } from "@/lib/breadcrumb"
 
 export const Route = createFileRoute("/admin/settings/security")({
     staticData: breadcrumbI18n("settingsSecurity"),
@@ -14,12 +15,13 @@ export const Route = createFileRoute("/admin/settings/security")({
 })
 
 function Page() {
+    const { LL } = useI18nContext()
     return (
         <Card>
             <CardHeader>
-                <CardTitle>Security</CardTitle>
+                <CardTitle>{LL.admin.settings.security.title()}</CardTitle>
                 <CardDescription>
-                    Reserved for session policies, IP rules, and audit logs.
+                    {LL.admin.settings.security.description()}
                 </CardDescription>
             </CardHeader>
         </Card>

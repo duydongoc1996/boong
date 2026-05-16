@@ -1,3 +1,4 @@
+import { useI18nContext } from "@boong/i18n"
 import { useForm } from "@tanstack/react-form"
 import { useMutation } from "@tanstack/react-query"
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router"
@@ -15,6 +16,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { authClient } from "@/lib/auth-client"
+import { translateError } from "@/lib/i18n-errors"
 
 const schema = z.object({
     email: z.string().email(),
@@ -27,6 +29,7 @@ export const Route = createFileRoute("/signin")({
 
 function SignInPage() {
     const navigate = useNavigate()
+    const { LL } = useI18nContext()
 
     const signIn = useMutation({
         mutationFn: async (values: z.infer<typeof schema>) => {
@@ -35,12 +38,15 @@ function SignInPage() {
                 password: values.password,
             })
             if (error) {
-                throw new Error(error.message ?? "Sign in failed")
+                throw error
             }
         },
         onSuccess: async () => {
-            toast.success("Signed in")
+            toast.success(LL.signIn.success())
             await navigate({ to: "/home" })
+        },
+        onError: (error) => {
+            toast.error(translateError(LL, error, "signInFailed"))
         },
     })
 
@@ -49,7 +55,7 @@ function SignInPage() {
         onSubmit: async ({ value }) => {
             const parsed = schema.safeParse(value)
             if (!parsed.success) {
-                toast.error(parsed.error.issues[0]?.message ?? "Invalid input")
+                toast.error(translateError(LL, parsed.error, "invalidInput"))
                 return
             }
             await signIn.mutateAsync(parsed.data)
@@ -60,10 +66,8 @@ function SignInPage() {
         <div className="flex min-h-svh items-center justify-center p-6">
             <Card className="w-full max-w-md">
                 <CardHeader>
-                    <CardTitle>Sign in</CardTitle>
-                    <CardDescription>
-                        Use the email and password for your Boong account.
-                    </CardDescription>
+                    <CardTitle>{LL.signIn.title()}</CardTitle>
+                    <CardDescription>{LL.signIn.description()}</CardDescription>
                 </CardHeader>
                 <form
                     onSubmit={(e) => {
@@ -75,7 +79,9 @@ function SignInPage() {
                         <form.Field name="email">
                             {(field) => (
                                 <div className="grid gap-2">
-                                    <Label htmlFor={field.name}>Email</Label>
+                                    <Label htmlFor={field.name}>
+                                        {LL.signIn.fieldEmail()}
+                                    </Label>
                                     <Input
                                         id={field.name}
                                         type="email"
@@ -97,7 +103,9 @@ function SignInPage() {
                         <form.Field name="password">
                             {(field) => (
                                 <div className="grid gap-2">
-                                    <Label htmlFor={field.name}>Password</Label>
+                                    <Label htmlFor={field.name}>
+                                        {LL.signIn.fieldPassword()}
+                                    </Label>
                                     <Input
                                         id={field.name}
                                         type="password"
@@ -118,7 +126,11 @@ function SignInPage() {
                         </form.Field>
                         {signIn.error ? (
                             <p className="text-destructive text-sm">
-                                {signIn.error.message}
+                                {translateError(
+                                    LL,
+                                    signIn.error,
+                                    "signInFailed"
+                                )}
                             </p>
                         ) : null}
                     </CardContent>
@@ -128,14 +140,18 @@ function SignInPage() {
                             disabled={signIn.isPending}
                             className="w-full sm:w-auto"
                         >
-                            {signIn.isPending ? "Signing in…" : "Sign in"}
+                            {signIn.isPending
+                                ? LL.signIn.submitting()
+                                : LL.signIn.submit()}
                         </Button>
                         <Button
                             variant="ghost"
                             asChild
                             className="w-full sm:w-auto"
                         >
-                            <Link to="/signup">Create an account</Link>
+                            <Link to="/signup">
+                                {LL.signIn.createAccountLink()}
+                            </Link>
                         </Button>
                     </CardFooter>
                 </form>

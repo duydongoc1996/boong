@@ -1,5 +1,6 @@
 "use client"
 
+import { useI18nContext } from "@boong/i18n"
 import * as React from "react"
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts"
 
@@ -137,6 +138,7 @@ const chartConfig = {
 } satisfies ChartConfig
 
 export function ChartAreaInteractive() {
+    const { LL } = useI18nContext()
     const [timeRange, setTimeRange] = React.useState("90d")
 
     const filteredData = chartData.filter((item) => {
@@ -157,27 +159,29 @@ export function ChartAreaInteractive() {
         <Card className="pt-0">
             <CardHeader className="flex items-center gap-2 space-y-0 border-b py-5 sm:flex-row">
                 <div className="grid flex-1 gap-1">
-                    <CardTitle>Area Chart - Interactive</CardTitle>
+                    <CardTitle>{LL.charts.area.title()}</CardTitle>
                     <CardDescription>
-                        Showing total visitors for the last 3 months
+                        {LL.charts.area.description()}
                     </CardDescription>
                 </div>
                 <Select value={timeRange} onValueChange={setTimeRange}>
                     <SelectTrigger
                         className="hidden w-[160px] rounded-lg sm:ml-auto sm:flex"
-                        aria-label="Select a value"
+                        aria-label={LL.charts.area.selectAria()}
                     >
-                        <SelectValue placeholder="Last 3 months" />
+                        <SelectValue
+                            placeholder={LL.charts.area.last3Months()}
+                        />
                     </SelectTrigger>
                     <SelectContent className="rounded-xl">
                         <SelectItem value="90d" className="rounded-lg">
-                            Last 3 months
+                            {LL.charts.area.last3Months()}
                         </SelectItem>
                         <SelectItem value="30d" className="rounded-lg">
-                            Last 30 days
+                            {LL.charts.area.last30Days()}
                         </SelectItem>
                         <SelectItem value="7d" className="rounded-lg">
-                            Last 7 days
+                            {LL.charts.area.last7Days()}
                         </SelectItem>
                     </SelectContent>
                 </Select>

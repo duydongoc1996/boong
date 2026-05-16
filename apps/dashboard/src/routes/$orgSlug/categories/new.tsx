@@ -1,3 +1,4 @@
+import { useI18nContext } from "@boong/i18n"
 import { useForm } from "@tanstack/react-form"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import {
@@ -21,7 +22,8 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { apiFetch } from "@/lib/api/http"
-import { breadcrumbI18n } from "@/lib/router-static-data"
+import { breadcrumbI18n } from "@/lib/breadcrumb"
+import { translateError } from "@/lib/i18n-errors"
 
 const orgRouteApi = getRouteApi("/$orgSlug")
 
@@ -35,6 +37,7 @@ export const Route = createFileRoute("/$orgSlug/categories/new")({
 })
 
 function NewCategoryPage() {
+    const { LL } = useI18nContext()
     const { orgId } = orgRouteApi.useLoaderData()
     const { orgSlug } = useParams({ strict: false }) as { orgSlug: string }
     const navigate = useNavigate()
@@ -49,7 +52,7 @@ function NewCategoryPage() {
             })
         },
         onSuccess: async () => {
-            toast.success("Category created")
+            toast.success(LL.categories.new.success())
             await queryClient.invalidateQueries({
                 queryKey: ["categories", orgId],
             })
@@ -58,6 +61,9 @@ function NewCategoryPage() {
                 params: { orgSlug },
             })
         },
+        onError: (err) => {
+            toast.error(translateError(LL, err))
+        },
     })
 
     const form = useForm({
@@ -65,7 +71,7 @@ function NewCategoryPage() {
         onSubmit: async ({ value }) => {
             const parsed = schema.safeParse(value)
             if (!parsed.success) {
-                toast.error(parsed.error.issues[0]?.message ?? "Invalid")
+                toast.error(translateError(LL, parsed.error, "invalidInput"))
                 return
             }
             await create.mutateAsync(parsed.data)
@@ -75,9 +81,9 @@ function NewCategoryPage() {
     return (
         <Card className="max-w-md">
             <CardHeader>
-                <CardTitle>New category</CardTitle>
+                <CardTitle>{LL.categories.new.title()}</CardTitle>
                 <CardDescription>
-                    Name the category for this organization.
+                    {LL.categories.new.description()}
                 </CardDescription>
             </CardHeader>
             <form
@@ -90,7 +96,9 @@ function NewCategoryPage() {
                     <form.Field name="name">
                         {(field) => (
                             <div className="grid gap-2">
-                                <Label htmlFor={field.name}>Name</Label>
+                                <Label htmlFor={field.name}>
+                                    {LL.categories.new.fieldName()}
+                                </Label>
                                 <Input
                                     id={field.name}
                                     value={field.state.value}
@@ -104,11 +112,13 @@ function NewCategoryPage() {
                 </CardContent>
                 <CardFooter className="flex gap-2">
                     <Button type="submit" disabled={create.isPending}>
-                        {create.isPending ? "Saving…" : "Save"}
+                        {create.isPending
+                            ? LL.common.saving()
+                            : LL.common.save()}
                     </Button>
                     <Button variant="outline" type="button" asChild>
                         <Link to="/$orgSlug/categories" params={{ orgSlug }}>
-                            Cancel
+                            {LL.common.cancel()}
                         </Link>
                     </Button>
                 </CardFooter>

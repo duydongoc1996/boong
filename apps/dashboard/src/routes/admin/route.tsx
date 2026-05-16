@@ -1,7 +1,7 @@
 import { createFileRoute, redirect } from "@tanstack/react-router"
 import { AdminShell } from "@/components/layout/admin/admin-shell"
 import { authClient } from "@/lib/auth-client"
-import { breadcrumbI18n } from "@/lib/router-static-data"
+import { breadcrumbI18n } from "@/lib/breadcrumb"
 
 export const Route = createFileRoute("/admin")({
     staticData: breadcrumbI18n("admin"),
