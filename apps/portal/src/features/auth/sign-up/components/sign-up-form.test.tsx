@@ -1,25 +1,37 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
+import { beforeEach, describe, expect, it, vi } from "vitest"
 import { type Locator, userEvent } from "vitest/browser"
 import { type RenderResult, render } from "vitest-browser-react"
 import { SignUpForm } from "./sign-up-form"
 
 const FORM_MESSAGES = {
+    nameEmpty: "Please enter your name.",
     emailEmpty: "Please enter your email.",
     passwordEmpty: "Please enter your password.",
     confirmPasswordEmpty: "Please confirm your password.",
     passwordMismatch: "Passwords don't match.",
 } as const
 
-const toastPromise = vi.hoisted(() =>
-    vi.fn((p: Promise<unknown>, opts: { success?: () => unknown }) => {
-        p.then(() => opts.success?.())
-    })
-)
+const navigate = vi.fn()
+const signUpEmail = vi.fn()
 
-vi.mock("sonner", () => ({ toast: { promise: toastPromise } }))
+vi.mock("@/data-provider", () => ({
+    signUp: {
+        email: signUpEmail,
+    },
+}))
+
+vi.mock("@tanstack/react-router", async (importOriginal) => {
+    const actual =
+        await importOriginal<typeof import("@tanstack/react-router")>()
+    return {
+        ...actual,
+        useNavigate: () => navigate,
+    }
+})
 
 describe("SignUpForm", () => {
     let screen: RenderResult
+    let nameInput: Locator
     let emailInput: Locator
     let passwordInput: Locator
     let confirmPasswordInput: Locator
@@ -27,19 +39,18 @@ describe("SignUpForm", () => {
 
     beforeEach(async () => {
         vi.clearAllMocks()
+        signUpEmail.mockResolvedValue({ data: { user: {} }, error: null })
 
         screen = await render(<SignUpForm />)
+        nameInput = screen.getByRole("textbox", { name: /^Name$/i })
         emailInput = screen.getByRole("textbox", { name: /^Email$/i })
         passwordInput = screen.getByLabelText(/^Password$/i)
         confirmPasswordInput = screen.getByLabelText(/^Confirm Password$/i)
         submitButton = screen.getByRole("button", { name: /^Create Account$/i })
     })
 
-    afterEach(() => {
-        vi.useRealTimers()
-    })
-
     it("renders fields and submit button", async () => {
+        await expect.element(nameInput).toBeInTheDocument()
         await expect.element(emailInput).toBeInTheDocument()
         await expect.element(passwordInput).toBeInTheDocument()
         await expect.element(confirmPasswordInput).toBeInTheDocument()
@@ -49,6 +60,9 @@ describe("SignUpForm", () => {
     it("shows validation messages when submitting empty form", async () => {
         await userEvent.click(submitButton)
 
+        await expect
+            .element(screen.getByText(FORM_MESSAGES.nameEmpty))
+            .toBeInTheDocument()
         await expect
             .element(screen.getByText(FORM_MESSAGES.emailEmpty))
             .toBeInTheDocument()
@@ -61,6 +75,7 @@ describe("SignUpForm", () => {
     })
 
     it("shows a mismatch error when passwords do not match", async () => {
+        await userEvent.fill(nameInput, "Jane")
         await userEvent.fill(emailInput, "a@b.com")
         await userEvent.fill(passwordInput, "1234567")
         await userEvent.fill(confirmPasswordInput, "7654321")
@@ -71,18 +86,22 @@ describe("SignUpForm", () => {
             .toBeInTheDocument()
     })
 
-    it("disables submit while submitting and re-enables after timeout", async () => {
-        vi.useFakeTimers()
-
+    it("calls signUp.email and navigates on success", async () => {
+        await userEvent.fill(nameInput, "Jane")
         await userEvent.fill(emailInput, "a@b.com")
         await userEvent.fill(passwordInput, "1234567")
         await userEvent.fill(confirmPasswordInput, "1234567")
 
         await userEvent.click(submitButton)
-        await expect.element(submitButton).toBeDisabled()
 
-        await vi.advanceTimersByTimeAsync(2000)
-        await expect.element(submitButton).toBeEnabled()
-        expect(toastPromise).toHaveBeenCalledOnce()
+        await vi.waitFor(() => expect(signUpEmail).toHaveBeenCalledOnce())
+        expect(signUpEmail).toHaveBeenCalledWith({
+            name: "Jane",
+            email: "a@b.com",
+            password: "1234567",
+        })
+        await vi.waitFor(() =>
+            expect(navigate).toHaveBeenCalledWith({ to: "/", replace: true })
+        )
     })
 })

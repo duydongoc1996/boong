@@ -19,7 +19,7 @@ import {
 import { Separator } from "@/components/ui/separator"
 import { apps } from "./data/apps"
 
-const route = getRouteApi("/_authenticated/apps/")
+const route = getRouteApi("/_authenticated/org/$orgId/apps/")
 
 type AppType = "all" | "connected" | "notConnected"
 

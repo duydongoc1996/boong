@@ -7,8 +7,8 @@ import { createRouter, RouterProvider } from "@tanstack/react-router"
 import { StrictMode } from "react"
 import { createRoot } from "react-dom/client"
 import { toast } from "sonner"
+import { signOut } from "@/data-provider/auth-provider"
 import { HttpError, handleServerError } from "@/lib/handle-server-error"
-import { useAuthStore } from "@/stores/auth-store"
 import { DirectionProvider } from "./context/direction-provider"
 import { FontProvider } from "./context/font-provider"
 import { ThemeProvider } from "./context/theme-provider"
@@ -52,7 +52,7 @@ const queryClient = new QueryClient({
             if (error instanceof HttpError) {
                 if (error.status === 401) {
                     toast.error("Session expired!")
-                    useAuthStore.getState().auth.reset()
+                    void signOut()
                     const redirect = `${router.history.location.href}`
                     router.navigate({ to: "/sign-in", search: { redirect } })
                 }

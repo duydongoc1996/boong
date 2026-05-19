@@ -6,6 +6,7 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { cn } from "@/lib/utils"
 import { callTypes, roles } from "../data/data"
 import type { User } from "../data/schema"
+import { statusFor } from "../data/users"
 import { DataTableRowActions } from "./data-table-row-actions"
 
 export const usersColumns: ColumnDef<User>[] = [
@@ -39,13 +40,13 @@ export const usersColumns: ColumnDef<User>[] = [
         enableHiding: false,
     },
     {
-        accessorKey: "username",
+        accessorKey: "name",
         header: ({ column }) => (
-            <DataTableColumnHeader column={column} title="Username" />
+            <DataTableColumnHeader column={column} title="Name" />
         ),
         cell: ({ row }) => (
-            <LongText className="max-w-36 ps-3">
-                {row.getValue("username")}
+            <LongText className="max-w-48 ps-3">
+                {row.getValue("name")}
             </LongText>
         ),
         meta: {
@@ -55,18 +56,6 @@ export const usersColumns: ColumnDef<User>[] = [
             ),
         },
         enableHiding: false,
-    },
-    {
-        id: "fullName",
-        header: ({ column }) => (
-            <DataTableColumnHeader column={column} title="Name" />
-        ),
-        cell: ({ row }) => {
-            const { firstName, lastName } = row.original
-            const fullName = `${firstName} ${lastName}`
-            return <LongText className="max-w-36">{fullName}</LongText>
-        },
-        meta: { className: "w-36" },
     },
     {
         accessorKey: "email",
@@ -80,20 +69,13 @@ export const usersColumns: ColumnDef<User>[] = [
         ),
     },
     {
-        accessorKey: "phoneNumber",
-        header: ({ column }) => (
-            <DataTableColumnHeader column={column} title="Phone Number" />
-        ),
-        cell: ({ row }) => <div>{row.getValue("phoneNumber")}</div>,
-        enableSorting: false,
-    },
-    {
-        accessorKey: "status",
+        id: "status",
+        accessorFn: (row) => statusFor(row),
         header: ({ column }) => (
             <DataTableColumnHeader column={column} title="Status" />
         ),
         cell: ({ row }) => {
-            const { status } = row.original
+            const status = statusFor(row.original)
             const badgeColor = callTypes.get(status)
             return (
                 <div className="flex space-x-2">
@@ -101,7 +83,7 @@ export const usersColumns: ColumnDef<User>[] = [
                         variant="outline"
                         className={cn("capitalize", badgeColor)}
                     >
-                        {row.getValue("status")}
+                        {status}
                     </Badge>
                 </div>
             )
@@ -118,12 +100,10 @@ export const usersColumns: ColumnDef<User>[] = [
             <DataTableColumnHeader column={column} title="Role" />
         ),
         cell: ({ row }) => {
-            const { role } = row.original
+            const role = row.original.role
             const userType = roles.find(({ value }) => value === role)
 
-            if (!userType) {
-                return null
-            }
+            if (!userType) return null
 
             return (
                 <div className="flex items-center gap-x-2">
@@ -133,9 +113,7 @@ export const usersColumns: ColumnDef<User>[] = [
                             className="text-muted-foreground"
                         />
                     )}
-                    <span className="text-sm capitalize">
-                        {row.getValue("role")}
-                    </span>
+                    <span className="text-sm capitalize">{role}</span>
                 </div>
             )
         },

@@ -10,16 +10,12 @@ const FORM_MESSAGES = {
 } as const
 
 const navigate = vi.fn()
-const setUserMock = vi.fn()
-const setAccessTokenMock = vi.fn()
+const signInEmail = vi.fn()
 
-vi.mock("@/stores/auth-store", () => ({
-    useAuthStore: () => ({
-        auth: {
-            setUser: setUserMock,
-            setAccessToken: setAccessTokenMock,
-        },
-    }),
+vi.mock("@/data-provider", () => ({
+    signIn: {
+        email: signInEmail,
+    },
 }))
 
 vi.mock("@tanstack/react-router", async (importOriginal) => {
@@ -45,11 +41,6 @@ vi.mock("@tanstack/react-router", async (importOriginal) => {
     }
 })
 
-vi.mock("@/lib/utils", async (orig) => ({
-    ...(await orig()),
-    sleep: vi.fn(() => Promise.resolve()),
-}))
-
 describe("UserAuthForm", () => {
     describe("Rendering without redirectTo", () => {
         let screen: RenderResult
@@ -60,6 +51,7 @@ describe("UserAuthForm", () => {
 
         beforeEach(async () => {
             vi.clearAllMocks()
+            signInEmail.mockResolvedValue({ data: { user: {} }, error: null })
             screen = await render(<UserAuthForm />)
             emailInput = screen.getByRole("textbox", { name: /^Email$/i })
             passwordInput = screen.getByLabelText(/^Password$/i)
@@ -91,17 +83,11 @@ describe("UserAuthForm", () => {
 
             await userEvent.click(signInButton)
 
-            await vi.waitFor(() => expect(setUserMock).toHaveBeenCalledOnce())
-            expect(setUserMock).toHaveBeenCalledWith(
-                expect.objectContaining({
-                    email: "a@b.com",
-                    accountNo: expect.any(String),
-                    role: expect.any(Array),
-                    exp: expect.any(Number),
-                })
-            )
-            expect(setAccessTokenMock).toHaveBeenCalledOnce()
-            expect(setAccessTokenMock).toHaveBeenCalledWith("mock-access-token")
+            await vi.waitFor(() => expect(signInEmail).toHaveBeenCalledOnce())
+            expect(signInEmail).toHaveBeenCalledWith({
+                email: "a@b.com",
+                password: "1234567",
+            })
 
             await vi.waitFor(() =>
                 expect(navigate).toHaveBeenCalledWith({
@@ -114,6 +100,7 @@ describe("UserAuthForm", () => {
 
     it("navigates to redirectTo when provided", async () => {
         vi.clearAllMocks()
+        signInEmail.mockResolvedValue({ data: { user: {} }, error: null })
 
         const { getByRole, getByLabelText } = await render(
             <UserAuthForm redirectTo="/settings" />
@@ -127,8 +114,7 @@ describe("UserAuthForm", () => {
 
         await userEvent.click(getByRole("button", { name: /Sign in/i }))
 
-        await vi.waitFor(() => expect(setUserMock).toHaveBeenCalledOnce())
-        expect(setAccessTokenMock).toHaveBeenCalledOnce()
+        await vi.waitFor(() => expect(signInEmail).toHaveBeenCalledOnce())
 
         await vi.waitFor(() =>
             expect(navigate).toHaveBeenCalledWith({

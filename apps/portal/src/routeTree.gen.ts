@@ -17,22 +17,23 @@ import { Route as errors404RouteImport } from './routes/(errors)/404'
 import { Route as errors403RouteImport } from './routes/(errors)/403'
 import { Route as errors401RouteImport } from './routes/(errors)/401'
 import { Route as authSignUpRouteImport } from './routes/(auth)/sign-up'
-import { Route as authSignIn2RouteImport } from './routes/(auth)/sign-in-2'
 import { Route as authSignInRouteImport } from './routes/(auth)/sign-in'
-import { Route as authOtpRouteImport } from './routes/(auth)/otp'
 import { Route as authForgotPasswordRouteImport } from './routes/(auth)/forgot-password'
 import { Route as AuthenticatedSettingsRouteRouteImport } from './routes/_authenticated/settings/route'
-import { Route as AuthenticatedUsersIndexRouteImport } from './routes/_authenticated/users/index'
-import { Route as AuthenticatedTasksIndexRouteImport } from './routes/_authenticated/tasks/index'
+import { Route as AuthenticatedAdminRouteRouteImport } from './routes/_authenticated/admin/route'
 import { Route as AuthenticatedSettingsIndexRouteImport } from './routes/_authenticated/settings/index'
-import { Route as AuthenticatedHelpCenterIndexRouteImport } from './routes/_authenticated/help-center/index'
-import { Route as AuthenticatedChatsIndexRouteImport } from './routes/_authenticated/chats/index'
-import { Route as AuthenticatedAppsIndexRouteImport } from './routes/_authenticated/apps/index'
 import { Route as AuthenticatedSettingsNotificationsRouteImport } from './routes/_authenticated/settings/notifications'
 import { Route as AuthenticatedSettingsDisplayRouteImport } from './routes/_authenticated/settings/display'
 import { Route as AuthenticatedSettingsAppearanceRouteImport } from './routes/_authenticated/settings/appearance'
 import { Route as AuthenticatedSettingsAccountRouteImport } from './routes/_authenticated/settings/account'
 import { Route as AuthenticatedErrorsErrorRouteImport } from './routes/_authenticated/errors/$error'
+import { Route as AuthenticatedOrgOrgIdRouteRouteImport } from './routes/_authenticated/org/$orgId/route'
+import { Route as AuthenticatedOrgOrgIdIndexRouteImport } from './routes/_authenticated/org/$orgId/index'
+import { Route as AuthenticatedAdminUsersIndexRouteImport } from './routes/_authenticated/admin/users/index'
+import { Route as AuthenticatedOrgOrgIdTasksIndexRouteImport } from './routes/_authenticated/org/$orgId/tasks/index'
+import { Route as AuthenticatedOrgOrgIdHelpCenterIndexRouteImport } from './routes/_authenticated/org/$orgId/help-center/index'
+import { Route as AuthenticatedOrgOrgIdChatsIndexRouteImport } from './routes/_authenticated/org/$orgId/chats/index'
+import { Route as AuthenticatedOrgOrgIdAppsIndexRouteImport } from './routes/_authenticated/org/$orgId/apps/index'
 
 const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
   id: '/_authenticated',
@@ -73,19 +74,9 @@ const authSignUpRoute = authSignUpRouteImport.update({
   path: '/sign-up',
   getParentRoute: () => rootRouteImport,
 } as any)
-const authSignIn2Route = authSignIn2RouteImport.update({
-  id: '/(auth)/sign-in-2',
-  path: '/sign-in-2',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const authSignInRoute = authSignInRouteImport.update({
   id: '/(auth)/sign-in',
   path: '/sign-in',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const authOtpRoute = authOtpRouteImport.update({
-  id: '/(auth)/otp',
-  path: '/otp',
   getParentRoute: () => rootRouteImport,
 } as any)
 const authForgotPasswordRoute = authForgotPasswordRouteImport.update({
@@ -99,14 +90,9 @@ const AuthenticatedSettingsRouteRoute =
     path: '/settings',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
-const AuthenticatedUsersIndexRoute = AuthenticatedUsersIndexRouteImport.update({
-  id: '/users/',
-  path: '/users/',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-const AuthenticatedTasksIndexRoute = AuthenticatedTasksIndexRouteImport.update({
-  id: '/tasks/',
-  path: '/tasks/',
+const AuthenticatedAdminRouteRoute = AuthenticatedAdminRouteRouteImport.update({
+  id: '/admin',
+  path: '/admin',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedSettingsIndexRoute =
@@ -115,22 +101,6 @@ const AuthenticatedSettingsIndexRoute =
     path: '/',
     getParentRoute: () => AuthenticatedSettingsRouteRoute,
   } as any)
-const AuthenticatedHelpCenterIndexRoute =
-  AuthenticatedHelpCenterIndexRouteImport.update({
-    id: '/help-center/',
-    path: '/help-center/',
-    getParentRoute: () => AuthenticatedRouteRoute,
-  } as any)
-const AuthenticatedChatsIndexRoute = AuthenticatedChatsIndexRouteImport.update({
-  id: '/chats/',
-  path: '/chats/',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-const AuthenticatedAppsIndexRoute = AuthenticatedAppsIndexRouteImport.update({
-  id: '/apps/',
-  path: '/apps/',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
 const AuthenticatedSettingsNotificationsRoute =
   AuthenticatedSettingsNotificationsRouteImport.update({
     id: '/notifications',
@@ -161,37 +131,79 @@ const AuthenticatedErrorsErrorRoute =
     path: '/errors/$error',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedOrgOrgIdRouteRoute =
+  AuthenticatedOrgOrgIdRouteRouteImport.update({
+    id: '/org/$orgId',
+    path: '/org/$orgId',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedOrgOrgIdIndexRoute =
+  AuthenticatedOrgOrgIdIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AuthenticatedOrgOrgIdRouteRoute,
+  } as any)
+const AuthenticatedAdminUsersIndexRoute =
+  AuthenticatedAdminUsersIndexRouteImport.update({
+    id: '/users/',
+    path: '/users/',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
+  } as any)
+const AuthenticatedOrgOrgIdTasksIndexRoute =
+  AuthenticatedOrgOrgIdTasksIndexRouteImport.update({
+    id: '/tasks/',
+    path: '/tasks/',
+    getParentRoute: () => AuthenticatedOrgOrgIdRouteRoute,
+  } as any)
+const AuthenticatedOrgOrgIdHelpCenterIndexRoute =
+  AuthenticatedOrgOrgIdHelpCenterIndexRouteImport.update({
+    id: '/help-center/',
+    path: '/help-center/',
+    getParentRoute: () => AuthenticatedOrgOrgIdRouteRoute,
+  } as any)
+const AuthenticatedOrgOrgIdChatsIndexRoute =
+  AuthenticatedOrgOrgIdChatsIndexRouteImport.update({
+    id: '/chats/',
+    path: '/chats/',
+    getParentRoute: () => AuthenticatedOrgOrgIdRouteRoute,
+  } as any)
+const AuthenticatedOrgOrgIdAppsIndexRoute =
+  AuthenticatedOrgOrgIdAppsIndexRouteImport.update({
+    id: '/apps/',
+    path: '/apps/',
+    getParentRoute: () => AuthenticatedOrgOrgIdRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof AuthenticatedIndexRoute
+  '/admin': typeof AuthenticatedAdminRouteRouteWithChildren
   '/settings': typeof AuthenticatedSettingsRouteRouteWithChildren
   '/forgot-password': typeof authForgotPasswordRoute
-  '/otp': typeof authOtpRoute
   '/sign-in': typeof authSignInRoute
-  '/sign-in-2': typeof authSignIn2Route
   '/sign-up': typeof authSignUpRoute
   '/401': typeof errors401Route
   '/403': typeof errors403Route
   '/404': typeof errors404Route
   '/500': typeof errors500Route
   '/503': typeof errors503Route
+  '/org/$orgId': typeof AuthenticatedOrgOrgIdRouteRouteWithChildren
   '/errors/$error': typeof AuthenticatedErrorsErrorRoute
   '/settings/account': typeof AuthenticatedSettingsAccountRoute
   '/settings/appearance': typeof AuthenticatedSettingsAppearanceRoute
   '/settings/display': typeof AuthenticatedSettingsDisplayRoute
   '/settings/notifications': typeof AuthenticatedSettingsNotificationsRoute
-  '/apps/': typeof AuthenticatedAppsIndexRoute
-  '/chats/': typeof AuthenticatedChatsIndexRoute
-  '/help-center/': typeof AuthenticatedHelpCenterIndexRoute
   '/settings/': typeof AuthenticatedSettingsIndexRoute
-  '/tasks/': typeof AuthenticatedTasksIndexRoute
-  '/users/': typeof AuthenticatedUsersIndexRoute
+  '/admin/users/': typeof AuthenticatedAdminUsersIndexRoute
+  '/org/$orgId/': typeof AuthenticatedOrgOrgIdIndexRoute
+  '/org/$orgId/apps/': typeof AuthenticatedOrgOrgIdAppsIndexRoute
+  '/org/$orgId/chats/': typeof AuthenticatedOrgOrgIdChatsIndexRoute
+  '/org/$orgId/help-center/': typeof AuthenticatedOrgOrgIdHelpCenterIndexRoute
+  '/org/$orgId/tasks/': typeof AuthenticatedOrgOrgIdTasksIndexRoute
 }
 export interface FileRoutesByTo {
+  '/admin': typeof AuthenticatedAdminRouteRouteWithChildren
   '/forgot-password': typeof authForgotPasswordRoute
-  '/otp': typeof authOtpRoute
   '/sign-in': typeof authSignInRoute
-  '/sign-in-2': typeof authSignIn2Route
   '/sign-up': typeof authSignUpRoute
   '/401': typeof errors401Route
   '/403': typeof errors403Route
@@ -204,21 +216,21 @@ export interface FileRoutesByTo {
   '/settings/appearance': typeof AuthenticatedSettingsAppearanceRoute
   '/settings/display': typeof AuthenticatedSettingsDisplayRoute
   '/settings/notifications': typeof AuthenticatedSettingsNotificationsRoute
-  '/apps': typeof AuthenticatedAppsIndexRoute
-  '/chats': typeof AuthenticatedChatsIndexRoute
-  '/help-center': typeof AuthenticatedHelpCenterIndexRoute
   '/settings': typeof AuthenticatedSettingsIndexRoute
-  '/tasks': typeof AuthenticatedTasksIndexRoute
-  '/users': typeof AuthenticatedUsersIndexRoute
+  '/admin/users': typeof AuthenticatedAdminUsersIndexRoute
+  '/org/$orgId': typeof AuthenticatedOrgOrgIdIndexRoute
+  '/org/$orgId/apps': typeof AuthenticatedOrgOrgIdAppsIndexRoute
+  '/org/$orgId/chats': typeof AuthenticatedOrgOrgIdChatsIndexRoute
+  '/org/$orgId/help-center': typeof AuthenticatedOrgOrgIdHelpCenterIndexRoute
+  '/org/$orgId/tasks': typeof AuthenticatedOrgOrgIdTasksIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/_authenticated/admin': typeof AuthenticatedAdminRouteRouteWithChildren
   '/_authenticated/settings': typeof AuthenticatedSettingsRouteRouteWithChildren
   '/(auth)/forgot-password': typeof authForgotPasswordRoute
-  '/(auth)/otp': typeof authOtpRoute
   '/(auth)/sign-in': typeof authSignInRoute
-  '/(auth)/sign-in-2': typeof authSignIn2Route
   '/(auth)/sign-up': typeof authSignUpRoute
   '/(errors)/401': typeof errors401Route
   '/(errors)/403': typeof errors403Route
@@ -226,50 +238,52 @@ export interface FileRoutesById {
   '/(errors)/500': typeof errors500Route
   '/(errors)/503': typeof errors503Route
   '/_authenticated/': typeof AuthenticatedIndexRoute
+  '/_authenticated/org/$orgId': typeof AuthenticatedOrgOrgIdRouteRouteWithChildren
   '/_authenticated/errors/$error': typeof AuthenticatedErrorsErrorRoute
   '/_authenticated/settings/account': typeof AuthenticatedSettingsAccountRoute
   '/_authenticated/settings/appearance': typeof AuthenticatedSettingsAppearanceRoute
   '/_authenticated/settings/display': typeof AuthenticatedSettingsDisplayRoute
   '/_authenticated/settings/notifications': typeof AuthenticatedSettingsNotificationsRoute
-  '/_authenticated/apps/': typeof AuthenticatedAppsIndexRoute
-  '/_authenticated/chats/': typeof AuthenticatedChatsIndexRoute
-  '/_authenticated/help-center/': typeof AuthenticatedHelpCenterIndexRoute
   '/_authenticated/settings/': typeof AuthenticatedSettingsIndexRoute
-  '/_authenticated/tasks/': typeof AuthenticatedTasksIndexRoute
-  '/_authenticated/users/': typeof AuthenticatedUsersIndexRoute
+  '/_authenticated/admin/users/': typeof AuthenticatedAdminUsersIndexRoute
+  '/_authenticated/org/$orgId/': typeof AuthenticatedOrgOrgIdIndexRoute
+  '/_authenticated/org/$orgId/apps/': typeof AuthenticatedOrgOrgIdAppsIndexRoute
+  '/_authenticated/org/$orgId/chats/': typeof AuthenticatedOrgOrgIdChatsIndexRoute
+  '/_authenticated/org/$orgId/help-center/': typeof AuthenticatedOrgOrgIdHelpCenterIndexRoute
+  '/_authenticated/org/$orgId/tasks/': typeof AuthenticatedOrgOrgIdTasksIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/admin'
     | '/settings'
     | '/forgot-password'
-    | '/otp'
     | '/sign-in'
-    | '/sign-in-2'
     | '/sign-up'
     | '/401'
     | '/403'
     | '/404'
     | '/500'
     | '/503'
+    | '/org/$orgId'
     | '/errors/$error'
     | '/settings/account'
     | '/settings/appearance'
     | '/settings/display'
     | '/settings/notifications'
-    | '/apps/'
-    | '/chats/'
-    | '/help-center/'
     | '/settings/'
-    | '/tasks/'
-    | '/users/'
+    | '/admin/users/'
+    | '/org/$orgId/'
+    | '/org/$orgId/apps/'
+    | '/org/$orgId/chats/'
+    | '/org/$orgId/help-center/'
+    | '/org/$orgId/tasks/'
   fileRoutesByTo: FileRoutesByTo
   to:
+    | '/admin'
     | '/forgot-password'
-    | '/otp'
     | '/sign-in'
-    | '/sign-in-2'
     | '/sign-up'
     | '/401'
     | '/403'
@@ -282,20 +296,20 @@ export interface FileRouteTypes {
     | '/settings/appearance'
     | '/settings/display'
     | '/settings/notifications'
-    | '/apps'
-    | '/chats'
-    | '/help-center'
     | '/settings'
-    | '/tasks'
-    | '/users'
+    | '/admin/users'
+    | '/org/$orgId'
+    | '/org/$orgId/apps'
+    | '/org/$orgId/chats'
+    | '/org/$orgId/help-center'
+    | '/org/$orgId/tasks'
   id:
     | '__root__'
     | '/_authenticated'
+    | '/_authenticated/admin'
     | '/_authenticated/settings'
     | '/(auth)/forgot-password'
-    | '/(auth)/otp'
     | '/(auth)/sign-in'
-    | '/(auth)/sign-in-2'
     | '/(auth)/sign-up'
     | '/(errors)/401'
     | '/(errors)/403'
@@ -303,25 +317,25 @@ export interface FileRouteTypes {
     | '/(errors)/500'
     | '/(errors)/503'
     | '/_authenticated/'
+    | '/_authenticated/org/$orgId'
     | '/_authenticated/errors/$error'
     | '/_authenticated/settings/account'
     | '/_authenticated/settings/appearance'
     | '/_authenticated/settings/display'
     | '/_authenticated/settings/notifications'
-    | '/_authenticated/apps/'
-    | '/_authenticated/chats/'
-    | '/_authenticated/help-center/'
     | '/_authenticated/settings/'
-    | '/_authenticated/tasks/'
-    | '/_authenticated/users/'
+    | '/_authenticated/admin/users/'
+    | '/_authenticated/org/$orgId/'
+    | '/_authenticated/org/$orgId/apps/'
+    | '/_authenticated/org/$orgId/chats/'
+    | '/_authenticated/org/$orgId/help-center/'
+    | '/_authenticated/org/$orgId/tasks/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   authForgotPasswordRoute: typeof authForgotPasswordRoute
-  authOtpRoute: typeof authOtpRoute
   authSignInRoute: typeof authSignInRoute
-  authSignIn2Route: typeof authSignIn2Route
   authSignUpRoute: typeof authSignUpRoute
   errors401Route: typeof errors401Route
   errors403Route: typeof errors403Route
@@ -388,25 +402,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof authSignUpRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/(auth)/sign-in-2': {
-      id: '/(auth)/sign-in-2'
-      path: '/sign-in-2'
-      fullPath: '/sign-in-2'
-      preLoaderRoute: typeof authSignIn2RouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/(auth)/sign-in': {
       id: '/(auth)/sign-in'
       path: '/sign-in'
       fullPath: '/sign-in'
       preLoaderRoute: typeof authSignInRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/(auth)/otp': {
-      id: '/(auth)/otp'
-      path: '/otp'
-      fullPath: '/otp'
-      preLoaderRoute: typeof authOtpRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/(auth)/forgot-password': {
@@ -423,18 +423,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedSettingsRouteRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/_authenticated/users/': {
-      id: '/_authenticated/users/'
-      path: '/users'
-      fullPath: '/users/'
-      preLoaderRoute: typeof AuthenticatedUsersIndexRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/tasks/': {
-      id: '/_authenticated/tasks/'
-      path: '/tasks'
-      fullPath: '/tasks/'
-      preLoaderRoute: typeof AuthenticatedTasksIndexRouteImport
+    '/_authenticated/admin': {
+      id: '/_authenticated/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AuthenticatedAdminRouteRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/settings/': {
@@ -443,27 +436,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/settings/'
       preLoaderRoute: typeof AuthenticatedSettingsIndexRouteImport
       parentRoute: typeof AuthenticatedSettingsRouteRoute
-    }
-    '/_authenticated/help-center/': {
-      id: '/_authenticated/help-center/'
-      path: '/help-center'
-      fullPath: '/help-center/'
-      preLoaderRoute: typeof AuthenticatedHelpCenterIndexRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/chats/': {
-      id: '/_authenticated/chats/'
-      path: '/chats'
-      fullPath: '/chats/'
-      preLoaderRoute: typeof AuthenticatedChatsIndexRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/apps/': {
-      id: '/_authenticated/apps/'
-      path: '/apps'
-      fullPath: '/apps/'
-      preLoaderRoute: typeof AuthenticatedAppsIndexRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/settings/notifications': {
       id: '/_authenticated/settings/notifications'
@@ -500,8 +472,71 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedErrorsErrorRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/org/$orgId': {
+      id: '/_authenticated/org/$orgId'
+      path: '/org/$orgId'
+      fullPath: '/org/$orgId'
+      preLoaderRoute: typeof AuthenticatedOrgOrgIdRouteRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/org/$orgId/': {
+      id: '/_authenticated/org/$orgId/'
+      path: '/'
+      fullPath: '/org/$orgId/'
+      preLoaderRoute: typeof AuthenticatedOrgOrgIdIndexRouteImport
+      parentRoute: typeof AuthenticatedOrgOrgIdRouteRoute
+    }
+    '/_authenticated/admin/users/': {
+      id: '/_authenticated/admin/users/'
+      path: '/users'
+      fullPath: '/admin/users/'
+      preLoaderRoute: typeof AuthenticatedAdminUsersIndexRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
+    '/_authenticated/org/$orgId/tasks/': {
+      id: '/_authenticated/org/$orgId/tasks/'
+      path: '/tasks'
+      fullPath: '/org/$orgId/tasks/'
+      preLoaderRoute: typeof AuthenticatedOrgOrgIdTasksIndexRouteImport
+      parentRoute: typeof AuthenticatedOrgOrgIdRouteRoute
+    }
+    '/_authenticated/org/$orgId/help-center/': {
+      id: '/_authenticated/org/$orgId/help-center/'
+      path: '/help-center'
+      fullPath: '/org/$orgId/help-center/'
+      preLoaderRoute: typeof AuthenticatedOrgOrgIdHelpCenterIndexRouteImport
+      parentRoute: typeof AuthenticatedOrgOrgIdRouteRoute
+    }
+    '/_authenticated/org/$orgId/chats/': {
+      id: '/_authenticated/org/$orgId/chats/'
+      path: '/chats'
+      fullPath: '/org/$orgId/chats/'
+      preLoaderRoute: typeof AuthenticatedOrgOrgIdChatsIndexRouteImport
+      parentRoute: typeof AuthenticatedOrgOrgIdRouteRoute
+    }
+    '/_authenticated/org/$orgId/apps/': {
+      id: '/_authenticated/org/$orgId/apps/'
+      path: '/apps'
+      fullPath: '/org/$orgId/apps/'
+      preLoaderRoute: typeof AuthenticatedOrgOrgIdAppsIndexRouteImport
+      parentRoute: typeof AuthenticatedOrgOrgIdRouteRoute
+    }
   }
 }
+
+interface AuthenticatedAdminRouteRouteChildren {
+  AuthenticatedAdminUsersIndexRoute: typeof AuthenticatedAdminUsersIndexRoute
+}
+
+const AuthenticatedAdminRouteRouteChildren: AuthenticatedAdminRouteRouteChildren =
+  {
+    AuthenticatedAdminUsersIndexRoute: AuthenticatedAdminUsersIndexRoute,
+  }
+
+const AuthenticatedAdminRouteRouteWithChildren =
+  AuthenticatedAdminRouteRoute._addFileChildren(
+    AuthenticatedAdminRouteRouteChildren,
+  )
 
 interface AuthenticatedSettingsRouteRouteChildren {
   AuthenticatedSettingsAccountRoute: typeof AuthenticatedSettingsAccountRoute
@@ -526,26 +561,43 @@ const AuthenticatedSettingsRouteRouteWithChildren =
     AuthenticatedSettingsRouteRouteChildren,
   )
 
+interface AuthenticatedOrgOrgIdRouteRouteChildren {
+  AuthenticatedOrgOrgIdIndexRoute: typeof AuthenticatedOrgOrgIdIndexRoute
+  AuthenticatedOrgOrgIdAppsIndexRoute: typeof AuthenticatedOrgOrgIdAppsIndexRoute
+  AuthenticatedOrgOrgIdChatsIndexRoute: typeof AuthenticatedOrgOrgIdChatsIndexRoute
+  AuthenticatedOrgOrgIdHelpCenterIndexRoute: typeof AuthenticatedOrgOrgIdHelpCenterIndexRoute
+  AuthenticatedOrgOrgIdTasksIndexRoute: typeof AuthenticatedOrgOrgIdTasksIndexRoute
+}
+
+const AuthenticatedOrgOrgIdRouteRouteChildren: AuthenticatedOrgOrgIdRouteRouteChildren =
+  {
+    AuthenticatedOrgOrgIdIndexRoute: AuthenticatedOrgOrgIdIndexRoute,
+    AuthenticatedOrgOrgIdAppsIndexRoute: AuthenticatedOrgOrgIdAppsIndexRoute,
+    AuthenticatedOrgOrgIdChatsIndexRoute: AuthenticatedOrgOrgIdChatsIndexRoute,
+    AuthenticatedOrgOrgIdHelpCenterIndexRoute:
+      AuthenticatedOrgOrgIdHelpCenterIndexRoute,
+    AuthenticatedOrgOrgIdTasksIndexRoute: AuthenticatedOrgOrgIdTasksIndexRoute,
+  }
+
+const AuthenticatedOrgOrgIdRouteRouteWithChildren =
+  AuthenticatedOrgOrgIdRouteRoute._addFileChildren(
+    AuthenticatedOrgOrgIdRouteRouteChildren,
+  )
+
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAdminRouteRoute: typeof AuthenticatedAdminRouteRouteWithChildren
   AuthenticatedSettingsRouteRoute: typeof AuthenticatedSettingsRouteRouteWithChildren
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
+  AuthenticatedOrgOrgIdRouteRoute: typeof AuthenticatedOrgOrgIdRouteRouteWithChildren
   AuthenticatedErrorsErrorRoute: typeof AuthenticatedErrorsErrorRoute
-  AuthenticatedAppsIndexRoute: typeof AuthenticatedAppsIndexRoute
-  AuthenticatedChatsIndexRoute: typeof AuthenticatedChatsIndexRoute
-  AuthenticatedHelpCenterIndexRoute: typeof AuthenticatedHelpCenterIndexRoute
-  AuthenticatedTasksIndexRoute: typeof AuthenticatedTasksIndexRoute
-  AuthenticatedUsersIndexRoute: typeof AuthenticatedUsersIndexRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedAdminRouteRoute: AuthenticatedAdminRouteRouteWithChildren,
   AuthenticatedSettingsRouteRoute: AuthenticatedSettingsRouteRouteWithChildren,
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,
+  AuthenticatedOrgOrgIdRouteRoute: AuthenticatedOrgOrgIdRouteRouteWithChildren,
   AuthenticatedErrorsErrorRoute: AuthenticatedErrorsErrorRoute,
-  AuthenticatedAppsIndexRoute: AuthenticatedAppsIndexRoute,
-  AuthenticatedChatsIndexRoute: AuthenticatedChatsIndexRoute,
-  AuthenticatedHelpCenterIndexRoute: AuthenticatedHelpCenterIndexRoute,
-  AuthenticatedTasksIndexRoute: AuthenticatedTasksIndexRoute,
-  AuthenticatedUsersIndexRoute: AuthenticatedUsersIndexRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
@@ -554,9 +606,7 @@ const AuthenticatedRouteRouteWithChildren =
 const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   authForgotPasswordRoute: authForgotPasswordRoute,
-  authOtpRoute: authOtpRoute,
   authSignInRoute: authSignInRoute,
-  authSignIn2Route: authSignIn2Route,
   authSignUpRoute: authSignUpRoute,
   errors401Route: errors401Route,
   errors403Route: errors403Route,

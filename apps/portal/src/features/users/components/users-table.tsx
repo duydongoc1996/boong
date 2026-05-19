@@ -31,9 +31,15 @@ type DataTableProps = {
     data: User[]
     search: Record<string, unknown>
     navigate: NavigateFn
+    isLoading?: boolean
 }
 
-export function UsersTable({ data, search, navigate }: DataTableProps) {
+export function UsersTable({
+    data,
+    search,
+    navigate,
+    isLoading,
+}: DataTableProps) {
     // Local UI-only states
     const [rowSelection, setRowSelection] = useState({})
     const [columnVisibility, setColumnVisibility] = useState<VisibilityState>(
@@ -58,8 +64,7 @@ export function UsersTable({ data, search, navigate }: DataTableProps) {
         pagination: { defaultPage: 1, defaultPageSize: 10 },
         globalFilter: { enabled: false },
         columnFilters: [
-            // username per-column text filter
-            { columnId: "username", searchKey: "username", type: "string" },
+            { columnId: "name", searchKey: "name", type: "string" },
             { columnId: "status", searchKey: "status", type: "array" },
             { columnId: "role", searchKey: "role", type: "array" },
         ],
@@ -104,16 +109,14 @@ export function UsersTable({ data, search, navigate }: DataTableProps) {
             <DataTableToolbar
                 table={table}
                 searchPlaceholder="Filter users..."
-                searchKey="username"
+                searchKey="name"
                 filters={[
                     {
                         columnId: "status",
                         title: "Status",
                         options: [
                             { label: "Active", value: "active" },
-                            { label: "Inactive", value: "inactive" },
-                            { label: "Invited", value: "invited" },
-                            { label: "Suspended", value: "suspended" },
+                            { label: "Banned", value: "banned" },
                         ],
                     },
                     {
@@ -158,7 +161,16 @@ export function UsersTable({ data, search, navigate }: DataTableProps) {
                         ))}
                     </TableHeader>
                     <TableBody>
-                        {table.getRowModel().rows?.length ? (
+                        {isLoading ? (
+                            <TableRow>
+                                <TableCell
+                                    colSpan={columns.length}
+                                    className="h-24 text-center"
+                                >
+                                    Loading users…
+                                </TableCell>
+                            </TableRow>
+                        ) : table.getRowModel().rows?.length ? (
                             table.getRowModel().rows.map((row) => (
                                 <TableRow
                                     key={row.id}

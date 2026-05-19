@@ -1,5 +1,6 @@
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 import type { Table } from "@tanstack/react-table"
-import { Mail, Trash2, UserCheck, UserX } from "lucide-react"
+import { Trash2, UserCheck, UserX } from "lucide-react"
 import { useState } from "react"
 import { toast } from "sonner"
 import { DataTableBulkActions as BulkActionsToolbar } from "@/components/data-table"
@@ -9,45 +10,53 @@ import {
     TooltipContent,
     TooltipTrigger,
 } from "@/components/ui/tooltip"
-import { sleep } from "@/lib/utils"
+import { admin } from "@/data-provider/auth-provider"
 import type { User } from "../data/schema"
 import { UsersMultiDeleteDialog } from "./users-multi-delete-dialog"
 
-type DataTableBulkActionsProps<TData> = {
+type Props<TData> = {
     table: Table<TData>
 }
 
-export function DataTableBulkActions<TData>({
-    table,
-}: DataTableBulkActionsProps<TData>) {
+export function DataTableBulkActions<TData>({ table }: Props<TData>) {
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
     const selectedRows = table.getFilteredSelectedRowModel().rows
+    const queryClient = useQueryClient()
 
-    const handleBulkStatusChange = (status: "active" | "inactive") => {
-        const selectedUsers = selectedRows.map((row) => row.original as User)
-        toast.promise(sleep(2000), {
-            loading: `${status === "active" ? "Activating" : "Deactivating"} users...`,
-            success: () => {
-                table.resetRowSelection()
-                return `${status === "active" ? "Activated" : "Deactivated"} ${selectedUsers.length} user${selectedUsers.length > 1 ? "s" : ""}`
-            },
-            error: `Error ${status === "active" ? "activating" : "deactivating"} users`,
-        })
-        table.resetRowSelection()
-    }
-
-    const handleBulkInvite = () => {
-        const selectedUsers = selectedRows.map((row) => row.original as User)
-        toast.promise(sleep(2000), {
-            loading: "Inviting users...",
-            success: () => {
-                table.resetRowSelection()
-                return `Invited ${selectedUsers.length} user${selectedUsers.length > 1 ? "s" : ""}`
-            },
-            error: "Error inviting users",
-        })
-        table.resetRowSelection()
-    }
+    const banMutation = useMutation({
+        mutationFn: async (action: "ban" | "unban") => {
+            const ids = selectedRows.map((row) => (row.original as User).id)
+            const results = await Promise.allSettled(
+                ids.map((userId) =>
+                    action === "ban"
+                        ? admin.banUser({ userId })
+                        : admin.unbanUser({ userId })
+                )
+            )
+            const failed = results.filter(
+                (r) => r.status === "rejected" || r.value?.error
+            )
+            return {
+                total: ids.length,
+                failed: failed.length,
+                action,
+            }
+        },
+        onSuccess: ({ total, failed, action }) => {
+            queryClient.invalidateQueries({ queryKey: ["admin", "users"] })
+            table.resetRowSelection()
+            const ok = total - failed
+            const verb = action === "ban" ? "Banned" : "Unbanned"
+            toast.success(
+                failed
+                    ? `${verb} ${ok} of ${total} users (${failed} failed).`
+                    : `${verb} ${ok} user${ok > 1 ? "s" : ""}.`
+            )
+        },
+        onError: (err: Error) => {
+            toast.error(err.message)
+        },
+    })
 
     return (
         <>
@@ -57,40 +66,19 @@ export function DataTableBulkActions<TData>({
                         <Button
                             variant="outline"
                             size="icon"
-                            onClick={handleBulkInvite}
+                            onClick={() => banMutation.mutate("unban")}
                             className="size-8"
-                            aria-label="Invite selected users"
-                            title="Invite selected users"
-                        >
-                            <Mail />
-                            <span className="sr-only">
-                                Invite selected users
-                            </span>
-                        </Button>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                        <p>Invite selected users</p>
-                    </TooltipContent>
-                </Tooltip>
-
-                <Tooltip>
-                    <TooltipTrigger asChild>
-                        <Button
-                            variant="outline"
-                            size="icon"
-                            onClick={() => handleBulkStatusChange("active")}
-                            className="size-8"
-                            aria-label="Activate selected users"
-                            title="Activate selected users"
+                            aria-label="Unban selected users"
+                            title="Unban selected users"
                         >
                             <UserCheck />
                             <span className="sr-only">
-                                Activate selected users
+                                Unban selected users
                             </span>
                         </Button>
                     </TooltipTrigger>
                     <TooltipContent>
-                        <p>Activate selected users</p>
+                        <p>Unban selected users</p>
                     </TooltipContent>
                 </Tooltip>
 
@@ -99,19 +87,17 @@ export function DataTableBulkActions<TData>({
                         <Button
                             variant="outline"
                             size="icon"
-                            onClick={() => handleBulkStatusChange("inactive")}
+                            onClick={() => banMutation.mutate("ban")}
                             className="size-8"
-                            aria-label="Deactivate selected users"
-                            title="Deactivate selected users"
+                            aria-label="Ban selected users"
+                            title="Ban selected users"
                         >
                             <UserX />
-                            <span className="sr-only">
-                                Deactivate selected users
-                            </span>
+                            <span className="sr-only">Ban selected users</span>
                         </Button>
                     </TooltipTrigger>
                     <TooltipContent>
-                        <p>Deactivate selected users</p>
+                        <p>Ban selected users</p>
                     </TooltipContent>
                 </Tooltip>
 

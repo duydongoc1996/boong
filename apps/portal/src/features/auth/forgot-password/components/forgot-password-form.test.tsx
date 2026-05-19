@@ -3,16 +3,10 @@ import { type Locator, userEvent } from "vitest/browser"
 import { type RenderResult, render } from "vitest-browser-react"
 import { ForgotPasswordForm } from "./forgot-password-form"
 
-const navigateMock = vi.fn()
+const requestPasswordResetMock = vi.fn()
 
-vi.mock("@tanstack/react-router", async (orig) => {
-    const actual = await orig<typeof import("@tanstack/react-router")>()
-    return { ...actual, useNavigate: () => navigateMock }
-})
-
-vi.mock("@/lib/utils", async (orig) => ({
-    ...(await orig()),
-    sleep: vi.fn(() => Promise.resolve()),
+vi.mock("@/data-provider", () => ({
+    requestPasswordReset: requestPasswordResetMock,
 }))
 
 describe("ForgotPasswordForm", () => {
@@ -22,6 +16,7 @@ describe("ForgotPasswordForm", () => {
 
     beforeEach(async () => {
         vi.clearAllMocks()
+        requestPasswordResetMock.mockResolvedValue({ data: {}, error: null })
 
         screen = await render(<ForgotPasswordForm />)
         emailInput = screen.getByRole("textbox", { name: /^Email$/i })
@@ -40,15 +35,17 @@ describe("ForgotPasswordForm", () => {
             .toBeInTheDocument()
     })
 
-    it("resets the form and navigates to /otp on success", async () => {
+    it("calls forgetPassword and resets the form on success", async () => {
         await userEvent.fill(emailInput, "a@b.com")
         await userEvent.click(continueButton)
 
         await vi.waitFor(() =>
-            expect(navigateMock).toHaveBeenCalledWith({ to: "/otp" })
+            expect(requestPasswordResetMock).toHaveBeenCalledOnce()
+        )
+        expect(requestPasswordResetMock).toHaveBeenCalledWith(
+            expect.objectContaining({ email: "a@b.com" })
         )
 
-        // Form should reset on success
         await expect.element(emailInput).toHaveValue("")
     })
 })

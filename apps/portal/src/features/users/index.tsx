@@ -9,13 +9,14 @@ import { UsersDialogs } from "./components/users-dialogs"
 import { UsersPrimaryButtons } from "./components/users-primary-buttons"
 import { UsersProvider } from "./components/users-provider"
 import { UsersTable } from "./components/users-table"
-import { users } from "./data/users"
+import { useUsersQuery } from "./data/users"
 
-const route = getRouteApi("/_authenticated/users/")
+const route = getRouteApi("/_authenticated/admin/users/")
 
 export function Users() {
     const search = route.useSearch()
     const navigate = route.useNavigate()
+    const { data, isLoading, error } = useUsersQuery()
 
     return (
         <UsersProvider>
@@ -38,7 +39,19 @@ export function Users() {
                     </div>
                     <UsersPrimaryButtons />
                 </div>
-                <UsersTable data={users} search={search} navigate={navigate} />
+
+                {error ? (
+                    <div className="rounded-md border border-destructive/40 bg-destructive/10 p-4 text-sm text-destructive">
+                        {error.message}
+                    </div>
+                ) : null}
+
+                <UsersTable
+                    data={data?.users ?? []}
+                    search={search}
+                    navigate={navigate}
+                    isLoading={isLoading}
+                />
             </Main>
 
             <UsersDialogs />
