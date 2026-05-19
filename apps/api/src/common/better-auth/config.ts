@@ -21,6 +21,7 @@ export const BETTER_AUTH_CONFIG = {
             allowUserToCreateOrganization: async (user) => {
                 return (user as UserWithRole).role === UserRole.ADMIN
             },
+            requireEmailVerificationOnInvitation: false,
         }),
         openAPI(),
         multiSession(),

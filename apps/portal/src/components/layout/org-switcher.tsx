@@ -1,5 +1,5 @@
 import { useNavigate } from "@tanstack/react-router"
-import { Building2, ChevronsUpDown, Cog } from "lucide-react"
+import { Building2, ChevronsUpDown, Cog, MailPlus } from "lucide-react"
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -17,18 +17,22 @@ import {
 } from "@/components/ui/sidebar"
 import {
     organization,
+    UserRole,
     useActiveOrganization,
     useListOrganizations,
+    useSession,
 } from "@/data-provider/auth-provider"
 
 export function OrgSwitcher() {
-    const { isMobile } = useSidebar()
     const navigate = useNavigate()
+    const { isMobile } = useSidebar()
     const { data: organizations } = useListOrganizations()
     const { data: activeOrg } = useActiveOrganization()
+    const { data: session } = useSession()
 
     const orgs = organizations ?? []
     const current = activeOrg ?? orgs[0]
+    const isAdmin = session?.user.role === UserRole.ADMIN
 
     async function handleSelect(orgId: string, slug?: string | null) {
         await organization.setActive({ organizationId: orgId })
@@ -86,6 +90,18 @@ export function OrgSwitcher() {
                         ))}
                         <DropdownMenuSeparator />
                         <DropdownMenuItem
+                            className="gap-2 p-2"
+                            onClick={() => navigate({ to: "/invitations" })}
+                        >
+                            <div className="flex size-6 items-center justify-center rounded-md border bg-background">
+                                <MailPlus className="size-4" />
+                            </div>
+                            <div className="font-medium text-muted-foreground">
+                                Invitations
+                            </div>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                            hidden={!isAdmin}
                             className="gap-2 p-2"
                             onClick={() => navigate({ to: "/admin" })}
                         >

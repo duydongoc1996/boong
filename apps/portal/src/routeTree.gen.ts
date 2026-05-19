@@ -22,16 +22,19 @@ import { Route as authForgotPasswordRouteImport } from './routes/(auth)/forgot-p
 import { Route as AuthenticatedSettingsRouteRouteImport } from './routes/_authenticated/settings/route'
 import { Route as AuthenticatedAdminRouteRouteImport } from './routes/_authenticated/admin/route'
 import { Route as AuthenticatedSettingsIndexRouteImport } from './routes/_authenticated/settings/index'
+import { Route as AuthenticatedInvitationsIndexRouteImport } from './routes/_authenticated/invitations/index'
 import { Route as AuthenticatedSettingsNotificationsRouteImport } from './routes/_authenticated/settings/notifications'
 import { Route as AuthenticatedSettingsDisplayRouteImport } from './routes/_authenticated/settings/display'
 import { Route as AuthenticatedSettingsAppearanceRouteImport } from './routes/_authenticated/settings/appearance'
 import { Route as AuthenticatedSettingsAccountRouteImport } from './routes/_authenticated/settings/account'
 import { Route as AuthenticatedErrorsErrorRouteImport } from './routes/_authenticated/errors/$error'
+import { Route as authAcceptInvitationInvitationIdRouteImport } from './routes/(auth)/accept-invitation/$invitationId'
 import { Route as AuthenticatedOrgOrgIdRouteRouteImport } from './routes/_authenticated/org/$orgId/route'
 import { Route as AuthenticatedOrgOrgIdIndexRouteImport } from './routes/_authenticated/org/$orgId/index'
 import { Route as AuthenticatedAdminUsersIndexRouteImport } from './routes/_authenticated/admin/users/index'
 import { Route as AuthenticatedAdminOrganizationsIndexRouteImport } from './routes/_authenticated/admin/organizations/index'
 import { Route as AuthenticatedOrgOrgIdTasksIndexRouteImport } from './routes/_authenticated/org/$orgId/tasks/index'
+import { Route as AuthenticatedOrgOrgIdMembersIndexRouteImport } from './routes/_authenticated/org/$orgId/members/index'
 import { Route as AuthenticatedOrgOrgIdHelpCenterIndexRouteImport } from './routes/_authenticated/org/$orgId/help-center/index'
 import { Route as AuthenticatedOrgOrgIdChatsIndexRouteImport } from './routes/_authenticated/org/$orgId/chats/index'
 import { Route as AuthenticatedOrgOrgIdAppsIndexRouteImport } from './routes/_authenticated/org/$orgId/apps/index'
@@ -102,6 +105,12 @@ const AuthenticatedSettingsIndexRoute =
     path: '/',
     getParentRoute: () => AuthenticatedSettingsRouteRoute,
   } as any)
+const AuthenticatedInvitationsIndexRoute =
+  AuthenticatedInvitationsIndexRouteImport.update({
+    id: '/invitations/',
+    path: '/invitations/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedSettingsNotificationsRoute =
   AuthenticatedSettingsNotificationsRouteImport.update({
     id: '/notifications',
@@ -132,6 +141,12 @@ const AuthenticatedErrorsErrorRoute =
     path: '/errors/$error',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const authAcceptInvitationInvitationIdRoute =
+  authAcceptInvitationInvitationIdRouteImport.update({
+    id: '/(auth)/accept-invitation/$invitationId',
+    path: '/accept-invitation/$invitationId',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const AuthenticatedOrgOrgIdRouteRoute =
   AuthenticatedOrgOrgIdRouteRouteImport.update({
     id: '/org/$orgId',
@@ -160,6 +175,12 @@ const AuthenticatedOrgOrgIdTasksIndexRoute =
   AuthenticatedOrgOrgIdTasksIndexRouteImport.update({
     id: '/tasks/',
     path: '/tasks/',
+    getParentRoute: () => AuthenticatedOrgOrgIdRouteRoute,
+  } as any)
+const AuthenticatedOrgOrgIdMembersIndexRoute =
+  AuthenticatedOrgOrgIdMembersIndexRouteImport.update({
+    id: '/members/',
+    path: '/members/',
     getParentRoute: () => AuthenticatedOrgOrgIdRouteRoute,
   } as any)
 const AuthenticatedOrgOrgIdHelpCenterIndexRoute =
@@ -194,11 +215,13 @@ export interface FileRoutesByFullPath {
   '/500': typeof errors500Route
   '/503': typeof errors503Route
   '/org/$orgId': typeof AuthenticatedOrgOrgIdRouteRouteWithChildren
+  '/accept-invitation/$invitationId': typeof authAcceptInvitationInvitationIdRoute
   '/errors/$error': typeof AuthenticatedErrorsErrorRoute
   '/settings/account': typeof AuthenticatedSettingsAccountRoute
   '/settings/appearance': typeof AuthenticatedSettingsAppearanceRoute
   '/settings/display': typeof AuthenticatedSettingsDisplayRoute
   '/settings/notifications': typeof AuthenticatedSettingsNotificationsRoute
+  '/invitations/': typeof AuthenticatedInvitationsIndexRoute
   '/settings/': typeof AuthenticatedSettingsIndexRoute
   '/admin/organizations/': typeof AuthenticatedAdminOrganizationsIndexRoute
   '/admin/users/': typeof AuthenticatedAdminUsersIndexRoute
@@ -206,6 +229,7 @@ export interface FileRoutesByFullPath {
   '/org/$orgId/apps/': typeof AuthenticatedOrgOrgIdAppsIndexRoute
   '/org/$orgId/chats/': typeof AuthenticatedOrgOrgIdChatsIndexRoute
   '/org/$orgId/help-center/': typeof AuthenticatedOrgOrgIdHelpCenterIndexRoute
+  '/org/$orgId/members/': typeof AuthenticatedOrgOrgIdMembersIndexRoute
   '/org/$orgId/tasks/': typeof AuthenticatedOrgOrgIdTasksIndexRoute
 }
 export interface FileRoutesByTo {
@@ -219,11 +243,13 @@ export interface FileRoutesByTo {
   '/500': typeof errors500Route
   '/503': typeof errors503Route
   '/': typeof AuthenticatedIndexRoute
+  '/accept-invitation/$invitationId': typeof authAcceptInvitationInvitationIdRoute
   '/errors/$error': typeof AuthenticatedErrorsErrorRoute
   '/settings/account': typeof AuthenticatedSettingsAccountRoute
   '/settings/appearance': typeof AuthenticatedSettingsAppearanceRoute
   '/settings/display': typeof AuthenticatedSettingsDisplayRoute
   '/settings/notifications': typeof AuthenticatedSettingsNotificationsRoute
+  '/invitations': typeof AuthenticatedInvitationsIndexRoute
   '/settings': typeof AuthenticatedSettingsIndexRoute
   '/admin/organizations': typeof AuthenticatedAdminOrganizationsIndexRoute
   '/admin/users': typeof AuthenticatedAdminUsersIndexRoute
@@ -231,6 +257,7 @@ export interface FileRoutesByTo {
   '/org/$orgId/apps': typeof AuthenticatedOrgOrgIdAppsIndexRoute
   '/org/$orgId/chats': typeof AuthenticatedOrgOrgIdChatsIndexRoute
   '/org/$orgId/help-center': typeof AuthenticatedOrgOrgIdHelpCenterIndexRoute
+  '/org/$orgId/members': typeof AuthenticatedOrgOrgIdMembersIndexRoute
   '/org/$orgId/tasks': typeof AuthenticatedOrgOrgIdTasksIndexRoute
 }
 export interface FileRoutesById {
@@ -248,11 +275,13 @@ export interface FileRoutesById {
   '/(errors)/503': typeof errors503Route
   '/_authenticated/': typeof AuthenticatedIndexRoute
   '/_authenticated/org/$orgId': typeof AuthenticatedOrgOrgIdRouteRouteWithChildren
+  '/(auth)/accept-invitation/$invitationId': typeof authAcceptInvitationInvitationIdRoute
   '/_authenticated/errors/$error': typeof AuthenticatedErrorsErrorRoute
   '/_authenticated/settings/account': typeof AuthenticatedSettingsAccountRoute
   '/_authenticated/settings/appearance': typeof AuthenticatedSettingsAppearanceRoute
   '/_authenticated/settings/display': typeof AuthenticatedSettingsDisplayRoute
   '/_authenticated/settings/notifications': typeof AuthenticatedSettingsNotificationsRoute
+  '/_authenticated/invitations/': typeof AuthenticatedInvitationsIndexRoute
   '/_authenticated/settings/': typeof AuthenticatedSettingsIndexRoute
   '/_authenticated/admin/organizations/': typeof AuthenticatedAdminOrganizationsIndexRoute
   '/_authenticated/admin/users/': typeof AuthenticatedAdminUsersIndexRoute
@@ -260,6 +289,7 @@ export interface FileRoutesById {
   '/_authenticated/org/$orgId/apps/': typeof AuthenticatedOrgOrgIdAppsIndexRoute
   '/_authenticated/org/$orgId/chats/': typeof AuthenticatedOrgOrgIdChatsIndexRoute
   '/_authenticated/org/$orgId/help-center/': typeof AuthenticatedOrgOrgIdHelpCenterIndexRoute
+  '/_authenticated/org/$orgId/members/': typeof AuthenticatedOrgOrgIdMembersIndexRoute
   '/_authenticated/org/$orgId/tasks/': typeof AuthenticatedOrgOrgIdTasksIndexRoute
 }
 export interface FileRouteTypes {
@@ -277,11 +307,13 @@ export interface FileRouteTypes {
     | '/500'
     | '/503'
     | '/org/$orgId'
+    | '/accept-invitation/$invitationId'
     | '/errors/$error'
     | '/settings/account'
     | '/settings/appearance'
     | '/settings/display'
     | '/settings/notifications'
+    | '/invitations/'
     | '/settings/'
     | '/admin/organizations/'
     | '/admin/users/'
@@ -289,6 +321,7 @@ export interface FileRouteTypes {
     | '/org/$orgId/apps/'
     | '/org/$orgId/chats/'
     | '/org/$orgId/help-center/'
+    | '/org/$orgId/members/'
     | '/org/$orgId/tasks/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -302,11 +335,13 @@ export interface FileRouteTypes {
     | '/500'
     | '/503'
     | '/'
+    | '/accept-invitation/$invitationId'
     | '/errors/$error'
     | '/settings/account'
     | '/settings/appearance'
     | '/settings/display'
     | '/settings/notifications'
+    | '/invitations'
     | '/settings'
     | '/admin/organizations'
     | '/admin/users'
@@ -314,6 +349,7 @@ export interface FileRouteTypes {
     | '/org/$orgId/apps'
     | '/org/$orgId/chats'
     | '/org/$orgId/help-center'
+    | '/org/$orgId/members'
     | '/org/$orgId/tasks'
   id:
     | '__root__'
@@ -330,11 +366,13 @@ export interface FileRouteTypes {
     | '/(errors)/503'
     | '/_authenticated/'
     | '/_authenticated/org/$orgId'
+    | '/(auth)/accept-invitation/$invitationId'
     | '/_authenticated/errors/$error'
     | '/_authenticated/settings/account'
     | '/_authenticated/settings/appearance'
     | '/_authenticated/settings/display'
     | '/_authenticated/settings/notifications'
+    | '/_authenticated/invitations/'
     | '/_authenticated/settings/'
     | '/_authenticated/admin/organizations/'
     | '/_authenticated/admin/users/'
@@ -342,6 +380,7 @@ export interface FileRouteTypes {
     | '/_authenticated/org/$orgId/apps/'
     | '/_authenticated/org/$orgId/chats/'
     | '/_authenticated/org/$orgId/help-center/'
+    | '/_authenticated/org/$orgId/members/'
     | '/_authenticated/org/$orgId/tasks/'
   fileRoutesById: FileRoutesById
 }
@@ -355,6 +394,7 @@ export interface RootRouteChildren {
   errors404Route: typeof errors404Route
   errors500Route: typeof errors500Route
   errors503Route: typeof errors503Route
+  authAcceptInvitationInvitationIdRoute: typeof authAcceptInvitationInvitationIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -450,6 +490,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedSettingsIndexRouteImport
       parentRoute: typeof AuthenticatedSettingsRouteRoute
     }
+    '/_authenticated/invitations/': {
+      id: '/_authenticated/invitations/'
+      path: '/invitations'
+      fullPath: '/invitations/'
+      preLoaderRoute: typeof AuthenticatedInvitationsIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/settings/notifications': {
       id: '/_authenticated/settings/notifications'
       path: '/notifications'
@@ -485,6 +532,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedErrorsErrorRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/(auth)/accept-invitation/$invitationId': {
+      id: '/(auth)/accept-invitation/$invitationId'
+      path: '/accept-invitation/$invitationId'
+      fullPath: '/accept-invitation/$invitationId'
+      preLoaderRoute: typeof authAcceptInvitationInvitationIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated/org/$orgId': {
       id: '/_authenticated/org/$orgId'
       path: '/org/$orgId'
@@ -518,6 +572,13 @@ declare module '@tanstack/react-router' {
       path: '/tasks'
       fullPath: '/org/$orgId/tasks/'
       preLoaderRoute: typeof AuthenticatedOrgOrgIdTasksIndexRouteImport
+      parentRoute: typeof AuthenticatedOrgOrgIdRouteRoute
+    }
+    '/_authenticated/org/$orgId/members/': {
+      id: '/_authenticated/org/$orgId/members/'
+      path: '/members'
+      fullPath: '/org/$orgId/members/'
+      preLoaderRoute: typeof AuthenticatedOrgOrgIdMembersIndexRouteImport
       parentRoute: typeof AuthenticatedOrgOrgIdRouteRoute
     }
     '/_authenticated/org/$orgId/help-center/': {
@@ -589,6 +650,7 @@ interface AuthenticatedOrgOrgIdRouteRouteChildren {
   AuthenticatedOrgOrgIdAppsIndexRoute: typeof AuthenticatedOrgOrgIdAppsIndexRoute
   AuthenticatedOrgOrgIdChatsIndexRoute: typeof AuthenticatedOrgOrgIdChatsIndexRoute
   AuthenticatedOrgOrgIdHelpCenterIndexRoute: typeof AuthenticatedOrgOrgIdHelpCenterIndexRoute
+  AuthenticatedOrgOrgIdMembersIndexRoute: typeof AuthenticatedOrgOrgIdMembersIndexRoute
   AuthenticatedOrgOrgIdTasksIndexRoute: typeof AuthenticatedOrgOrgIdTasksIndexRoute
 }
 
@@ -599,6 +661,8 @@ const AuthenticatedOrgOrgIdRouteRouteChildren: AuthenticatedOrgOrgIdRouteRouteCh
     AuthenticatedOrgOrgIdChatsIndexRoute: AuthenticatedOrgOrgIdChatsIndexRoute,
     AuthenticatedOrgOrgIdHelpCenterIndexRoute:
       AuthenticatedOrgOrgIdHelpCenterIndexRoute,
+    AuthenticatedOrgOrgIdMembersIndexRoute:
+      AuthenticatedOrgOrgIdMembersIndexRoute,
     AuthenticatedOrgOrgIdTasksIndexRoute: AuthenticatedOrgOrgIdTasksIndexRoute,
   }
 
@@ -613,6 +677,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
   AuthenticatedOrgOrgIdRouteRoute: typeof AuthenticatedOrgOrgIdRouteRouteWithChildren
   AuthenticatedErrorsErrorRoute: typeof AuthenticatedErrorsErrorRoute
+  AuthenticatedInvitationsIndexRoute: typeof AuthenticatedInvitationsIndexRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
@@ -621,6 +686,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,
   AuthenticatedOrgOrgIdRouteRoute: AuthenticatedOrgOrgIdRouteRouteWithChildren,
   AuthenticatedErrorsErrorRoute: AuthenticatedErrorsErrorRoute,
+  AuthenticatedInvitationsIndexRoute: AuthenticatedInvitationsIndexRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
@@ -636,6 +702,7 @@ const rootRouteChildren: RootRouteChildren = {
   errors404Route: errors404Route,
   errors500Route: errors500Route,
   errors503Route: errors503Route,
+  authAcceptInvitationInvitationIdRoute: authAcceptInvitationInvitationIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -17,7 +17,7 @@ import {
     FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { signIn } from "@/data-provider/auth-provider"
+import { resetAuthAtoms, signIn } from "@/data-provider/auth-provider"
 import { cn } from "@/lib/utils"
 
 const formSchema = z.object({
@@ -66,6 +66,7 @@ export function UserAuthForm({
             return
         }
 
+        resetAuthAtoms()
         toast.success(`Welcome back, ${data.email}!`)
         navigate({ to: redirectTo || "/", replace: true })
     }

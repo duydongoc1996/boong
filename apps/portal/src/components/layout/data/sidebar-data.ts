@@ -17,6 +17,7 @@ import {
     ShieldCheck,
     UserCog,
     Users,
+    UsersRound,
     UserX,
     Wrench,
 } from "lucide-react"
@@ -64,6 +65,11 @@ export function useSidebarData(): SidebarData {
                         url: `${orgBase}/chats`,
                         badge: "3",
                         icon: MessagesSquare,
+                    },
+                    {
+                        title: "Members",
+                        url: `${orgBase}/members`,
+                        icon: UsersRound,
                     },
                 ],
             },
