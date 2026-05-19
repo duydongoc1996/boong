@@ -1,4 +1,4 @@
-import { create } from "zustand"
+import { Store, useSelector } from "@tanstack/react-store"
 import { getCookie, removeCookie, setCookie } from "@/lib/cookies"
 
 const ACCESS_TOKEN = "thisisjustarandomstring"
@@ -21,36 +21,44 @@ interface AuthState {
     }
 }
 
-export const useAuthStore = create<AuthState>()((set) => {
-    const cookieState = getCookie(ACCESS_TOKEN)
-    const initToken = cookieState ? JSON.parse(cookieState) : ""
-    return {
-        auth: {
-            user: null,
-            setUser: (user) =>
-                set((state) => ({ ...state, auth: { ...state.auth, user } })),
-            accessToken: initToken,
-            setAccessToken: (accessToken) =>
-                set((state) => {
-                    setCookie(ACCESS_TOKEN, JSON.stringify(accessToken))
-                    return { ...state, auth: { ...state.auth, accessToken } }
-                }),
-            resetAccessToken: () =>
-                set((state) => {
-                    removeCookie(ACCESS_TOKEN)
-                    return {
-                        ...state,
-                        auth: { ...state.auth, accessToken: "" },
-                    }
-                }),
-            reset: () =>
-                set((state) => {
-                    removeCookie(ACCESS_TOKEN)
-                    return {
-                        ...state,
-                        auth: { ...state.auth, user: null, accessToken: "" },
-                    }
-                }),
-        },
-    }
+const cookieState = getCookie(ACCESS_TOKEN)
+const initToken = cookieState ? JSON.parse(cookieState) : ""
+
+const authStore = new Store<AuthState>({
+    auth: {
+        user: null,
+        accessToken: initToken,
+        setUser: (user) =>
+            authStore.setState((state) => ({
+                ...state,
+                auth: { ...state.auth, user },
+            })),
+        setAccessToken: (accessToken) =>
+            authStore.setState((state) => {
+                setCookie(ACCESS_TOKEN, JSON.stringify(accessToken))
+                return { ...state, auth: { ...state.auth, accessToken } }
+            }),
+        resetAccessToken: () =>
+            authStore.setState((state) => {
+                removeCookie(ACCESS_TOKEN)
+                return {
+                    ...state,
+                    auth: { ...state.auth, accessToken: "" },
+                }
+            }),
+        reset: () =>
+            authStore.setState((state) => {
+                removeCookie(ACCESS_TOKEN)
+                return {
+                    ...state,
+                    auth: { ...state.auth, user: null, accessToken: "" },
+                }
+            }),
+    },
 })
+
+export function useAuthStore(): AuthState {
+    return useSelector(authStore)
+}
+
+useAuthStore.getState = (): AuthState => authStore.state

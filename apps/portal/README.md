@@ -57,7 +57,7 @@ This project uses Shadcn UI components, but some have been slightly modified for
 
 **Type Checking:** [TypeScript](https://www.typescriptlang.org/)
 
-**Linting/Formatting:** [Biome](https://biome.js/)
+**Linting/Formatting:** [Biome](https://biomejs.dev)
 
 **Icons:** [Lucide Icons](https://lucide.dev/icons/), [Tabler Icons](https://tabler.io/icons) (Brand icons only)
 
