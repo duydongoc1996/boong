@@ -1,4 +1,4 @@
-import { Store, useStore } from "@tanstack/react-store"
+import { Store, useSelector } from "@tanstack/react-store"
 
 type UiState = {
     sidebarRailVisible: boolean
@@ -11,7 +11,7 @@ const initial: UiState = {
 export const uiStore = new Store<UiState>(initial)
 
 export function useUiStore<T>(selector: (s: UiState) => T): T {
-    return useStore(uiStore, selector)
+    return useSelector(uiStore, selector)
 }
 
 export function setSidebarRailVisible(visible: boolean) {

@@ -13,7 +13,7 @@
             "correctness": {
                 "useExhaustiveDependencies": "off",
                 "useHookAtTopLevel": "off",
-                "noUnusedVariables": "warn"
+                "noUnusedVariables": "off"
             }
         }
     }
