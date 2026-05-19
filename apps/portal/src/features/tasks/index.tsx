@@ -14,7 +14,7 @@ export function Tasks() {
     return (
         <TasksProvider>
             <Header fixed>
-                <Search className="me-auto" />
+                <Search className="ms-auto" />
                 <ThemeSwitch />
                 <ConfigDrawer />
                 <ProfileDropdown />

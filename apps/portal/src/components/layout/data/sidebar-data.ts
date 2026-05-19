@@ -1,6 +1,7 @@
 import {
     Bell,
     Bug,
+    Building2,
     Construction,
     FileX,
     HelpCircle,
@@ -20,21 +21,28 @@ import {
     Wrench,
 } from "lucide-react"
 import {
+    UserRole,
     useActiveOrganization,
     useListOrganizations,
+    useSession,
 } from "@/data-provider/auth-provider"
 import type { SidebarData } from "../types"
 
 export function useSidebarData(): SidebarData {
     const { data: activeOrg } = useActiveOrganization()
     const { data: orgs } = useListOrganizations()
+    const { data: session } = useSession()
+
     const slug = activeOrg?.slug ?? orgs?.[0]?.slug
     const orgBase = slug ? `/org/${slug}` : ""
+    const hasOrg = activeOrg || (orgs && orgs.length > 0)
+    const isAdmin = session?.user.role === UserRole.ADMIN
 
     return {
         navGroups: [
             {
                 title: "General",
+                isHidden: !hasOrg,
                 items: [
                     {
                         title: "Dashboard",
@@ -61,11 +69,17 @@ export function useSidebarData(): SidebarData {
             },
             {
                 title: "Admin",
+                isHidden: !isAdmin,
                 items: [
                     {
                         title: "Users",
                         url: "/admin/users",
                         icon: Users,
+                    },
+                    {
+                        title: "Organizations",
+                        url: "/admin/organizations",
+                        icon: Building2,
                     },
                 ],
             },

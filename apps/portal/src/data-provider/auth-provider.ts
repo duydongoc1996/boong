@@ -31,3 +31,8 @@ export type Session =
     }
         ? D
         : never
+
+export enum UserRole {
+    ADMIN = "admin",
+    USER = "user",
+}

@@ -30,6 +30,7 @@ import { Route as AuthenticatedErrorsErrorRouteImport } from './routes/_authenti
 import { Route as AuthenticatedOrgOrgIdRouteRouteImport } from './routes/_authenticated/org/$orgId/route'
 import { Route as AuthenticatedOrgOrgIdIndexRouteImport } from './routes/_authenticated/org/$orgId/index'
 import { Route as AuthenticatedAdminUsersIndexRouteImport } from './routes/_authenticated/admin/users/index'
+import { Route as AuthenticatedAdminOrganizationsIndexRouteImport } from './routes/_authenticated/admin/organizations/index'
 import { Route as AuthenticatedOrgOrgIdTasksIndexRouteImport } from './routes/_authenticated/org/$orgId/tasks/index'
 import { Route as AuthenticatedOrgOrgIdHelpCenterIndexRouteImport } from './routes/_authenticated/org/$orgId/help-center/index'
 import { Route as AuthenticatedOrgOrgIdChatsIndexRouteImport } from './routes/_authenticated/org/$orgId/chats/index'
@@ -149,6 +150,12 @@ const AuthenticatedAdminUsersIndexRoute =
     path: '/users/',
     getParentRoute: () => AuthenticatedAdminRouteRoute,
   } as any)
+const AuthenticatedAdminOrganizationsIndexRoute =
+  AuthenticatedAdminOrganizationsIndexRouteImport.update({
+    id: '/organizations/',
+    path: '/organizations/',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
+  } as any)
 const AuthenticatedOrgOrgIdTasksIndexRoute =
   AuthenticatedOrgOrgIdTasksIndexRouteImport.update({
     id: '/tasks/',
@@ -193,6 +200,7 @@ export interface FileRoutesByFullPath {
   '/settings/display': typeof AuthenticatedSettingsDisplayRoute
   '/settings/notifications': typeof AuthenticatedSettingsNotificationsRoute
   '/settings/': typeof AuthenticatedSettingsIndexRoute
+  '/admin/organizations/': typeof AuthenticatedAdminOrganizationsIndexRoute
   '/admin/users/': typeof AuthenticatedAdminUsersIndexRoute
   '/org/$orgId/': typeof AuthenticatedOrgOrgIdIndexRoute
   '/org/$orgId/apps/': typeof AuthenticatedOrgOrgIdAppsIndexRoute
@@ -217,6 +225,7 @@ export interface FileRoutesByTo {
   '/settings/display': typeof AuthenticatedSettingsDisplayRoute
   '/settings/notifications': typeof AuthenticatedSettingsNotificationsRoute
   '/settings': typeof AuthenticatedSettingsIndexRoute
+  '/admin/organizations': typeof AuthenticatedAdminOrganizationsIndexRoute
   '/admin/users': typeof AuthenticatedAdminUsersIndexRoute
   '/org/$orgId': typeof AuthenticatedOrgOrgIdIndexRoute
   '/org/$orgId/apps': typeof AuthenticatedOrgOrgIdAppsIndexRoute
@@ -245,6 +254,7 @@ export interface FileRoutesById {
   '/_authenticated/settings/display': typeof AuthenticatedSettingsDisplayRoute
   '/_authenticated/settings/notifications': typeof AuthenticatedSettingsNotificationsRoute
   '/_authenticated/settings/': typeof AuthenticatedSettingsIndexRoute
+  '/_authenticated/admin/organizations/': typeof AuthenticatedAdminOrganizationsIndexRoute
   '/_authenticated/admin/users/': typeof AuthenticatedAdminUsersIndexRoute
   '/_authenticated/org/$orgId/': typeof AuthenticatedOrgOrgIdIndexRoute
   '/_authenticated/org/$orgId/apps/': typeof AuthenticatedOrgOrgIdAppsIndexRoute
@@ -273,6 +283,7 @@ export interface FileRouteTypes {
     | '/settings/display'
     | '/settings/notifications'
     | '/settings/'
+    | '/admin/organizations/'
     | '/admin/users/'
     | '/org/$orgId/'
     | '/org/$orgId/apps/'
@@ -297,6 +308,7 @@ export interface FileRouteTypes {
     | '/settings/display'
     | '/settings/notifications'
     | '/settings'
+    | '/admin/organizations'
     | '/admin/users'
     | '/org/$orgId'
     | '/org/$orgId/apps'
@@ -324,6 +336,7 @@ export interface FileRouteTypes {
     | '/_authenticated/settings/display'
     | '/_authenticated/settings/notifications'
     | '/_authenticated/settings/'
+    | '/_authenticated/admin/organizations/'
     | '/_authenticated/admin/users/'
     | '/_authenticated/org/$orgId/'
     | '/_authenticated/org/$orgId/apps/'
@@ -493,6 +506,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminUsersIndexRouteImport
       parentRoute: typeof AuthenticatedAdminRouteRoute
     }
+    '/_authenticated/admin/organizations/': {
+      id: '/_authenticated/admin/organizations/'
+      path: '/organizations'
+      fullPath: '/admin/organizations/'
+      preLoaderRoute: typeof AuthenticatedAdminOrganizationsIndexRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
     '/_authenticated/org/$orgId/tasks/': {
       id: '/_authenticated/org/$orgId/tasks/'
       path: '/tasks'
@@ -525,11 +545,14 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedAdminRouteRouteChildren {
+  AuthenticatedAdminOrganizationsIndexRoute: typeof AuthenticatedAdminOrganizationsIndexRoute
   AuthenticatedAdminUsersIndexRoute: typeof AuthenticatedAdminUsersIndexRoute
 }
 
 const AuthenticatedAdminRouteRouteChildren: AuthenticatedAdminRouteRouteChildren =
   {
+    AuthenticatedAdminOrganizationsIndexRoute:
+      AuthenticatedAdminOrganizationsIndexRoute,
     AuthenticatedAdminUsersIndexRoute: AuthenticatedAdminUsersIndexRoute,
   }
 

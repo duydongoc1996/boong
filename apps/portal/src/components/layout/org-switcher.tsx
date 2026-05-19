@@ -1,5 +1,5 @@
 import { useNavigate } from "@tanstack/react-router"
-import { Building2, ChevronsUpDown, Plus } from "lucide-react"
+import { Building2, ChevronsUpDown, Cog } from "lucide-react"
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -85,12 +85,15 @@ export function OrgSwitcher() {
                             </DropdownMenuItem>
                         ))}
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem className="gap-2 p-2">
+                        <DropdownMenuItem
+                            className="gap-2 p-2"
+                            onClick={() => navigate({ to: "/admin" })}
+                        >
                             <div className="flex size-6 items-center justify-center rounded-md border bg-background">
-                                <Plus className="size-4" />
+                                <Cog className="size-4" />
                             </div>
                             <div className="font-medium text-muted-foreground">
-                                New organization
+                                Administration
                             </div>
                         </DropdownMenuItem>
                     </DropdownMenuContent>

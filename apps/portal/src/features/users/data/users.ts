@@ -15,7 +15,6 @@ export const usersQueryKey = (params: ListUsersQuery = {}) =>
     ["admin", "users", params] as const
 
 function toUser(record: Record<string, unknown>): User {
-    const banned = Boolean(record.banned)
     return {
         id: String(record.id),
         name: String(record.name ?? ""),
@@ -23,7 +22,7 @@ function toUser(record: Record<string, unknown>): User {
         emailVerified: Boolean(record.emailVerified),
         image: (record.image as string | null | undefined) ?? null,
         role: ((record.role as string) ?? "user") as User["role"],
-        banned,
+        banned: Boolean(record.banned),
         banReason: (record.banReason as string | null | undefined) ?? null,
         createdAt: new Date(record.createdAt as string | number | Date),
         updatedAt: new Date(record.updatedAt as string | number | Date),

@@ -30,7 +30,7 @@ function RouteComponent() {
     return (
         <>
             <Header fixed className="border-b">
-                <Search className="me-auto" />
+                <Search className="ms-auto" />
                 <ThemeSwitch />
                 <ConfigDrawer />
                 <ProfileDropdown />

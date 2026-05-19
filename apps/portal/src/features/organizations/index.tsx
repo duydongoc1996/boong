@@ -5,21 +5,21 @@ import { Main } from "@/components/layout/main"
 import { ProfileDropdown } from "@/components/profile-dropdown"
 import { Search } from "@/components/search"
 import { ThemeSwitch } from "@/components/theme-switch"
-import { UsersDialogs } from "./components/users-dialogs"
-import { UsersPrimaryButtons } from "./components/users-primary-buttons"
-import { UsersProvider } from "./components/users-provider"
-import { UsersTable } from "./components/users-table"
-import { useUsersQuery } from "./data/users"
+import { OrganizationsDialogs } from "./components/organizations-dialogs"
+import { OrganizationsPrimaryButtons } from "./components/organizations-primary-buttons"
+import { OrganizationsProvider } from "./components/organizations-provider"
+import { OrganizationsTable } from "./components/organizations-table"
+import { useOrganizationsQuery } from "./data/organizations"
 
-const route = getRouteApi("/_authenticated/admin/users/")
+const route = getRouteApi("/_authenticated/admin/organizations/")
 
-export function Users() {
+export function Organizations() {
     const search = route.useSearch()
     const navigate = route.useNavigate()
-    const { data, isLoading, error } = useUsersQuery()
+    const { data, isLoading, error } = useOrganizationsQuery()
 
     return (
-        <UsersProvider>
+        <OrganizationsProvider>
             <Header fixed>
                 <Search className="ms-auto" />
                 <ThemeSwitch />
@@ -31,13 +31,13 @@ export function Users() {
                 <div className="flex flex-wrap items-end justify-between gap-2">
                     <div>
                         <h2 className="text-2xl font-bold tracking-tight">
-                            User List
+                            Organizations
                         </h2>
                         <p className="text-muted-foreground">
-                            Manage your users and their roles here.
+                            Create and manage organizations.
                         </p>
                     </div>
-                    <UsersPrimaryButtons />
+                    <OrganizationsPrimaryButtons />
                 </div>
 
                 {error ? (
@@ -46,15 +46,15 @@ export function Users() {
                     </div>
                 ) : null}
 
-                <UsersTable
-                    data={data?.users ?? []}
+                <OrganizationsTable
+                    data={data ?? []}
                     search={search}
                     navigate={navigate}
                     isLoading={isLoading}
                 />
             </Main>
 
-            <UsersDialogs />
-        </UsersProvider>
+            <OrganizationsDialogs />
+        </OrganizationsProvider>
     )
 }

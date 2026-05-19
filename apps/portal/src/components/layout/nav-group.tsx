@@ -33,10 +33,10 @@ import type {
     NavLink,
 } from "./types"
 
-export function NavGroup({ title, items }: NavGroupProps) {
+export function NavGroup({ title, items, isHidden }: NavGroupProps) {
     const { state, isMobile } = useSidebar()
     const href = useLocation({ select: (location) => location.href })
-    return (
+    return isHidden ? null : (
         <SidebarGroup>
             <SidebarGroupLabel>{title}</SidebarGroupLabel>
             <SidebarMenu>

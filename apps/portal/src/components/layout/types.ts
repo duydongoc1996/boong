@@ -19,6 +19,7 @@ type NavCollapsible = BaseNavItem & {
 type NavItem = NavCollapsible | NavLink
 
 type NavGroup = {
+    isHidden?: boolean
     title: string
     items: NavItem[]
 }

@@ -66,7 +66,7 @@ export function Chats() {
         <>
             {/* ===== Top Heading ===== */}
             <Header>
-                <Search className="me-auto" />
+                <Search className="ms-auto" />
                 <ThemeSwitch />
                 <ConfigDrawer />
                 <ProfileDropdown />
